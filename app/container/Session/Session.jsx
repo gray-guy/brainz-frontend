@@ -292,14 +292,15 @@ export const Session = ({ params }) => {
 
   return (
     <div className="relative">
-      <button
+      {/* DISCONNECT BUTTON FOR DEBUGGING */}
+      {/* <button
         className="absolute right-4 top-4 z-[101] bg-secondary"
         onClick={() => {
           if (socketRef.current) socketRef.current.disconnect()
         }}
       >
         disconnect
-      </button>
+      </button> */}
       {stage === "countdown" && !showConfirmationModal && (
         <>
           <SessionHeader title={game.title} />
