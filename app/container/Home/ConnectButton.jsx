@@ -32,7 +32,7 @@ const ConnectButton = () => {
 
   return (
     <Button
-      variant={"outlined"}
+      variant={"contained"}
       size="text-xl"
       className="disabled:opacity-70"
       disabled={disableLogin}
