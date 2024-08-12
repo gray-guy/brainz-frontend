@@ -32,6 +32,7 @@ export const SelectAnswer = ({
   powerUsed,
   playerCount,
   stage,
+  isSessionEnded
 }) => {
   const [audio] = useState(new Audio(clickSound))
   const [wrong] = useState(new Audio(w))
@@ -39,10 +40,9 @@ export const SelectAnswer = ({
   const [tickSoundeffect] = useState(new Audio(tickSound))
   const [alert] = useState(new Audio(a))
 
-  const [tickingAudioPlaying, setTickingAudioPlaying] = useState(false);
-  const [alertSound, setAlertSound] = useState(false);
-  const [table, setTable] = useState();
-
+  const [tickingAudioPlaying, setTickingAudioPlaying] = useState(false)
+  const [alertSound, setAlertSound] = useState(false)
+  const [table, setTable] = useState()
 
   const moveUser = (currentIndex, targetIndex, data) => {
     if (currentIndex >= targetIndex && currentIndex >= 0 && targetIndex >= 0) {
@@ -279,11 +279,12 @@ export const SelectAnswer = ({
         </div>
         <div className="hidden w-full space-y-6 md:block lg:w-[344px]">
           <QuestionTimer
+            isSessionEnded={isSessionEnded}
             questionTimeRemaining={questionTimeRemaining}
             restTimeRemaining={restTimeRemaining}
           />
-          <div className="px-3 pt-5 pb-3 bg-gradient-to-b from-[#061F30] to-[#061F30] rounded-lg">
-            <h1 className="pt-2.5 font-basement font-bold text-xl text-white ">
+          <div className="rounded-lg bg-gradient-to-b from-[#061F30] to-[#061F30] px-3 pb-3 pt-5">
+            <h1 className="pt-2.5 font-basement text-xl font-bold text-white">
               Participants ({playerCount})
             </h1>
             <div className="mt-5">
@@ -319,10 +320,17 @@ export const SelectAnswer = ({
   )
 }
 
-const useTimer = ({ questionTimeRemaining, restTimeRemaining }) => {
+const useTimer = ({
+  questionTimeRemaining,
+  restTimeRemaining,
+  isSessionEnded
+}) => {
   const [internalTime, setInternalTime] = useState(0)
   const [showCapture, setShowCapture] = useState(false)
-  const nonZeroTime = questionTimeRemaining || restTimeRemaining
+  let nonZeroTime = questionTimeRemaining || restTimeRemaining
+  if (isSessionEnded) {
+    nonZeroTime = 4
+  }
 
   // countdown in miliseconds
   useEffect(() => {
@@ -357,16 +365,27 @@ const useTimer = ({ questionTimeRemaining, restTimeRemaining }) => {
   }
 }
 
-const QuestionTimer = ({ questionTimeRemaining, restTimeRemaining }) => {
+const QuestionTimer = ({
+  questionTimeRemaining,
+  isSessionEnded,
+  restTimeRemaining
+}) => {
   const { shouldPulse, showCapture, timeToShow } = useTimer({
+    isSessionEnded,
     questionTimeRemaining,
     restTimeRemaining
   })
 
+  const label = isSessionEnded
+    ? "Ending session in"
+    : questionTimeRemaining === 0
+      ? "Next question in"
+      : "Time remaining"
+
   return (
     <div className="desktop relative w-full rounded-lg bg-gradient-to-r from-[#2e414e] to-[#132836] px-6 py-4 text-4xl">
       <p className={`font-basement text-lg font-normal text-secondary`}>
-        {questionTimeRemaining === 0 ? "Next question in" : "Time remaining"}
+        {label}
       </p>
       <div
         className={`font-basement text-3xl font-bold text-white ${
@@ -390,7 +409,7 @@ const TimerCard = ({ timeToShow }) => {
     "max-lg:animate-scoreSlideY lg:animate-scoreSlide ease-out slide"
   return (
     <div className={`${baseStyles} ${animateStyles}`}>
-      <p className="text-lg font-normal font-basement">Your Time</p>
+      <p className="font-basement text-lg font-normal">Your Time</p>
       <div className="text-3xl font-bold">
         <span className="inline-block w-[94px]">{capturedTime}</span>
         <span>secs</span>

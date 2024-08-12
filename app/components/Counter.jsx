@@ -17,26 +17,6 @@ export const Counter = ({ timeRemaining, isTickingEnabled }) => {
     return num < 10 ? `0${num}` : num;
   };
 
-  // when time is less than 10 seconds, change color to red amd play sound
-  useEffect(() => {
-    if (timeRemaining !== null) {
-      if (timeRemaining <= 10) {
-        setColor("bg-[red]");
-      }
-      if (timeRemaining <= 10 && !soundPlayed && isTickingEnabled) {
-        setSoundPlayed(true);
-        playSound();
-      }
-    }
-    if (
-      (timeRemaining === 0 || timeRemaining === null) &&
-      isTickingEnabled &&
-      soundPlayed
-    ) {
-      stopSound();
-    }
-  }, [timeRemaining]);
-
   // Function to play the sound
   const playSound = () => {
     if (!audioRef.current) {
@@ -55,6 +35,25 @@ export const Counter = ({ timeRemaining, isTickingEnabled }) => {
       audioRef.current.currentTime = 0;
     }
   };
+
+  // when time is less than 10 seconds, change color to red amd play sound
+  useEffect(() => {
+    if (timeRemaining !== null) {
+      if (timeRemaining <= 10) {
+        setColor("bg-[red]");
+      }
+      if (timeRemaining <= 10 && !soundPlayed && isTickingEnabled) {
+        setSoundPlayed(true);
+        playSound();
+      }
+    }
+  }, [timeRemaining]);
+
+  useEffect(() => {
+    return () => {
+      stopSound();
+    };
+  }, []);
 
   return (
     <div className="w-full">

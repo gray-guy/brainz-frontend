@@ -17,9 +17,11 @@ const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    if (sessionStorage.getItem("showWelcome")) return;
     setTimeout(() => {
       setShowWelcome(true);
-    }, 2000);
+      sessionStorage.setItem("showWelcome", true);
+    }, 2500);
   }, []);
 
   return (
