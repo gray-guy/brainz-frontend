@@ -25,10 +25,10 @@ const UserProvider = ({ children }) => {
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}
-      <TermsConditionsModal
+      {/* <TermsConditionsModal
         isOpen={!!user && !user.hasAcceptedToc}
         onAccept={handleAccepToc}
-      />
+      /> */}
       <WelcomeModal showModal={!user && showWelcome} setShowModal={setShowWelcome} />
     </UserContext.Provider>
   );
