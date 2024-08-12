@@ -11,6 +11,8 @@ import Image from "next/image";
 import CountdownTimer from "./CountDownTimer";
 import { toast } from "react-toastify";
 import { useUser } from "../contexts/UserContext";
+import w from "@/public/sounds/win.mp3";
+import l from "@/public/sounds/fail-sound.mp3";
 
 const SPIN_DURATION = 4 * 1000;
 
@@ -28,6 +30,17 @@ export const SessionResult = ({ leaderboard, session, game, rewardEarned, player
   const [spinned, setSpinned] = useState(false);
   const wheelRef = useRef(null);
   const [nextSession, setNextSession] = useState(null);
+  const [winnerAudio] = useState(new Audio(w));
+  const [loserAudio] = useState(new Audio(l));
+
+  useEffect(() => {
+    if (rewardEarned.type === "pot") {
+      toast.success('Your Prize is on its way!"');
+      winnerAudio.play();
+    } else {
+      loserAudio.play();
+    }
+  },[])
 
   // if game has sessions get the next session
   useEffect(() => {
