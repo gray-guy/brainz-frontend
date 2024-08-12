@@ -199,7 +199,7 @@ export const Dashboard = () => {
                   disabled={!session || session.status !== "upcoming"}
                   onClick={() => handleJoinSession(session?.id)}
                 >
-                  <span className="text-xl font-bold">Take a Seat</span>
+                  <span className="text-xl font-bold">Join Session</span>
                   <TicketIcon
                     height={14}
                     width={14}
@@ -348,7 +348,7 @@ export const Dashboard = () => {
                         disabled={!session || session.status !== "upcoming"}
                         onClick={() => handleJoinSession(session?.id)}
                       >
-                        <span className="text-xl font-bold">Take a Seat</span>
+                        <span className="text-xl font-bold">Join Session</span>
                         <TicketIcon
                           height={14}
                           width={14}
