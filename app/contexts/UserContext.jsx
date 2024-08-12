@@ -31,7 +31,7 @@ const UserProvider = ({ children }) => {
         isOpen={!!user && !user.hasAcceptedToc}
         onAccept={handleAccepToc}
       />
-      <WelcomeModal showModal={!user && showWelcome} setShowModal={setShowWelcome} />
+      {/* <WelcomeModal showModal={!user && showWelcome} setShowModal={setShowWelcome} /> */}
     </UserContext.Provider>
   );
 };
