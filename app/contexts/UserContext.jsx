@@ -21,16 +21,16 @@ const UserProvider = ({ children }) => {
     setTimeout(() => {
       setShowWelcome(true);
       sessionStorage.setItem("showWelcome", true);
-    }, 3000);
+    }, 2500);
   }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}
-      {/* <TermsConditionsModal
+      <TermsConditionsModal
         isOpen={!!user && !user.hasAcceptedToc}
         onAccept={handleAccepToc}
-      /> */}
+      />
       <WelcomeModal showModal={!user && showWelcome} setShowModal={setShowWelcome} />
     </UserContext.Provider>
   );

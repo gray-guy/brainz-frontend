@@ -2,6 +2,7 @@
 import ConfirmationModal from "@/app/components/ConfirmationModal"
 import { CountDown } from "@/app/components/CountDown"
 import { ProgressBar } from "@/app/components/Progressbar"
+import ReconnectModal from "@/app/components/ReconnectModal"
 import { SelectAnswer } from "@/app/components/SelectAnswer"
 import { SessionHeader } from "@/app/components/SessionHeader"
 import { SessionResult } from "@/app/components/SessionResult"
@@ -291,6 +292,14 @@ export const Session = ({ params }) => {
 
   return (
     <div className="relative">
+      <button
+        className="absolute right-4 top-4 z-[101] bg-secondary"
+        onClick={() => {
+          if (socketRef.current) socketRef.current.disconnect()
+        }}
+      >
+        disconnect
+      </button>
       {stage === "countdown" && !showConfirmationModal && (
         <>
           <SessionHeader title={game.title} />
@@ -355,6 +364,12 @@ export const Session = ({ params }) => {
           onLeaveClick={handleLeave}
         />
       )} */}
+      <ReconnectModal
+        showModal={
+          stage !== "countdown" && stage !== "sessionResult" && !isConnected
+        }
+        onReconnect={handleReconnect}
+      />
       <ConfirmationModal
         ticketsAmount={session?.ticketsRequired}
         showModal={showConfirmationModal}

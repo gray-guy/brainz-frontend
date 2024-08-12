@@ -10,11 +10,7 @@ import { usePrivy, useLogin  } from "@privy-io/react-auth"
 const WelcomeModal = ({ showModal, setShowModal  }) => {
 
   const { ready, authenticated, user } = usePrivy()
-  const { login } = useLogin({
-    onComplete: () => {
-      localStorage.removeItem("token")
-    }
-  })
+  const { login } = useLogin()
 
   if (user || !showModal ) return null;
 
