@@ -258,7 +258,7 @@ export const Dashboard = () => {
         </div>
       </div>
       {/* Mobile Screen Tabs */}
-      <div className="pt-3 lg:hidden ">
+      <div className="pt-1 lg:hidden ">
         <Tab.Group>
           <Tab.List className="flex justify-center w-full px-5">
             <Tab className={"w-full focus:outline-none"}>
@@ -293,14 +293,14 @@ export const Dashboard = () => {
           <Tab.Panels className={"pb-0"}>
             <Tab.Panel>
               {nextGame && session ? (
-                <div className="flex flex-col gap-4 pl-6 pr-12 mt-10 text-center">
+                <div className="flex flex-col gap-4 px-5 mt-6 text-center">
                   <div className="text-center">
                     <h1 className="pl-0 text-xl font-bold md:pl-8 font-basement">
                       Starting in
                       <CountdownTimer time={nextGame.startTime} />
                     </h1>
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 pr-6">
                     <SessionCard
                       game={nextGame}
                       activeIdx={sessionIdx}
@@ -318,31 +318,31 @@ export const Dashboard = () => {
                       )} */}
                     </p>
 
-                    <div className="flex flex-col">
-                      <div>
-                        <p className="pt-5 text-lg font-normal font-basement ">
-                          Winner Pot Size
+                    <div className="flex justify-center my-6">
+                      <div className="basis-full  pt-2">
+                        <p className="grow text-lg font-normal font-basement ">
+                          Winner Pot 
                         </p>
                         <p className="text-sm mt-1">per session</p>
-                        <h1 className="text-xl font-basement font-bold mt-3 mb-6">
+                        <h1 className="text-xl font-basement font-bold mt-3 mb-2">
                           {session?.netPotValue} USDT
                         </h1>
                       </div>
 
                       {!!wheelRewards && (
-                        <div c>
-                          <p className="text-lg font-normal font-basement ">
-                            Spin the Wheel rewards
+                      <div className="basis-full border-l pt-2 pl-3">
+                          <p className="basis-full grow text-lg font-normal font-basement ">
+                            Spin the Wheel 
                           </p>
                           <p className="text-sm mt-1">per session</p>
-                          <h1 className="text-xl font-basement font-bold mt-3 mb-6">
+                          <h1 className="text-xl font-basement font-bold mt-3 mb-2">
                             {wheelRewards} USDT
                           </h1>
                         </div>
                       )}
                     </div>
 
-                    <div>
+                    <div className="mt-2 mb-4">
                       <Button
                         className="py-2 px-5 gap-2 group border-2 hover:!bg-primary-350 hover:text-white"
                         disabled={!session || session.status !== "upcoming"}

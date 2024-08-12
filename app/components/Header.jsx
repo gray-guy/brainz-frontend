@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import SelectDropdown from "./SelectDropdown"
 import Logo from "@/public/images/brainz-logo.svg"
+import LogoMb from "@/public/images/Brainz-logo.png"
 
 import {
   ArrowDownLightIcon,
@@ -88,22 +89,20 @@ const Header = () => {
           <div className="flex items-center justify-end border-white max-md:justify-between md:mt-0">
             <Link
               href="/"
-              className="relative h-8 w-12 md:hidden lg:h-12 lg:w-16"
+              className="flex items-center gap-3 relative h-8 md:hidden"
             >
               <Image
-                src={Logo}
+                src={LogoMb}
                 alt="Logo"
-                fill={"layout"}
-                objectFit="contain"
-                draggable={false}
+                width={74}
                 priority={true}
               />
 
-              <span className="absolute bottom-0 w-32 font-basement text-[10px] font-bold leading-[1.4] text-white">
-                Play Trivia, Win Crypto
-              </span>
+              <p className="font-basement tracking-wider text-[10px] font-bold leading-[1.4] text-white">
+                PLAY TRIVIA, WIN CRYPTO
+              </p>
             </Link>
-            <div className="flex items-center gap-10 max-md:hidden">
+            <div className="flex items-center gap-4 lg:gap-10 max-md:hidden">
               <div className="block max-[1200px]:hidden">
                 {walletBalances.length > 0 && (
                   <SelectDropdown
@@ -133,7 +132,7 @@ const Header = () => {
                 />
               </div>
               <div
-                className="relative rounded-[88px] max-lg:hidden"
+                className="relative rounded-[88px] max-md:hidden"
                 ref={profileRef}
               >
                 <div
