@@ -366,9 +366,7 @@ export const Session = ({ params }) => {
         />
       )} */}
       <ReconnectModal
-        showModal={
-          stage !== "countdown" && stage !== "sessionResult" && !isConnected
-        }
+        showModal={stage === "selectAnswer" && !isConnected}
         onReconnect={handleReconnect}
       />
       <ConfirmationModal
