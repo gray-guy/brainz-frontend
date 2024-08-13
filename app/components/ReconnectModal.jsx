@@ -8,7 +8,7 @@ const ReconnectModal = ({ showModal, onReconnect }) => {
 
   return (
     <Transition appear show={showModal} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={() => {}}>
+      <Dialog as="div" className="relative z-10" onClose={() => {}}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
