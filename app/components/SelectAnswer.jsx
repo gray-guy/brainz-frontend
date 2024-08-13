@@ -135,6 +135,7 @@ export const SelectAnswer = ({
               {title}
             </h1>
             <QuestionTimerMobile
+              isSessionEnded={isSessionEnded}
               questionTimeRemaining={questionTimeRemaining}
               restTimeRemaining={restTimeRemaining}
             />
