@@ -83,6 +83,7 @@ export const SelectAnswer = ({
     if (
       questionTimeRemaining === 0 &&
       question.answer &&
+      question.correctAnswer &&
       stage === "selectAnswer"
     ) {
       if (question.answer === question.correctAnswer) {
@@ -91,7 +92,7 @@ export const SelectAnswer = ({
         wrong.play()
       }
     }
-  }, [questionTimeRemaining])
+  }, [question.answer, question.correctAnswer, questionTimeRemaining, stage])
   useEffect(() => {
     if (
       (questionTimeRemaining > 0 &&
@@ -263,6 +264,7 @@ export const SelectAnswer = ({
                     variant={getOptionVariant(
                       question.correctAnswer === index + 1,
                       question.answer === index + 1 &&
+                        question.correctAnswer &&
                         question.answer !== question.correctAnswer
                     )}
                     answer={questionTimeRemaining === 0 && true}
