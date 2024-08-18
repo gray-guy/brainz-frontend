@@ -1,17 +1,17 @@
-"use client";
-import { apiCall, authenticate, getWalletBalance } from "@/lib/utils";
-import { getAccessToken, usePrivy } from "@privy-io/react-auth";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useUser } from "../contexts/UserContext";
-import { useWallet } from "../contexts/WalletContext";
+"use client"
+import { apiCall, authenticate, getWalletBalance } from "@/lib/utils"
+import { getAccessToken, usePrivy } from "@privy-io/react-auth"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { useUser } from "../contexts/UserContext"
+import { useWallet } from "../contexts/WalletContext"
 
 const Loader = ({ children }) => {
-  const { ready, authenticated, logout } = usePrivy();
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const { user, setUser } = useUser();
+  const { ready, authenticated, logout } = usePrivy()
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+  const [loggedIn, setLoggedIn] = useState(false)
+  const { user, setUser } = useUser()
   const {
     walletAddress,
     tokens,
@@ -21,104 +21,104 @@ const Loader = ({ children }) => {
     provider,
     platformAddress,
     setPlatformAddress,
-  } = useWallet();
+  } = useWallet()
 
   useEffect(() => {
     const checkAuthentication = async () => {
       if (ready && authenticated) {
-        let token = localStorage.getItem("token");
-        const expiresAt = localStorage.getItem("expiresAt");
-        const expired = new Date(expiresAt) < new Date();
+        let token = localStorage.getItem("token")
+        const expiresAt = localStorage.getItem("expiresAt")
+        const expired = new Date(expiresAt) < new Date()
 
         if (!token || expired) {
-          const data = await authenticate();
+          const data = await authenticate()
           if (!data) {
-            logout();
-            return;
+            logout()
+            return
           }
-          token = data.token;
+          token = data.token
 
-          const userData = await apiCall("get", "/profile");
-          setUser(userData.profile);
+          const userData = await apiCall("get", "/profile")
+          setUser(userData.profile)
         } else if (!user) {
-          const userData = await apiCall("get", "/profile");
+          const userData = await apiCall("get", "/profile")
           if (!userData) {
-            logout();
-            return;
+            logout()
+            return
           }
-          setUser(userData.profile);
+          setUser(userData.profile)
         }
-        setLoggedIn(true);
+        setLoggedIn(true)
       } else if (ready && !authenticated) {
-        router.push("/");
-        localStorage.removeItem("token");
-        localStorage.removeItem("expiresAt");
+        router.push("/")
+        localStorage.removeItem("token")
+        localStorage.removeItem("expiresAt")
       }
 
-      setLoading(false);
-    };
+      setLoading(false)
+    }
 
     if (ready) {
-      checkAuthentication();
+      checkAuthentication()
     }
-  }, [ready, authenticated, router]);
+  }, [ready, authenticated, router])
 
   useEffect(() => {
     const getBalances = async () => {
-      const tokens = await apiCall("get", "/tokens");
+      const tokens = await apiCall("get", "/tokens")
       if (tokens) {
-        setTokens((prev) => [...prev, ...tokens]);
+        setTokens((prev) => [...prev, ...tokens])
         if (provider && walletBalances.length <= 1) {
           tokens.forEach(async (token) => {
-            if (token.isNative) return;
+            if (token.isNative) return
             const balance = await getWalletBalance({
               provider,
               walletAddress,
               tokenAddress: token.contractAddress,
-            });
+            })
             const balanceDetails = {
               balance,
               symbol: token.symbol,
               imageUrl: token.imageUrl,
-            };
+            }
             setWalletBalances((prev) => ({
               ...prev,
               [token.symbol.toUpperCase()]: balanceDetails,
-            }));
-          });
+            }))
+          })
         }
       }
-    };
-// TEST
+    }
+    // TEST
     const getPlatformAddress = async () => {
-      const data = await apiCall("get", "/platformWallet");
+      const data = await apiCall("get", "/platformWallet")
       if (data) {
-        setPlatformAddress(data.platformWallet);
+        setPlatformAddress(data.platformWallet)
       }
-    };
+    }
     if (loggedIn) {
-      getBalances();
+      getBalances()
     }
 
     if (loggedIn && !platformAddress) {
-      getPlatformAddress();
+      getPlatformAddress()
     }
-  }, [loggedIn, provider]);
+  }, [loggedIn, provider])
 
-  if (!ready || loading) {
-    return (
-      <div className="flex items-center justify-center w-full h-screen gap-4 text-white bg-primary z-[1000000]">
-        <div className="z-50 border-4 rounded-full w-10 h-10 animate-spin border-secondary border-s-secondary/20 " />
-        Loading
-      </div>
-    );
-  }
+  // if (!ready || loading) {
+  //   return (
+  //     <div className="z-[1000000] flex h-screen w-full items-center justify-center gap-4 bg-primary text-white">
+  //       <div className="z-50 h-10 w-10 animate-spin rounded-full border-4 border-secondary border-s-secondary/20" />
+  //       Loading
+  //     </div>
+  //   )
+  // }
 
-  if (authenticated && loggedIn && !loading) {
-    return children;
-  }
+  // if (authenticated && loggedIn && !loading) {
+  //   return children
+  // }
 
-  return null;
-};
+  return null
+}
 
-export default Loader;
+export default Loader
