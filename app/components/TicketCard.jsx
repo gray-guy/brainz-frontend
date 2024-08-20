@@ -412,18 +412,26 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
       <p className="my-2 font-basement font-normal text-grey-400 text-sm">
         For
       </p>
-      <h2 className="font-basement font-bold text-base lg:text-lg mt-2.5">
+      <h2 className="mt-2.5 font-basement text-base font-bold lg:text-lg">
         {price} USDT
       </h2>
-      <div className="mt-[8px]">
+      <div className="mt-[8px] flex gap-2">
         <Button
           variant={"outlined"}
           size="text-sm lg:text-base"
-          className={"sm:px-5 py-1 md:px-6 lg:px-10"}
+          className={"py-1 sm:px-5 md:px-6 lg:px-10"}
           onClick={openModal}
         >
           Buy now
         </Button>
+        <form
+          action={`${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`}
+          method="POST"
+        >
+          <input type="hidden" name="packId" value={id} />
+          <input type="hidden" name="userId" value={user?.id} />
+          <button type="submit">S</button>
+        </form>
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>

@@ -21,12 +21,6 @@ export default function Page() {
     <div>
       <Dashboard />
 
-      <form
-        action={`${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`}
-        method="POST"
-      >
-        <button type="submit">Checkout</button>
-      </form>
     </div>
   )
 }
