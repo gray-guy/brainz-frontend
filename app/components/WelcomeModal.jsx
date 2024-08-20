@@ -95,7 +95,7 @@ const settings = {
   };
 
   return (
-    <div classname="slider-container">
+    <div className="slider-container">
       <Slider className="modal-slider md:w-[400px]" {...settings}>
           <Image src="/images/welcome-image-1.png" alt="image-1" width={400} height={400} />
           <Image src="/images/welcome-image-2.png" alt="image-2" width={400} height={400} />
