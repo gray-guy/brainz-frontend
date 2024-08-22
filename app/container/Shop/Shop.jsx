@@ -67,6 +67,7 @@ export const Shop = () => {
               ))}
         </div>
       </div>
+      {(isLoading || bothPacks.length > 0) && (
       <div className="bg-primary-350 px-6 md:px-13 py-8 w-full rounded-[10px] mt-6 mb-0 md:mb-5">
         <h1 className="text-xl font-bold font-basement">
           Exclusive Packs
@@ -84,6 +85,7 @@ export const Shop = () => {
               ))}
         </div>
       </div>
+      )}
       <StripeModal />
     </div>
   );

@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation"
 
 const StripeModal = () => {
   const searchParams = useSearchParams()
-  const [showModal, setShowModal] = React.useState(true)
+  const [showModal, setShowModal] = React.useState(false)
   const [title, setTitle] = React.useState("")
 
   useEffect(() => {
