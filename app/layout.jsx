@@ -1,23 +1,23 @@
-import { NotificationContext } from "@/app/contexts/notification";
-import "./globals.css";
-import { Inter } from "next/font/google";
-import Providers from "./Providers";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { GoogleAnalytics } from "@next/third-parties/google";
-import { Suspense } from "react";
+import { NotificationContext } from "@/app/contexts/notification"
+import "./globals.css"
+import { Inter } from "next/font/google"
+import Providers from "./Providers"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
+import { GoogleAnalytics } from "@next/third-parties/google"
+import { Suspense } from "react"
 
 const inter = Inter({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
-});
+})
 
 export const metadata = {
   title: "Brainz",
-  description: "Play Trivia, Win Crypto Rewards"
-};
+  description: "Play Trivia, Win Crypto Rewards",
+}
 
 export default function RootLayout({ children }) {
   return (
@@ -32,5 +32,5 @@ export default function RootLayout({ children }) {
         </Suspense>
       </body>
     </html>
-  );
+  )
 }
