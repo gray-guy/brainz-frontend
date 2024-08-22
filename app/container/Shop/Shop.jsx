@@ -7,6 +7,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { apiCall } from "@/lib/utils";
 import { DiamondIcon, TicketIcon } from "@/app/components/Svgs";
+import StripeModal from "@/app/components/StripeModal";
 
 export const Shop = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -83,6 +84,7 @@ export const Shop = () => {
               ))}
         </div>
       </div>
+      <StripeModal />
     </div>
   );
 };
