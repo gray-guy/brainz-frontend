@@ -102,19 +102,14 @@ export const Dashboard = () => {
     async function getSessionWheel() {
       const data = await apiCall(
         "get",
-        `/wheels/session/${session.id}`,
+        `/wheels/session/${session.id}?getOnlyRewards=true`,
         null,
         null,
         true
       )
 
-      if (data && data.cashPrizes) {
-        console.log(data.cashPrizes)
-        const total = data.cashPrizes.reduce(
-          (total, { amount, qty }) => total + Number(amount) * qty,
-          0
-        )
-        setWheelRewards(total)
+      if (data && data.totalRewards) {
+        setWheelRewards(data.totalRewards)
       }
     }
 
