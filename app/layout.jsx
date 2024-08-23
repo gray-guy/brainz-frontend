@@ -16,8 +16,8 @@ const inter = Inter({
 })
 
 export const metadata = {
-  title: "Brainz",
-  description: "Play Trivia, Win Crypto Rewards"
+  title: "Brainz | Play Live Trivia Games & Win Prizes",
+  description: "Join Brainz for exciting live trivia, quizzes, and games. From general trivia to crypto and sports challenges, test your knowledge and win big rewards. Play and win now!"
 }
 
 export default function RootLayout({ children }) {
@@ -35,12 +35,6 @@ export default function RootLayout({ children }) {
           </NotificationContext>
           <GoogleAnalytics gaId="G-68EFCMX8V4" />
         </Suspense>
-        <Script id="twitter-pixel" strategy="afterInteractive">
-          {`!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
-            },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
-            a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
-            twq('config','on4uj');`}
-        </Script>
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`!function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -52,6 +46,12 @@ export default function RootLayout({ children }) {
           'https://connect.facebook.net/en_US/fbevents.js');
           fbq('init', '1668196110409091');
           fbq('track', 'PageView');`}
+        </Script>
+        <Script id="twitter-pixel" strategy="afterInteractive">
+          {`!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+            },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
+            a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+            twq('config','on4uj');`}
         </Script>
       </body>
     </html>
