@@ -30,10 +30,10 @@ import { useUser } from "../contexts/UserContext";
 const USDT_ADDRESS = process.env.NEXT_PUBLIC_USDT_ADDRESS;
 
 const discounts = {
-  35: { discount: "25%", newPrice: 15 }, // 10 tickets
-  37: { discount: "20%", newPrice: 8 }, // 10 diamonds
-  38: { discount: "40%", newPrice: 12 }, // 20 diamonds
-  2: { discount: "40%", newPrice: 12 }, // 20 diamonds
+  35: { discount: "25%", oldPrice: 20 }, // 10 tickets
+  37: { discount: "20%", oldPrice: 10 }, // 10 diamonds
+  38: { discount: "40%", oldPrice: 20 }, // 20 diamonds
+  2: { discount: "40%", oldPrice: 0.04 }, // 20 diamonds
 };
 
 export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
@@ -439,9 +439,9 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
           {hasDiscount && (
             <span className="absolute -left-1 top-1/2 h-[3px] w-[110%] translate-y-[-50%] rotate-[-10deg] bg-danger-100" />
           )}
-          {price}
+          {hasDiscount ? discounts[id].oldPrice : price}
         </span>
-        {hasDiscount && ` ${discounts[id].newPrice}`}
+        {hasDiscount && ` ${price}`}
         &nbsp;USDT
       </h2>
       {hasDiscount && (
