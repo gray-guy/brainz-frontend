@@ -8,18 +8,13 @@ import { isAddress } from "viem"
 import { toast } from "react-toastify"
 import { useUser } from "../contexts/UserContext"
 
+const isMainnet = process.env.NEXT_PUBLIC_CHAIN === "bsc"
+
 const WithdrawRewards = () => {
   const { user, setUser } = useUser()
   const [recipient, setRecipient] = useState("")
   const [isLoading, setIsLoading] = useState(true)
-  const [tableData, setTableData] = useState([
-    {
-      id: 1,
-      status: "Pending",
-      amount: "-25USDT",
-      date: "22 March 2024"
-    }
-  ])
+  const [tableData, setTableData] = useState([])
   const [amount, setAmount] = useState(0)
   const [errors, setErrors] = useState({})
 
@@ -52,6 +47,8 @@ const WithdrawRewards = () => {
       setUser((prev) => ({ ...prev, credit: prev.credit - amount }))
       setTableData((prev) => [data.data, ...prev])
     }
+    setAmount(0)
+    setRecipient("")
   }
 
   return (
@@ -146,9 +143,14 @@ const WithdrawTable = ({ tableData }) => {
                       {item.amount}
                     </span>
                     {item.txHash && (
-                      <button className="m-0 p-0">
+                      <a
+                        target="_blank"
+                        rel="noopener"
+                        href={`https://${isMainnet ? "bscscan" : "testnet.bscscan"}.com/tx/${item.txHash}`}
+                        className="m-0 p-0"
+                      >
                         <LinkIcon className="cursor-pointer hover:text-secondary" />
-                      </button>
+                      </a>
                     )}
                   </div>
                 </td>

@@ -76,7 +76,7 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
             <div className="flex w-fit items-center gap-1 rounded-full bg-[#20BCFF]/20 px-[10px] py-[8px]">
               <img src="/images/usdc-logo.png" alt="coins" width={21} />
               <h1 className="font-basement text-sm font-bold text-white">
-                {user.credit}
+                {formatNumber(user.credit)}
               </h1>
             </div>
             <Link href="/shop">
