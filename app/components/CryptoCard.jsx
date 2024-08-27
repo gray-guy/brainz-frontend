@@ -1,6 +1,6 @@
-import React from "react";
-import { Button } from "./Button";
-import moment from "moment";
+import React from "react"
+import { Button } from "./Button"
+import moment from "moment"
 
 const cardClasses = [
   "bg-primary-100 shadow-cryptoCardOne",
@@ -9,25 +9,25 @@ const cardClasses = [
 ]
 
 const CryptoCard = ({ idx, data }) => {
-  const { title, sessions, startTime } = data;
+  const { title, sessions, startTime } = data
   return (
     <div
-      className={`${cardClasses[idx % 3]} rounded-[10px] w-full py-4 px-4 lg:py-5 lg:px-5`}
+      className={`${cardClasses[idx % 3]} w-full rounded-[10px] px-4 py-4 lg:px-5 lg:py-5`}
     >
-      <p className="text-base font-bold font-basement">{title}</p>
+      <p className="font-basement text-base font-bold">{title}</p>
       <div className="flex">
-        <div className="flex-1 mt-4 max-w-[70%]">
-          <div className="flex flex-col h-full overflow-hidden ">
-            <ul className="flex flex-col gap-1 list-disc">
+        <div className="mt-4 max-w-[70%] flex-1">
+          <div className="flex h-full flex-col overflow-hidden">
+            <ul className="flex list-disc flex-col gap-1">
               {sessions.slice(0, 3).map((session, index) => {
                 return (
                   <li
                     key={index}
-                    className="text-sm truncate font-bold list-disc font-basement capitalize"
+                    className="list-disc truncate font-basement text-sm font-bold capitalize"
                   >
                     - {session.topic?.title ?? `Session ${index + 1}`}
                   </li>
-                );
+                )
               })}
             </ul>
           </div>
@@ -42,20 +42,20 @@ const CryptoCard = ({ idx, data }) => {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col gap-1.5 text-right items-right">
-          <h1 className="text-lg font-bold text-white md:text-xl font-basement">
+        <div className="items-right flex flex-1 flex-col gap-1.5 text-right">
+          <h1 className="font-basement text-lg font-bold text-white md:text-xl">
             {moment(startTime).format("MMMM")}
           </h1>
-          <h1 className="text-3xl lg:text-4xl font-basement text-white font-[900]">
+          <h1 className="font-basement text-3xl font-[900] text-white lg:text-4xl">
             {moment(startTime).format("DD")}
           </h1>
-          <h1 className="text-lg font-bold text-white md:text-xl font-basement">
+          <h1 className="font-basement text-lg font-bold text-white md:text-xl">
             {moment(startTime).format("h a")}
           </h1>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CryptoCard;
+export default CryptoCard

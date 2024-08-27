@@ -1,5 +1,5 @@
-import { confetti } from "@tsparticles/confetti";
-import { useEffect } from "react";
+import { confetti } from "@tsparticles/confetti"
+import { useEffect } from "react"
 
 // export const ConfettiBackground = () => {
 //   useEffect(() => {
@@ -47,7 +47,7 @@ export const ConfettiBackground = () => {
         origin: { x: 0, y: 0.5 },
         scalar: 1.2,
         // decay: 0.9,
-      };
+      }
 
       const confettiSettingsRight = {
         particleCount: 450,
@@ -56,15 +56,15 @@ export const ConfettiBackground = () => {
         origin: { x: 1, y: 0.5 },
         scalar: 1.2,
         // decay: 0.9,
-      };
-      confetti(confettiSettingsLeft);
-      confetti(confettiSettingsRight);
-    };
+      }
+      confetti(confettiSettingsLeft)
+      confetti(confettiSettingsRight)
+    }
 
-    const timeoutId = setTimeout(startConfetti, 70);
+    const timeoutId = setTimeout(startConfetti, 70)
 
-    return () => clearTimeout(timeoutId);
-  }, []);
+    return () => clearTimeout(timeoutId)
+  }, [])
 
-  return <div></div>;
-};
+  return <div></div>
+}

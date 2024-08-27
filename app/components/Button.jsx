@@ -14,13 +14,16 @@ export const Button = ({
       "text-nowrap text-base md:text-xl font-basement font-bold bg-gradient-to-r from-[#2e414e] to-[#132836] text-white font-bold rounded-[10px] inline-flex items-center duration-200 px-10 py-3 hover:opacity-75",
     outlinedWhite:
       "outline-none	text-nowrap justify-center text-center font-basement font-bold bg-transparent border border-white border-2 text-white font-bold py-2 rounded-full inline-flex items-center duration-200 hover:bg-white hover:text-dark px-10 py-1",
-  };
+  }
 
-  const style = buttonStyles[variant] || buttonStyles.contained;
+  const style = buttonStyles[variant] || buttonStyles.contained
 
   return (
-    <button className={`disabled:opacity-70 ${style} ${size} ${className}`} {...props}>
+    <button
+      className={`disabled:opacity-70 ${style} ${size} ${className}`}
+      {...props}
+    >
       {children}
     </button>
-  );
-};
+  )
+}

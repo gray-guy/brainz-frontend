@@ -1,56 +1,56 @@
-import React, { useState, useRef, useEffect } from "react";
-import { ArrowDownLightIcon, ArrowIcon } from "./Svgs";
+import React, { useState, useRef, useEffect } from "react"
+import { ArrowDownLightIcon, ArrowIcon } from "./Svgs"
 
 const PurchaseDropdown = ({ options, onChange, defaultOption = "ETH" }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(defaultOption);
-  const dropdownRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedOption, setSelectedOption] = useState(defaultOption)
+  const dropdownRef = useRef(null)
 
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
 
   const handleOptionClick = (option) => {
-    setSelectedOption(option);
+    setSelectedOption(option)
     if (onChange) {
-      onChange(option);
+      onChange(option)
     }
-    setIsOpen(false);
-  };
+    setIsOpen(false)
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
   return (
     <div className="relative cursor-pointer" ref={dropdownRef}>
       <div
         onClick={toggleDropdown}
-        className="flex items-center relative w-full leading-tight focus:outline-none focus:shadow-outline z-[11] "
+        className="focus:shadow-outline relative z-[11] flex w-full items-center leading-tight focus:outline-none"
       >
-        <div className=" bg-primary w-full flex items-center font-basement justify-between py-3 px-6 md:px-8 border border-primary-275 rounded-[10px] ">
-          <div className="text-start flex flex-col rounded font-bold text-grey-200">
-            <p className="font-basement font-normal text-xs mb-[4px] ">
+        <div className="flex w-full items-center justify-between rounded-[10px] border border-primary-275 bg-primary px-6 py-3 font-basement md:px-8">
+          <div className="flex flex-col rounded text-start font-bold text-grey-200">
+            <p className="mb-[4px] font-basement text-xs font-normal">
               YOU PAY
             </p>
-            <h1 className="text-white text-sm md:text-base ">
+            <h1 className="text-sm text-white md:text-base">
               {selectedOption.price || options[0].price}
             </h1>
           </div>
-          <div className="text-white flex items-center ">
+          <div className="flex items-center text-white">
             <span className="mr-2">
               {selectedOption.icon || options[0].icon}
             </span>
-            <h2 className="text-sm md:text-base ">
+            <h2 className="text-sm md:text-base">
               {selectedOption.label || options[0].label}
             </h2>
 
@@ -61,18 +61,18 @@ const PurchaseDropdown = ({ options, onChange, defaultOption = "ETH" }) => {
         </div>
       </div>
       {isOpen && (
-        <div className="absolute z-10 -mt-1 w-full bg-dark-100 text-grey-200 rounded ">
+        <div className="absolute z-10 -mt-1 w-full rounded bg-dark-100 text-grey-200">
           {options.map((option, index) => (
             <div
               key={index}
               onClick={() => handleOptionClick(option)}
-              className={` py-2 hover:text-white  ${
+              className={`py-2 hover:text-white ${
                 index === options.length - 1
-                  ? "border-b-0 "
+                  ? "border-b-0"
                   : "border-b-[0.5px] border-grey-200"
               }`}
             >
-              <div className="flex items-center pb-2 pt-2.5 justify-between pl-8 pr-[54px]">
+              <div className="flex items-center justify-between pb-2 pl-8 pr-[54px] pt-2.5">
                 <div className="flex font-basement font-normal">
                   <p className="text-sm md:text-base">{option.price}</p>
                 </div>
@@ -86,7 +86,7 @@ const PurchaseDropdown = ({ options, onChange, defaultOption = "ETH" }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PurchaseDropdown;
+export default PurchaseDropdown

@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { PrivyProvider } from "@privy-io/react-auth";
+import { PrivyProvider } from "@privy-io/react-auth"
 // import { Arbitrum, DAppProvider, MetamaskConnector } from "@usedapp/core";
-import { bsc, bscTestnet } from "viem/chains";
-import WalletProvider from "./contexts/WalletContext";
-import UserProvider from "./contexts/UserContext";
+import { bsc, bscTestnet } from "viem/chains"
+import WalletProvider from "./contexts/WalletContext"
+import UserProvider from "./contexts/UserContext"
 
 export default function Providers({ children }) {
   // const config = {
@@ -47,5 +47,5 @@ export default function Providers({ children }) {
       </WalletProvider>
     </PrivyProvider>
     // </DAppProvider>
-  );
+  )
 }

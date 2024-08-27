@@ -29,7 +29,7 @@ export const Session = ({ params }) => {
   const [leaderboard, setLeaderboard] = useState({ top10: [] })
   const [powerUsed, setPowerUsed] = useState({
     fiftyFifty: false,
-    autoCorrect: false
+    autoCorrect: false,
   })
   const [isBanned, setIsBanned] = useState(false)
   const [rewardEarned, setRewardEarned] = useState({})
@@ -136,8 +136,8 @@ export const Session = ({ params }) => {
     const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL, {
       reconnectionDelayMax: 10000,
       extraHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     })
     socketRef.current = socket
 
@@ -254,7 +254,7 @@ export const Session = ({ params }) => {
 
   const handleConfirmStart = async () => {
     const data = await apiCall("post", "/session-stats", {
-      sessionID: params.id
+      sessionID: params.id,
     })
     if (data) {
       toast.success(data.message || "Session joined successfully!")

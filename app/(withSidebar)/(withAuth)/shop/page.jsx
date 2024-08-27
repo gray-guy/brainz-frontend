@@ -1,5 +1,5 @@
-import Shop from "@/app/container/Shop";
+import Shop from "@/app/container/Shop"
 
 export default function Page() {
-  return <Shop />;
+  return <Shop />
 }

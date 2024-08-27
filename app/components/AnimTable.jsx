@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"
 
 function AnimTable() {
   const [users, setUsers] = useState([
@@ -12,28 +12,28 @@ function AnimTable() {
     { id: 8, name: "User 8" },
     { id: 9, name: "User 9" },
     { id: 10, name: "User 10" },
-  ]);
-  const [currentUserIndex, setCurrentUserIndex] = useState(9); // Initial index is 9 (User 10)
+  ])
+  const [currentUserIndex, setCurrentUserIndex] = useState(9) // Initial index is 9 (User 10)
 
   // Function to move the current user up or down the list
   const moveUser = (direction) => {
     setCurrentUserIndex((prevIndex) => {
-      let newIndex = prevIndex + direction;
+      let newIndex = prevIndex + direction
       // Ensure newIndex stays within the bounds of the user list
-      newIndex = Math.max(0, Math.min(newIndex, users.length - 1));
-      return newIndex;
-    });
-  };
+      newIndex = Math.max(0, Math.min(newIndex, users.length - 1))
+      return newIndex
+    })
+  }
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      moveUser(-1); // Move the user up automatically
-    }, 1000); // Interval of 4 seconds
+      moveUser(-1) // Move the user up automatically
+    }, 1000) // Interval of 4 seconds
 
     return () => {
-      clearInterval(intervalId); // Cleanup function to clear the interval
-    };
-  }, [moveUser]);
+      clearInterval(intervalId) // Cleanup function to clear the interval
+    }
+  }, [moveUser])
 
   return (
     <div className="App">
@@ -60,7 +60,7 @@ function AnimTable() {
         </tbody>
       </table>
     </div>
-  );
+  )
 }
 
-export default AnimTable;
+export default AnimTable

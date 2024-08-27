@@ -1,16 +1,16 @@
-import { Dialog, Transition } from "@headlessui/react";
-import React, { Fragment } from "react";
-import { ModalCrossIcon, WarningIcon } from "./Svgs";
-import { Button } from "./Button";
+import { Dialog, Transition } from "@headlessui/react"
+import React, { Fragment } from "react"
+import { ModalCrossIcon, WarningIcon } from "./Svgs"
+import { Button } from "./Button"
 
 const BackModal = ({ showModal, setShowModal, onContinue, onLeaveClick }) => {
-  if (!showModal) return null;
+  if (!showModal) return null
 
   return (
     <Transition appear show={showModal} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-50 "
+        className="relative z-50"
         onClose={() => setShowModal(false)}
       >
         <Transition.Child
@@ -22,7 +22,7 @@ const BackModal = ({ showModal, setShowModal, onContinue, onLeaveClick }) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/25" />
+          <div className="bg-black/25 fixed inset-0" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -36,7 +36,7 @@ const BackModal = ({ showModal, setShowModal, onContinue, onLeaveClick }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-[724px] text-center text-white transform overflow-hidden rounded-[20px] bg-primary-275 pb-6 md:pb-[48px] pt-[30px] md:pt-[90px] px-6 md:px-[86px] md:px-[50px] text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="shadow-xl w-full max-w-[724px] transform overflow-hidden rounded-[20px] bg-primary-275 px-6 pb-6 pt-[30px] text-left text-center align-middle text-white transition-all md:px-[50px] md:px-[86px] md:pb-[48px] md:pt-[90px]">
                 <div className="flex items-center justify-center">
                   <div className="block md:hidden">
                     <WarningIcon width="50" height="50" />
@@ -45,11 +45,11 @@ const BackModal = ({ showModal, setShowModal, onContinue, onLeaveClick }) => {
                     <WarningIcon />
                   </div>
                 </div>
-                <h2 className="mt-5 md:mt-10 font-basement text-lg md:text-2xl font-medium">
+                <h2 className="mt-5 font-basement text-lg font-medium md:mt-10 md:text-2xl">
                   If you leave the page you will lose your spot and your ticket
                   will not be refunded.
                 </h2>
-                <div className="w-full flex-wrap mt-5 justify-center items-center flex gap-4 md:gap-[42px]">
+                <div className="mt-5 flex w-full flex-wrap items-center justify-center gap-4 md:gap-[42px]">
                   <Button variant={"outlined"} onClick={onContinue}>
                     Continue
                   </Button>
@@ -62,7 +62,7 @@ const BackModal = ({ showModal, setShowModal, onContinue, onLeaveClick }) => {
                   </Button>
                 </div>
                 <button
-                  className="absolute top-[38px] right-[38px] cursor-pointer hover:text-secondary"
+                  className="absolute right-[38px] top-[38px] cursor-pointer hover:text-secondary"
                   onClick={() => setShowModal(false)}
                 >
                   <ModalCrossIcon />
@@ -73,7 +73,7 @@ const BackModal = ({ showModal, setShowModal, onContinue, onLeaveClick }) => {
         </div>
       </Dialog>
     </Transition>
-  );
-};
+  )
+}
 
-export default BackModal;
+export default BackModal

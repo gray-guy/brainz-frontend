@@ -1,6 +1,6 @@
-import winBoxImg1 from "@/public/images/image-1.png";
-import winBoxImg2 from "@/public/images/image-2.png";
-import winBoxImg3 from "@/public/images/image-3.png";
+import winBoxImg1 from "@/public/images/image-1.png"
+import winBoxImg2 from "@/public/images/image-2.png"
+import winBoxImg3 from "@/public/images/image-3.png"
 
 export const winBoxData = [
   {
@@ -18,4 +18,4 @@ export const winBoxData = [
     title: "Win session and collect the entire pot",
     // description: "Discover the unexplored vistas of our universe.",
   },
-];
+]

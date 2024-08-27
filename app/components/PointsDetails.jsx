@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { WinnerDarkIcon, WinnerIcon } from "./Svgs";
+import Image from "next/image"
+import { WinnerDarkIcon, WinnerIcon } from "./Svgs"
 
 export const PointsDetails = ({
   rank = "01",
@@ -16,28 +16,28 @@ export const PointsDetails = ({
 }) => {
   const ActiveRankStyles = myRank
     ? "items-center bg-[#FFE61A] pb-[10px] pt-2.5 border-none rounded-[8px]"
-    : "";
+    : ""
 
   const bgGreyStyles =
     bgColorGrey &&
-    "items-center bg-[#344653] pb-[14px] pt-[14px] px-[20px] lg:px-[28px] border-none rounded-[8px]";
+    "items-center bg-[#344653] pb-[14px] pt-[14px] px-[20px] lg:px-[28px] border-none rounded-[8px]"
 
   const textStyles =
-    ranked || myRank ? "font-basement font-bold text-dark" : "text-white ";
-  const rankNumStyles = ranked || myRank ? "text-dark" : "text-white";
+    ranked || myRank ? "font-basement font-bold text-dark" : "text-white "
+  const rankNumStyles = ranked || myRank ? "text-dark" : "text-white"
   return (
     <div
-      className={`w-full mb-[16px] flex justify-between px-3 items-center pb-[10px] border-b border-grey-475 ${ActiveRankStyles} ${bgGreyStyles} ${
+      className={`mb-[16px] flex w-full items-center justify-between border-b border-grey-475 px-3 pb-[10px] ${ActiveRankStyles} ${bgGreyStyles} ${
         !showWinnerIcon && "pl-[38px]"
       } `}
       {...rest}
     >
-      <div className="flex items-center gap-[6px] mr-[26px]">
+      <div className="mr-[26px] flex items-center gap-[6px]">
         {myRank && !participants && <WinnerDarkIcon />}
         {showWinnerIcon && !myRank && (
           <WinnerIcon className={"text-secondary"} />
         )}
-        <h1 className={`font-basement font-bold text-base ${rankNumStyles}`}>
+        <h1 className={`font-basement text-base font-bold ${rankNumStyles}`}>
           {rank}
         </h1>
       </div>
@@ -53,14 +53,14 @@ export const PointsDetails = ({
           />
         </div> */}
         <h1
-          className={`font-basement font-bold text-sm lg:text-base text-nowrap	 ${textStyles}`}
+          className={`text-nowrap font-basement text-sm font-bold lg:text-base ${textStyles}`}
         >
           {userName}
         </h1>
       </div>
-      <div className="flex items-center justify-center ml-[44px] ">
+      <div className="ml-[44px] flex items-center justify-center">
         <p
-          className={`font-basement text-sm lg:text-base font-bold text-nowrap	 ${textStyles}`}
+          className={`text-nowrap font-basement text-sm font-bold lg:text-base ${textStyles}`}
         >
           {points}
         </p>
@@ -75,5 +75,5 @@ export const PointsDetails = ({
         </div>
       )} */}
     </div>
-  );
-};
+  )
+}

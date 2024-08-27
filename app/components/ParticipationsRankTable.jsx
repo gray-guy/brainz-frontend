@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { WinnerIcon } from "./Svgs";
+import Image from "next/image"
+import { WinnerIcon } from "./Svgs"
 
 export const ParticipationsRankTable = ({
   rank,
@@ -10,28 +10,28 @@ export const ParticipationsRankTable = ({
   animate,
   ...rest
 }) => {
-  const winnerRank = rank <= 3;
-  const winnerOpacity = winnerRank ? 1 : 0;
-  const winnerTextColor = isCurrentUser ? "dark" : "secondary";
+  const winnerRank = rank <= 3
+  const winnerOpacity = winnerRank ? 1 : 0
+  const winnerTextColor = isCurrentUser ? "dark" : "secondary"
   const rankStyles = isCurrentUser
     ? "items-center bg-[#FFE61A] text-dark pt-2.5 border-none rounded-lg opacity-100"
-    : "";
+    : ""
   const animationClass =
     isCurrentUser && animate
       ? "transition-transform duration-500 ease-in-out animate-bounce"
-      : "";
+      : ""
 
   return (
     <div
-      className={`mb-4 flex justify-between px-3 items-center pb-2.5 border-b border-grey-475 ${rankStyles} ${animationClass}`}
+      className={`mb-4 flex items-center justify-between border-b border-grey-475 px-3 pb-2.5 ${rankStyles} ${animationClass}`}
       {...rest}
     >
-      <div className="flex items-center gap-1.5 mr-6">
+      <div className="mr-6 flex items-center gap-1.5">
         <WinnerIcon
           className={`opacity-${winnerOpacity} text-${winnerTextColor}`}
         />
         <h1
-          className={`w-6 text-base font-bold  font-basement ${
+          className={`w-6 font-basement text-base font-bold ${
             isCurrentUser ? "text-dark" : "text-white"
           }`}
         >
@@ -50,16 +50,16 @@ export const ParticipationsRankTable = ({
           />
         </div> */}
         <h1
-          className={`text-base font-bold font-basement ${
+          className={`font-basement text-base font-bold ${
             isCurrentUser ? "text-dark" : "text-white"
           }`}
         >
           {userName.slice(0, 10)}
         </h1>
       </div>
-      <div className="flex items-center justify-center ml-11">
+      <div className="ml-11 flex items-center justify-center">
         <p
-          className={`text-base font-bold font-basement ${
+          className={`font-basement text-base font-bold ${
             isCurrentUser ? "text-dark" : "text-white"
           }`}
         >
@@ -67,7 +67,7 @@ export const ParticipationsRankTable = ({
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ParticipationsRankTable;
+export default ParticipationsRankTable

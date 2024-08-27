@@ -1,7 +1,7 @@
-import winBoxImg from "@/public/images/winbox.png";
-import ticket from "@/public/images/Tickets.png";
-import chip from "@/public/images/Chip.png";
-import diamond from "@/public/images/Diamond.png";
+import winBoxImg from "@/public/images/winbox.png"
+import ticket from "@/public/images/Tickets.png"
+import chip from "@/public/images/Chip.png"
+import diamond from "@/public/images/Diamond.png"
 
 export const winBoxData = [
   {
@@ -24,4 +24,4 @@ export const winBoxData = [
     title: "500 USDT for the Top-Liked Post",
     imageBg: "#2d9267",
   },
-];
+]

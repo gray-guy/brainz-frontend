@@ -1,4 +1,4 @@
-import profile from "@/public/images/avatar.png";
+import profile from "@/public/images/avatar.png"
 
 export const usersRankData = [
   {
@@ -67,7 +67,7 @@ export const usersRankData = [
     points: "5 pts",
     profileImage: profile,
   },
-];
+]
 
 export const fiveUsersRankData = [
   {
@@ -110,7 +110,7 @@ export const fiveUsersRankData = [
     reward: "1000USDT",
     myRank: false,
   },
-];
+]
 export const fiveToTenUsersRankData = [
   {
     rank: "06",
@@ -148,7 +148,7 @@ export const fiveToTenUsersRankData = [
     reward: "4000USDT",
     myRank: true,
   },
-];
+]
 export const mobileScreenUsersRankData = [
   {
     rank: "1",
@@ -174,4 +174,4 @@ export const mobileScreenUsersRankData = [
     points: "5 pts",
     profileImage: profile,
   },
-];
+]

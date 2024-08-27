@@ -1,10 +1,10 @@
-import Image from "next/image";
-import React from "react";
+import Image from "next/image"
+import React from "react"
 
 export const MobilePointsCard = ({ data }) => {
-  const {  rank, totalPoints, username } = data;
+  const { rank, totalPoints, username } = data
   return (
-    <div className="w-full flex gap-3 items-center bg-gradient-to-r from-white/20 to-[#C6C6C6]/10 rounded-[4px] px-2.5 py-1.5">
+    <div className="flex w-full items-center gap-3 rounded-[4px] bg-gradient-to-r from-white/20 to-[#C6C6C6]/10 px-2.5 py-1.5">
       {/* <div className="relative border rounded-full min-w-6 min-h-6 border-secondary">
         <Image
           src={profileImage}
@@ -16,12 +16,12 @@ export const MobilePointsCard = ({ data }) => {
         />
       </div> */}
       <div>
-        <h1 className="flex gap-3 font-bold text-secondary font-basement">
+        <h1 className="flex gap-3 font-basement font-bold text-secondary">
           <span> R{rank}:</span>
           {totalPoints}
         </h1>
-        <h1 className="font-normal text-white font-basement">{username}</h1>
+        <h1 className="font-basement font-normal text-white">{username}</h1>
       </div>
     </div>
-  );
-};
+  )
+}

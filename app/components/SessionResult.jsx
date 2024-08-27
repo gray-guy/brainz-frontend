@@ -1,81 +1,87 @@
-import Link from "next/link";
-import { Button } from "./Button";
-import { PointsDetails } from "./PointsDetails";
-import { ResultCard } from "./ResultCard";
-import { ConfettiBackground } from "./ConfettiBackground ";
-import WheelModal from "./WheelModal";
-import { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import { apiCall, getLocalAccessToken } from "@/lib/utils";
-import Image from "next/image";
-import CountdownTimer from "./CountDownTimer";
-import { toast } from "react-toastify";
-import { useUser } from "../contexts/UserContext";
-import w from "@/public/sounds/win.mp3";
-import l from "@/public/sounds/fail-sound.mp3";
+import Link from "next/link"
+import { Button } from "./Button"
+import { PointsDetails } from "./PointsDetails"
+import { ResultCard } from "./ResultCard"
+import { ConfettiBackground } from "./ConfettiBackground "
+import WheelModal from "./WheelModal"
+import { useEffect, useRef, useState } from "react"
+import axios from "axios"
+import { apiCall, getLocalAccessToken } from "@/lib/utils"
+import Image from "next/image"
+import CountdownTimer from "./CountDownTimer"
+import { toast } from "react-toastify"
+import { useUser } from "../contexts/UserContext"
+import w from "@/public/sounds/win.mp3"
+import l from "@/public/sounds/fail-sound.mp3"
 
-const SPIN_DURATION = 4 * 1000;
+const SPIN_DURATION = 4 * 1000
 
-export const SessionResult = ({ leaderboard, session, game, rewardEarned, playerCount }) => {
+export const SessionResult = ({
+  leaderboard,
+  session,
+  game,
+  rewardEarned,
+  playerCount,
+}) => {
   const [remainingWheelTime, setRemainingWheelTime] = useState(
     session.wheelDuration
-  );
-  const [isOpenWheelModal, setIsOpenWheelModal] = useState(false);
-  const [wheelData, setWheelData] = useState([]);
-  const [spinning, setSpinning] = useState(false);
+  )
+  const [isOpenWheelModal, setIsOpenWheelModal] = useState(false)
+  const [wheelData, setWheelData] = useState([])
+  const [spinning, setSpinning] = useState(false)
   const [winningPrize, setWiningPrize] = useState({
     type: "",
     amount: "",
-  });
-  const [spinned, setSpinned] = useState(false);
-  const wheelRef = useRef(null);
-  const [nextSession, setNextSession] = useState(null);
-  const [winnerAudio] = useState(new Audio(w));
-  const [loserAudio] = useState(new Audio(l));
+  })
+  const [spinned, setSpinned] = useState(false)
+  const wheelRef = useRef(null)
+  const [nextSession, setNextSession] = useState(null)
+  const [winnerAudio] = useState(new Audio(w))
+  const [loserAudio] = useState(new Audio(l))
 
   useEffect(() => {
     if (rewardEarned.type === "pot") {
-      toast.success('Your Prize is on its way!"');
-      winnerAudio.play();
+      toast.success('Your Prize is on its way!"')
+      winnerAudio.play()
     } else {
-      loserAudio.play();
+      loserAudio.play()
     }
-  },[])
+  }, [])
 
   // if game has sessions get the next session
   useEffect(() => {
     if (game && game.sessions && game.sessions.length > 0) {
       const nextSession = game.sessions.find(
         (session) => new Date(session.startTime) > new Date()
-      );
-      console.log({ nextSession });
+      )
+      console.log({ nextSession })
       // get least time session
       if (nextSession) {
         // const nextSession = nextSessions.reduce((prev, current) =>
         //   prev.startTime < current.startTime ? prev : current
         // );
-        setNextSession(nextSession);
+        setNextSession(nextSession)
       }
     }
-  }, [game]);
+  }, [game])
 
   useEffect(() => {
     const interval = setInterval(() => {
       setRemainingWheelTime((prev) => {
         if (prev > 0) {
-          return prev - 1;
+          return prev - 1
         } else {
-          clearInterval(interval);
-          !spinning && setIsOpenWheelModal(false);
-          return 0;
+          clearInterval(interval)
+          !spinning && setIsOpenWheelModal(false)
+          return 0
         }
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+      })
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
-    const accessToken = getLocalAccessToken();
+    const accessToken = getLocalAccessToken()
     const getWheelData = async () => {
       try {
         const res = await axios.get(
@@ -83,15 +89,15 @@ export const SessionResult = ({ leaderboard, session, game, rewardEarned, player
           {
             headers: { Authorization: `Bearer ${accessToken}` },
           }
-        );
-        const diamondQuantity = res.data.diamondsQty;
-        const ticketQuantity = res.data.ticketsQty;
+        )
+        const diamondQuantity = res.data.diamondsQty
+        const ticketQuantity = res.data.ticketsQty
 
-        const cashPrizes = res.data.cashPrizes;
+        const cashPrizes = res.data.cashPrizes
         // get average for each prize to set weight on wheel
-        const totalPrizes = cashPrizes.length + 3;
-        const diamondWeight = diamondQuantity / totalPrizes;
-        const ticketWeight = ticketQuantity / totalPrizes;
+        const totalPrizes = cashPrizes.length + 3
+        const diamondWeight = diamondQuantity / totalPrizes
+        const ticketWeight = ticketQuantity / totalPrizes
 
         const data = [
           {
@@ -106,116 +112,116 @@ export const SessionResult = ({ leaderboard, session, game, rewardEarned, player
             label: "1 Ticket",
             weight: Math.max(1, ticketWeight),
           },
-        ];
+        ]
         cashPrizes.forEach((prize) => {
           data.push({
             label: `$${prize.amount}`,
             weight: Math.max(1, prize.qty / totalPrizes),
-          });
-        });
-        setWheelData(data);
+          })
+        })
+        setWheelData(data)
       } catch (err) {
-        setRemainingWheelTime(0);
-        console.error("Error fetching wheel data:", err);
+        setRemainingWheelTime(0)
+        console.error("Error fetching wheel data:", err)
       }
-    };
-    getWheelData();
-  }, []);
+    }
+    getWheelData()
+  }, [])
 
   const getWinningPrize = async () => {
-    const data = apiCall("post", `/wheels/spin`, { sessionId: session.id });
+    const data = apiCall("post", `/wheels/spin`, { sessionId: session.id })
     if (data) {
-      setWiningPrize(data);
-      return data;
+      setWiningPrize(data)
+      return data
     } else {
-      toast.error("Error spinning the wheel!");
+      toast.error("Error spinning the wheel!")
     }
-  };
+  }
 
   const handleSpin = async () => {
     if (spinning || spinned) {
-      return toast.error("You can only spin once!");
+      return toast.error("You can only spin once!")
     }
-    setSpinning(true);
-    const winningPrize = await getWinningPrize();
-    let winningMessage = "";
-    let winningItem = "noPrize";
-    let winningIndex = 0;
+    setSpinning(true)
+    const winningPrize = await getWinningPrize()
+    let winningMessage = ""
+    let winningItem = "noPrize"
+    let winningIndex = 0
     if (winningPrize.type === "cashPrize") {
-      winningMessage = `You won $${winningPrize.amount}`;
-      winningItem = `$${winningPrize.amount}`;
-      winningIndex = wheelData.findIndex((item) => item.label === winningItem);
+      winningMessage = `You won $${winningPrize.amount}`
+      winningItem = `$${winningPrize.amount}`
+      winningIndex = wheelData.findIndex((item) => item.label === winningItem)
     } else if (winningPrize.type === "diamonds") {
-      winningMessage = `You won ${winningPrize.amount} diamonds`;
-      winningItem = "2 Diamonds";
-      winningIndex = wheelData.findIndex((item) => item.label === "2 Diamonds");
+      winningMessage = `You won ${winningPrize.amount} diamonds`
+      winningItem = "2 Diamonds"
+      winningIndex = wheelData.findIndex((item) => item.label === "2 Diamonds")
     } else if (winningPrize.type === "tickets") {
-      winningMessage = `You won ${winningPrize.amount} tickets`;
-      winningItem = "1 Ticket";
-      winningIndex = wheelData.findIndex((item) => item.label === "1 Ticket");
+      winningMessage = `You won ${winningPrize.amount} tickets`
+      winningItem = "1 Ticket"
+      winningIndex = wheelData.findIndex((item) => item.label === "1 Ticket")
     } else {
-      winningMessage = "Better luck next time";
+      winningMessage = "Better luck next time"
     }
-    wheelRef.current.spinToItem(winningIndex, SPIN_DURATION, true, 2, 1);
+    wheelRef.current.spinToItem(winningIndex, SPIN_DURATION, true, 2, 1)
     setTimeout(() => {
-      setSpinning(false);
-      setSpinned(true);
-      setRemainingWheelTime(0);
+      setSpinning(false)
+      setSpinned(true)
+      setRemainingWheelTime(0)
       if (winningPrize.type === "noPrize" || !winningPrize.type) {
-        toast.info(winningMessage);
+        toast.info(winningMessage)
       } else {
-        toast.success(winningMessage);
+        toast.success(winningMessage)
       }
       setTimeout(() => {
-        setIsOpenWheelModal(false);
-      }, 3000);
-    }, SPIN_DURATION);
-  };
+        setIsOpenWheelModal(false)
+      }, 3000)
+    }, SPIN_DURATION)
+  }
 
-  const { user } = useUser();
+  const { user } = useUser()
 
   const handleJoinSession = async (id) => {
-    if (!user || !nextSession) return;
+    if (!user || !nextSession) return
     if (user.tickets < nextSession.ticketsRequired) {
-      toast.error("You don't have enough tickets. Buy tickets in the shop.");
-      return;
+      toast.error("You don't have enough tickets. Buy tickets in the shop.")
+      return
     }
-    window.location.href = `${process.env.NEXT_PUBLIC_WEB_URL}/session/${id}`;
-  };
+    window.location.href = `${process.env.NEXT_PUBLIC_WEB_URL}/session/${id}`
+  }
 
-  const showAnimation = wheelData.length > 0;
-  const isWheelDisabled = remainingWheelTime <= 0 || spinned || !showAnimation;
+  const showAnimation = wheelData.length > 0
+  const isWheelDisabled = remainingWheelTime <= 0 || spinned || !showAnimation
 
   return (
     <div className="content">
       <ConfettiBackground />
-      <div className="flex flex-wrap gap-6 lg:gap-16 border-secondary">
+      <div className="flex flex-wrap gap-6 border-secondary lg:gap-16">
         <div className="flex-1">
           <div
             className={
-              "text-white pt-4 lg:pt-4 pb-4 lg:pb-6 pl-4 lg:pl-6 pr-4 lg:pr-12 rounded-[10px] h-full w-full text-nowrap bg-gradient-to-r from-[#3a4d56]/90 to-[#152c3a]"
+              "h-full w-full text-nowrap rounded-[10px] bg-gradient-to-r from-[#3a4d56]/90 to-[#152c3a] pb-4 pl-4 pr-4 pt-4 text-white lg:pb-6 lg:pl-6 lg:pr-12 lg:pt-4"
             }
           >
             <h1
-              className={`font-basement font-bold text-lg lg:text-xl tracking-wider mb-4`}
+              className={`mb-4 font-basement text-lg font-bold tracking-wider lg:text-xl`}
             >
               You Ranked{" "}
-              <span className="text-secondary uppercase">
+              <span className="uppercase text-secondary">
                 {leaderboard.currentUser.rank}
                 {leaderboard.currentUser.rank === 1
                   ? "st"
                   : leaderboard.currentUser.rank === 2
-                  ? "nd"
-                  : leaderboard.currentUser.rank === 3
-                  ? "rd"
-                  : "th"}
+                    ? "nd"
+                    : leaderboard.currentUser.rank === 3
+                      ? "rd"
+                      : "th"}
               </span>
             </h1>
             <h1
-              className={`font-basement font-bold text-xl lg:text-3xl tracking-wider mb-4`}
+              className={`mb-4 font-basement text-xl font-bold tracking-wider lg:text-3xl`}
             >
               Your Points{" "}
-              <span className="text-secondary uppercase">
+              <span className="uppercase text-secondary">
                 {leaderboard.currentUser.totalPoints}
               </span>
             </h1>
@@ -239,25 +245,25 @@ export const SessionResult = ({ leaderboard, session, game, rewardEarned, player
           />
         </div>
         <div
-          className={`flex-1 text-center sm:text-start ${showAnimation ? "animate-wiggle" : "" } ${isWheelDisabled ? "opacity-60": ""}` }
+          className={`flex-1 text-center sm:text-start ${showAnimation ? "animate-wiggle" : ""} ${isWheelDisabled ? "opacity-60" : ""}`}
         >
           <div
             className={
-              "pt-4 lg:pt-4 pb-4 lg:pb-6 pl-4 lg:pl-6 pr-4 lg:pr-12 rounded-[10px] h-full w-full text-nowrap bg-gradient-to-r from-[#3a4d56]/90 to-[#152c3a] relative overflow-hidden cursor-pointer hover:bg-secondary"
+              "relative h-full w-full cursor-pointer overflow-hidden text-nowrap rounded-[10px] bg-gradient-to-r from-[#3a4d56]/90 to-[#152c3a] pb-4 pl-4 pr-4 pt-4 hover:bg-secondary lg:pb-6 lg:pl-6 lg:pr-12 lg:pt-4"
             }
             onClick={() => {
-              if (isWheelDisabled) return;
-              setIsOpenWheelModal(true);
+              if (isWheelDisabled) return
+              setIsOpenWheelModal(true)
             }}
           >
-            <div className="z-10 relative">
+            <div className="relative z-10">
               <h1
-                className={`font-basement font-bold text-lg lg:text-xl text-white tracking-wider mb-4`}
+                className={`mb-4 font-basement text-lg font-bold tracking-wider text-white lg:text-xl`}
               >
                 Spin the wheel{" "}
               </h1>
               <h1
-                className={`font-basement font-bold text-xl lg:text-3xl text-white`}
+                className={`font-basement text-xl font-bold text-white lg:text-3xl`}
               >
                 {remainingWheelTime}s
               </h1>
@@ -267,35 +273,35 @@ export const SessionResult = ({ leaderboard, session, game, rewardEarned, player
               alt="wheel"
               width={320}
               height={320}
-              className="absolute -right-20 -bottom-28 "
+              className="absolute -bottom-28 -right-20"
             />
           </div>
         </div>
       </div>
 
-      <div className="flex-col lg:flex-row flex flex-wrap gap-10 lg:gap-16 justify-center bg-gradient-to-r from-[#3a4d56]/80 to-[#152c3a]/90 rounded-[10px] mt-6 lg:mt-10 py-4 lg:py-11 px-4 lg:px-6">
-        <div className="flex-1 items-center flex">
-          <h1 className="w-full text-lg text-center lg:text-start  lg:text-3xl font-black text-white font-basement">
+      <div className="mt-6 flex flex-col flex-wrap justify-center gap-10 rounded-[10px] bg-gradient-to-r from-[#3a4d56]/80 to-[#152c3a]/90 px-4 py-4 lg:mt-10 lg:flex-row lg:gap-16 lg:px-6 lg:py-11">
+        <div className="flex flex-1 items-center">
+          <h1 className="w-full text-center font-basement text-lg font-black text-white lg:text-start lg:text-3xl">
             Next Session Starting in
           </h1>
         </div>
-        <div className="flex-1 items-center flex ">
+        <div className="flex flex-1 items-center">
           {nextSession ? (
             <CountdownTimer time={nextSession.startTime} />
           ) : (
-            <h1 className="w-full text-lg text-center lg:text-start  lg:text-3xl font-black text-white font-basement">
+            <h1 className="w-full text-center font-basement text-lg font-black text-white lg:text-start lg:text-3xl">
               No upcoming sessions
             </h1>
           )}
         </div>
-        <div className="flex-1 flex flex-wrap flex-row lg:flex-col items-center justify-center gap-4 lg:gap-8 ">
-          <div className="flex gap-4 justify-center flex-row lg:flex-col items-center">
+        <div className="flex flex-1 flex-row flex-wrap items-center justify-center gap-4 lg:flex-col lg:gap-8">
+          <div className="flex flex-row items-center justify-center gap-4 lg:flex-col">
             {nextSession && (
               <div href={"/session"} className="flex justify-center">
                 <Button
                   variant={"outlined"}
                   size="text-sm lg:text-2xl"
-                  className={"px-6 lg:px-9 w-full"}
+                  className={"w-full px-6 lg:px-9"}
                   onClick={() => handleJoinSession(nextSession.id)}
                 >
                   Take a seat
@@ -316,10 +322,10 @@ export const SessionResult = ({ leaderboard, session, game, rewardEarned, player
       </div>
 
       <div className="mt-10">
-        <h2 className="text-2xl lg:text-4xl font-black text-white font-basement">
+        <h2 className="font-basement text-2xl font-black text-white lg:text-4xl">
           Participants ({playerCount})
         </h2>
-        <div className="mt-5 lg:mt-9 h-[370px] cursor-grab active:cursor-grabbing	 scrollbar scrollbar-w-[5.6px] scrollbar-h-[5.6px] overflow-y-scroll scrollbar-thumb-rounded-full scrollbar-thumb-[#104061]">
+        <div className="mt-5 h-[370px] cursor-grab overflow-y-scroll scrollbar scrollbar-thumb-[#104061] scrollbar-thumb-rounded-full scrollbar-w-[5.6px] scrollbar-h-[5.6px] active:cursor-grabbing lg:mt-9">
           <div className="flex flex-wrap justify-between gap-0 lg:gap-14">
             <div className="flex-1">
               {leaderboard.top10.slice(0, 5).map((user, index) => (
@@ -365,5 +371,5 @@ export const SessionResult = ({ leaderboard, session, game, rewardEarned, player
         />
       )}
     </div>
-  );
-};
+  )
+}

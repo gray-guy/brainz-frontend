@@ -1,9 +1,9 @@
-import { Dialog, Transition } from "@headlessui/react";
-import React, { Fragment, useEffect, useRef } from "react";
-import { ModalCrossIcon, WarningIcon } from "./Svgs";
-import { Button } from "./Button";
-import { Wheel } from "spin-wheel";
-import { wheelColors } from "@/lib/config";
+import { Dialog, Transition } from "@headlessui/react"
+import React, { Fragment, useEffect, useRef } from "react"
+import { ModalCrossIcon, WarningIcon } from "./Svgs"
+import { Button } from "./Button"
+import { Wheel } from "spin-wheel"
+import { wheelColors } from "@/lib/config"
 
 const WheelModal = ({
   showModal,
@@ -13,44 +13,44 @@ const WheelModal = ({
   onSpin,
   spinning,
 }) => {
-  const wheelContainerRef = useRef(null);
+  const wheelContainerRef = useRef(null)
 
   useEffect(() => {
-    const items = [];
-    const colorUsage = wheelColors.map(() => 0);
+    const items = []
+    const colorUsage = wheelColors.map(() => 0)
     wheelData.forEach((data) => {
-      const minUsage = Math.min(...colorUsage);
-      const colorIndex = colorUsage.indexOf(minUsage);
-      const color = wheelColors[colorIndex];
+      const minUsage = Math.min(...colorUsage)
+      const colorIndex = colorUsage.indexOf(minUsage)
+      const color = wheelColors[colorIndex]
 
       items.push({
         ...data,
         backgroundColor: color.backgroundColor,
         labelColor: color.labelColor,
-      });
-      colorUsage[colorIndex]++;
-    });
+      })
+      colorUsage[colorIndex]++
+    })
 
     const props = {
       items,
       borderWidth: 0,
       lineWidth: 0,
       lineColor: "transparent",
-      itemLabelRadius: 0.90,
-      itemLabelRadiusMax: 0.40,
+      itemLabelRadius: 0.9,
+      itemLabelRadiusMax: 0.4,
       overlayImage: "/wheel.png",
       isInteractive: false,
       pointerAngle: 90,
-    };
-    const wheel = new Wheel(wheelContainerRef.current, props);
-    wheelRef.current = wheel;
-  }, []);
+    }
+    const wheel = new Wheel(wheelContainerRef.current, props)
+    wheelRef.current = wheel
+  }, [])
 
   return (
     <Transition appear show={showModal} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-50 "
+        className="relative z-50"
         onClose={() => setShowModal(false)}
       >
         <Transition.Child
@@ -76,7 +76,7 @@ const WheelModal = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-[724px] text-center text-white transform overflow-hidden rounded-[20px] bg-primary-275 pb-6 md:pb-[48px] pt-[30px] md:pt-[90px] px-6 md:px-[86px] md:px-[50px] text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="shadow-xl w-full max-w-[724px] transform overflow-hidden rounded-[20px] bg-primary-275 px-6 pb-6 pt-[30px] text-left text-center align-middle text-white transition-all md:px-[50px] md:px-[86px] md:pb-[48px] md:pt-[90px]">
                 <div ref={wheelContainerRef} className="h-[500px]"></div>
 
                 <Button
@@ -89,7 +89,7 @@ const WheelModal = ({
                 </Button>
 
                 <button
-                  className="absolute top-[38px] right-[38px] cursor-pointer hover:text-secondary"
+                  className="absolute right-[38px] top-[38px] cursor-pointer hover:text-secondary"
                   onClick={() => setShowModal(false)}
                 >
                   <ModalCrossIcon />
@@ -100,7 +100,7 @@ const WheelModal = ({
         </div>
       </Dialog>
     </Transition>
-  );
-};
+  )
+}
 
-export default WheelModal;
+export default WheelModal

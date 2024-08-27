@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 export const TickIcon = ({ className, ...rest }) => {
   return (
@@ -15,8 +15,8 @@ export const TickIcon = ({ className, ...rest }) => {
         fill="currentColor"
       />
     </svg>
-  );
-};
+  )
+}
 export const EmailIcon = ({ className, ...rest }) => {
   return (
     <svg
@@ -33,8 +33,8 @@ export const EmailIcon = ({ className, ...rest }) => {
         d="M28 6H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h24a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2m-2.2 2L16 14.78L6.2 8ZM4 24V8.91l11.43 7.91a1 1 0 0 0 1.14 0L28 8.91V24Z"
       ></path>
     </svg>
-  );
-};
+  )
+}
 export const XIcon = ({
   className,
   width = "36px",
@@ -55,8 +55,8 @@ export const XIcon = ({
         fill="currentColor"
       />
     </svg>
-  );
-};
+  )
+}
 export const DiscordIcon = ({
   className,
   width = "44",
@@ -77,8 +77,8 @@ export const DiscordIcon = ({
         fill="currentColor"
       />
     </svg>
-  );
-};
+  )
+}
 export const LinkedInIcon = ({
   className,
   width = "34",
@@ -99,8 +99,8 @@ export const LinkedInIcon = ({
         fill="currentColor"
       />
     </svg>
-  );
-};
+  )
+}
 export const InstagramIcon = ({
   className,
   width = "34",
@@ -130,8 +130,8 @@ export const InstagramIcon = ({
         />
       </g>
     </svg>
-  );
-};
+  )
+}
 export const EthIcon = ({
   width = "24",
   height = "24",
@@ -151,8 +151,8 @@ export const EthIcon = ({
         d="M12 0L4.63 12.22L12 16.574l7.37-4.354zm0 24L4.63 13.617L12 18l7.37-4.383z"
       />
     </svg>
-  );
-};
+  )
+}
 export const ArrowIcon = ({
   width = "12",
   height = "6",
@@ -170,8 +170,8 @@ export const ArrowIcon = ({
     >
       <path d="M6 6L0 0H12L6 6Z" fill="currentColor4" />
     </svg>
-  );
-};
+  )
+}
 export const WalletIcon = ({ height = 16, width = 16, className, ...rest }) => {
   return (
     <svg
@@ -189,8 +189,8 @@ export const WalletIcon = ({ height = 16, width = 16, className, ...rest }) => {
         strokeLinejoin="round"
       />
     </svg>
-  );
-};
+  )
+}
 export const TicketIcon = ({
   className,
   height = "24",
@@ -221,8 +221,8 @@ export const TicketIcon = ({
         d="m250.5 140.44l-16.51-16.51m60.53 60.53l-11.01-11m55.03 55.03l-11-11.01m60.53 60.53l-16.51-16.51"
       />
     </svg>
-  );
-};
+  )
+}
 export const CrossIcon = ({ className, ...rest }) => {
   return (
     <svg
@@ -246,8 +246,8 @@ export const CrossIcon = ({ className, ...rest }) => {
         strokeLinecap="round"
       />
     </svg>
-  );
-};
+  )
+}
 export const DiamondIcon = ({
   width = "24",
   height = "24",
@@ -269,8 +269,8 @@ export const DiamondIcon = ({
         fill={fill}
       />
     </svg>
-  );
-};
+  )
+}
 export const ArrowDownLightIcon = ({ className, ...rest }) => {
   return (
     <svg
@@ -283,8 +283,8 @@ export const ArrowDownLightIcon = ({ className, ...rest }) => {
     >
       <path d="M1 1L8 8L15 1" stroke="#EFEFEF" strokeLinecap="round" />
     </svg>
-  );
-};
+  )
+}
 export const MenuIcon = ({ className, ...rest }) => {
   return (
     <svg
@@ -317,8 +317,8 @@ export const MenuIcon = ({ className, ...rest }) => {
         fill="white"
       />
     </svg>
-  );
-};
+  )
+}
 export const ModalCrossIcon = ({
   className,
   width = "20",
@@ -347,8 +347,8 @@ export const ModalCrossIcon = ({
         strokeLinecap="round"
       />
     </svg>
-  );
-};
+  )
+}
 export const BtcIcon = ({
   width = "22",
   height = "22",
@@ -366,8 +366,8 @@ export const BtcIcon = ({
         />
       </g>
     </svg>
-  );
-};
+  )
+}
 export const UsdtIcon = ({ className, ...rest }) => {
   return (
     <svg
@@ -385,8 +385,8 @@ export const UsdtIcon = ({ className, ...rest }) => {
         />
       </g>
     </svg>
-  );
-};
+  )
+}
 
 export const CheckIcon = ({ colorClass, ...rest }) => {
   return (
@@ -395,10 +395,7 @@ export const CheckIcon = ({ colorClass, ...rest }) => {
       height="9"
       viewBox="0 0 13 9"
       fill="none"
-      className={`absolute
-    w-4 h-5
-    hidden peer-checked:block
-    pointer-events-none text-${colorClass}`}
+      className={`pointer-events-none absolute hidden h-5 w-4 peer-checked:block text-${colorClass}`}
     >
       <path
         d="M1 4.29883L4.66667 7.79883L12 0.798828"
@@ -407,8 +404,8 @@ export const CheckIcon = ({ colorClass, ...rest }) => {
         strokeLinecap="round"
       />
     </svg>
-  );
-};
+  )
+}
 export const CheckCirclekIcon = ({ className, ...rest }) => {
   return (
     <svg
@@ -424,8 +421,8 @@ export const CheckCirclekIcon = ({ className, ...rest }) => {
         fill="#30C551"
       />
     </svg>
-  );
-};
+  )
+}
 export const GreyCheckIcon = ({ className, ...rest }) => {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -435,8 +432,8 @@ export const GreyCheckIcon = ({ className, ...rest }) => {
         fillOpacity="0.2"
       />
     </svg>
-  );
-};
+  )
+}
 export const ArrowRightIcon = ({ className, ...rest }) => {
   return (
     <svg
@@ -451,8 +448,8 @@ export const ArrowRightIcon = ({ className, ...rest }) => {
         d="M338.752 104.704a64 64 0 0 0 0 90.496l316.8 316.8l-316.8 316.8a64 64 0 0 0 90.496 90.496l362.048-362.048a64 64 0 0 0 0-90.496L429.248 104.704a64 64 0 0 0-90.496 0"
       />
     </svg>
-  );
-};
+  )
+}
 export const BankIcon = ({ className, ...rest }) => {
   return (
     <svg
@@ -468,8 +465,8 @@ export const BankIcon = ({ className, ...rest }) => {
         fill="white"
       />
     </svg>
-  );
-};
+  )
+}
 export const LongArrowRightIcon = ({
   className,
   width = "27",
@@ -490,8 +487,8 @@ export const LongArrowRightIcon = ({
         fill="#EFEFEF"
       />
     </svg>
-  );
-};
+  )
+}
 export const WinnerIcon = ({
   className,
   width = "18",
@@ -512,8 +509,8 @@ export const WinnerIcon = ({
         fill="currentColor"
       />
     </svg>
-  );
-};
+  )
+}
 export const WinnerDarkIcon = ({
   className,
   width = "24",
@@ -534,8 +531,8 @@ export const WinnerDarkIcon = ({
         fill="#011828"
       />
     </svg>
-  );
-};
+  )
+}
 export const WarningIcon = ({
   className,
   width = "128",
@@ -570,8 +567,8 @@ export const WarningIcon = ({
         fill="#FFE61A"
       />
     </svg>
-  );
-};
+  )
+}
 export const LinkIcon = ({ className, ...props }) => {
   return (
     <svg
@@ -590,8 +587,8 @@ export const LinkIcon = ({ className, ...props }) => {
       <polyline points="15 3 21 3 21 9"></polyline>
       <line x1="10" y1="14" x2="21" y2="3"></line>
     </svg>
-  );
-};
+  )
+}
 
 export const PayementIcon = ({ ...props }) => {
   return (
@@ -604,8 +601,8 @@ export const PayementIcon = ({ ...props }) => {
         strokeLinejoin="round"
       />
     </svg>
-  );
-};
+  )
+}
 export const TextCopyIcon = ({
   height = "16",
   width = "16",
@@ -625,8 +622,8 @@ export const TextCopyIcon = ({
         d="M9.116 17q-.691 0-1.153-.462T7.5 15.385V4.615q0-.69.463-1.153T9.116 3h7.769q.69 0 1.153.462t.462 1.153v10.77q0 .69-.462 1.152T16.884 17zm0-1h7.769q.23 0 .423-.192t.192-.423V4.615q0-.23-.192-.423T16.884 4H9.116q-.231 0-.424.192t-.192.423v10.77q0 .23.192.423t.423.192m-3 4q-.69 0-1.153-.462T4.5 18.385V7.115q0-.213.143-.356T5 6.616t.357.143t.143.357v11.269q0 .23.192.423t.423.192h8.27q.213 0 .356.143t.143.357t-.143.357t-.357.143zM8.5 16V4z"
       />
     </svg>
-  );
-};
+  )
+}
 export const TextCopyTickIcon = ({
   height = "16",
   width = "16",
@@ -651,5 +648,5 @@ export const TextCopyTickIcon = ({
         color="currentColor"
       />
     </svg>
-  );
-};
+  )
+}

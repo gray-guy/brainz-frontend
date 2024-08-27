@@ -1,13 +1,13 @@
-import Link from "next/link";
-import homeBanner from "../../../public/images/homebanner.png";
-import logo from "../../../public/images/brainz-logo.svg";
-import Image from "next/image";
-import { WinBox } from "@/app/components/WinBox";
-import { winBoxData } from "./data";
-import WaveAnimation from "@/app/components/Wave";
-import Footer from "@/app/components/Footer";
-import ConnectButton from "./ConnectButton";
-import { Suspense } from "react";
+import Link from "next/link"
+import homeBanner from "../../../public/images/homebanner.png"
+import logo from "../../../public/images/brainz-logo.svg"
+import Image from "next/image"
+import { WinBox } from "@/app/components/WinBox"
+import { winBoxData } from "./data"
+import WaveAnimation from "@/app/components/Wave"
+import Footer from "@/app/components/Footer"
+import ConnectButton from "./ConnectButton"
+import { Suspense } from "react"
 
 export const Home = () => {
   return (
@@ -25,8 +25,8 @@ export const Home = () => {
         }}
         className="flex flex-col items-center"
       >
-        <div className="container flex flex-col items-center justify-center px-6 text-center pt-14 pb-14 ">
-          <Link href={"/"} className="relative w-20 h-12 lg:w-28 lg:h-16">
+        <div className="container flex flex-col items-center justify-center px-6 pb-14 pt-14 text-center">
+          <Link href={"/"} className="relative h-12 w-20 lg:h-16 lg:w-28">
             <Image
               src={logo}
               alt="Logo"
@@ -36,10 +36,10 @@ export const Home = () => {
               priority={true}
             />
           </Link>
-          <h1 className="mt-6 text-3xl font-bold text-white font-basement md:text-4xl">
+          <h1 className="mt-6 font-basement text-3xl font-bold text-white md:text-4xl">
             Play Trivia Game, Win Crypto Prizes
           </h1>
-          <p className="mt-5 text-base font-normal lg:text-lg font-basement text-grey-100">
+          <p className="mt-5 font-basement text-base font-normal text-grey-100 lg:text-lg">
             Use Any Crypto to Join a Session
           </p>
           <div className="mt-9">
@@ -54,7 +54,7 @@ export const Home = () => {
             onAccept={handleAccept}
             toggleNotification={toggleNotification}
           /> */}
-          <div className="relative flex grid justify-center gap-8 mt-5 -bottom-14 xs:grid-cols-1 lg:grid-cols-3 pb-14">
+          <div className="xs:grid-cols-1 relative -bottom-14 mt-5 flex grid justify-center gap-8 pb-14 lg:grid-cols-3">
             <div className="lg:pt-[78px]">
               <WinBox
                 imageSrc={winBoxData[0].imageSrc}
@@ -125,12 +125,12 @@ export const Home = () => {
           <TokkenCard />
         </SlickCarousel>
       </div> */}
-      <div className="w-full overflow-hidden ">
+      <div className="w-full overflow-hidden">
         <WaveAnimation />
       </div>
       <div className="m-2 border-t border-grey-250">
         <Footer />
       </div>
     </div>
-  );
-};
+  )
+}

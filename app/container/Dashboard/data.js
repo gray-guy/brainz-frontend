@@ -1,4 +1,4 @@
-import SessionImage from "@/public/images/football-kick.png";
+import SessionImage from "@/public/images/football-kick.png"
 export const cryptoCardData = [
   {
     id: 1,
@@ -42,9 +42,9 @@ export const cryptoCardData = [
       },
     ],
   },
-];
+]
 export const sessionCardData = {
   title: "Game Title",
   gamesCategories: ["Crypto", "Sports", "Science"],
   gameImage: SessionImage,
-};
+}

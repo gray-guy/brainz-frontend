@@ -115,13 +115,13 @@ const Header = () => {
             )}
           </div>
           <div>
-            {/* <Ticket
+            <Ticket
               mainIcon={TicketIcon}
               number={user.tickets}
               label="Tickets"
               bgColor="danger"
               href="/shop"
-            /> */}
+            />
           </div>
           <div>
             <Ticket

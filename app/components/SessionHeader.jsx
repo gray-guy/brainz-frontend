@@ -1,13 +1,13 @@
-import Image from "next/image";
-import Link from "next/link";
-import logo from "@/public/images/brainz-logo.svg";
+import Image from "next/image"
+import Link from "next/link"
+import logo from "@/public/images/brainz-logo.svg"
 
 export const SessionHeader = ({ title }) => {
   return (
-    <div className="pb-[70px] relative z-30 ">
-      <div className="fixed top-0 flex w-full px-4 lg:px-12 bg-primary-350 py-[17px]">
-        <div className="lg:border-r-2 border-primary-375 pr-1 lg:pr-9">
-          <Link href="/" className="flex items-center w-full">
+    <div className="relative z-30 pb-[70px]">
+      <div className="fixed top-0 flex w-full bg-primary-350 px-4 py-[17px] lg:px-12">
+        <div className="border-primary-375 pr-1 lg:border-r-2 lg:pr-9">
+          <Link href="/" className="flex w-full items-center">
             <Image
               src={logo}
               alt="Logo"
@@ -18,12 +18,12 @@ export const SessionHeader = ({ title }) => {
             />
           </Link>
         </div>
-        <div className="flex items-center justify-center w-full md:w-[calc(100%-142px)]">
-          <h1 className="text-lg lg:text-xl font-bold text-white font-basement">
+        <div className="flex w-full items-center justify-center md:w-[calc(100%-142px)]">
+          <h1 className="font-basement text-lg font-bold text-white lg:text-xl">
             {title}
           </h1>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

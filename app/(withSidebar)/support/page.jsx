@@ -1,8 +1,8 @@
-import Support from "@/app/container/Support";
-import React from "react";
+import Support from "@/app/container/Support"
+import React from "react"
 
 const page = () => {
-  return <Support />;
-};
+  return <Support />
+}
 
-export default page;
+export default page

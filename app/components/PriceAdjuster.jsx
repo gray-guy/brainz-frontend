@@ -1,38 +1,37 @@
 export const PriceAdjuster = ({ value, onChange, currency = "ETH" }) => {
-
   const updatePrice = (operation) => {
-    const increment = 1;
-    let priceNumber = value;
+    const increment = 1
+    let priceNumber = value
     if (operation === "increment") {
-      priceNumber = priceNumber + increment;
+      priceNumber = priceNumber + increment
     } else if (operation === "decrement") {
-      priceNumber = Math.max(0, priceNumber - increment);
+      priceNumber = Math.max(0, priceNumber - increment)
     }
-    onChange(priceNumber);
-  };
+    onChange(priceNumber)
+  }
 
   return (
-    <div className="flex w-full md:w-60 px-[10px] lg:px-6 py-3.5 border border-primary-250 bg-primary flex gap-4 items-center justify-between rounded-3xl">
-      <div className="flex-2.5 flex ">
+    <div className="flex w-full items-center justify-between gap-4 rounded-3xl border border-primary-250 bg-primary px-[10px] py-3.5 md:w-60 lg:px-6">
+      <div className="flex-2.5 flex">
         <button
           onClick={() => updatePrice("decrement")}
-          className="text-base lg:text-lg font-bold text-white font-basement hover:text-secondary"
+          className="font-basement text-base font-bold text-white hover:text-secondary lg:text-lg"
         >
           -
         </button>
         <input
-          className="w-full overflow-hidden border-secondary mx-4 appearance-none font-basement font-bold text-base lg:text-lg  text-grey-650 bg-[transparent] outline-none focus:outline-none text-white"
+          className="mx-4 w-full appearance-none overflow-hidden border-secondary bg-[transparent] font-basement text-base font-bold text-grey-650 text-white outline-none focus:outline-none lg:text-lg"
           type="number"
           placeholder="121"
           value={value}
           onChange={(e) => {
             const newPrice =
-              e.target.value === "" ? 0 : parseFloat(e.target.value);
-            if (!isNaN(newPrice)) onChange(newPrice);
+              e.target.value === "" ? 0 : parseFloat(e.target.value)
+            if (!isNaN(newPrice)) onChange(newPrice)
           }}
         />
       </div>
-      <div className="flex-1 flex items-center justify-end gap-3 relative ">
+      <div className="relative flex flex-1 items-center justify-end gap-3">
         {/* <input
           className="hidden lg:block appearance-none font-basement font-bold text-base lg:text-lg  text-grey-650 bg-[transparent] outline-none focus:outline-none text-white"
           type="number"
@@ -48,16 +47,16 @@ export const PriceAdjuster = ({ value, onChange, currency = "ETH" }) => {
             width: `${(price.toString().length + 1) * 10}px`,
           }}
         /> */}
-        <h1 className="text-base lg:text-lg  font-bold font-basement text-secondary">
+        <h1 className="font-basement text-base font-bold text-secondary lg:text-lg">
           {currency}
         </h1>
         <button
           onClick={() => updatePrice("increment")}
-          className="text-base lg:text-lg  font-bold text-white font-basement hover:text-secondary"
+          className="font-basement text-base font-bold text-white hover:text-secondary lg:text-lg"
         >
           +
         </button>
       </div>
     </div>
-  );
-};
+  )
+}

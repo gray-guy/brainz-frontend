@@ -1,8 +1,8 @@
-import Profile from "@/app/container/Profile";
-import React from "react";
+import Profile from "@/app/container/Profile"
+import React from "react"
 
 const page = () => {
-  return <Profile />;
-};
+  return <Profile />
+}
 
-export default page;
+export default page

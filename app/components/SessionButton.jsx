@@ -1,4 +1,4 @@
-import { DiamondIcon } from "./Svgs";
+import { DiamondIcon } from "./Svgs"
 
 export const SessionButton = ({
   title = "50/50",
@@ -14,7 +14,7 @@ export const SessionButton = ({
 }) => {
   return (
     <div
-      className={`h-full transition  duration-200 ease-in-out rounded-[10px] ${mainStyles} px-2 lg:px-4 pt-2 pb-[12px] border border-[#051c2b] ${
+      className={`h-full rounded-[10px] transition duration-200 ease-in-out ${mainStyles} border border-[#051c2b] px-2 pb-[12px] pt-2 lg:px-4 ${
         hover ? "hover:border-white" : ""
       }`}
       {...props}
@@ -25,7 +25,7 @@ export const SessionButton = ({
         </h1>
       </div>
       <div
-        className={`py-1.5 mt-[6px] flex items-center justify-center gap-4 rounded-full ${badgeBg} max-w-[80px] md:max-w-[100px]`}
+        className={`mt-[6px] flex items-center justify-center gap-4 rounded-full py-1.5 ${badgeBg} max-w-[80px] md:max-w-[100px]`}
       >
         <h1 className={`font-basement font-normal ${countSize} text-white`}>
           {count}
@@ -37,5 +37,5 @@ export const SessionButton = ({
         />
       </div>
     </div>
-  );
-};
+  )
+}

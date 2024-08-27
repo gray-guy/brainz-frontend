@@ -5,17 +5,17 @@ import React, {
   useEffect,
   useMemo,
   useCallback,
-} from "react";
-import { useSendTransaction, useWallets } from "@privy-io/react-auth";
-import { bsc, bscTestnet } from "viem/chains";
-import { getWalletBalance, getNativeWalletBalance } from "@/lib/utils";
+} from "react"
+import { useSendTransaction, useWallets } from "@privy-io/react-auth"
+import { bsc, bscTestnet } from "viem/chains"
+import { getWalletBalance, getNativeWalletBalance } from "@/lib/utils"
 
-const WalletContext = createContext(null);
+const WalletContext = createContext(null)
 
 const WalletProvider = ({ children }) => {
-  const { wallets } = useWallets();
-  const [provider, setProvider] = useState(null);
-  const [signer, setSigner] = useState(null);
+  const { wallets } = useWallets()
+  const [provider, setProvider] = useState(null)
+  const [signer, setSigner] = useState(null)
   const [tokens, setTokens] = useState([
     {
       symbol: "BNB",
@@ -28,51 +28,51 @@ const WalletProvider = ({ children }) => {
       contractAddress: process.env.NEXT_PUBLIC_USDT_ADDRESS,
       imageUrl: "https://playbrainz-data.s3.amazonaws.com/token-logos/usdt.png",
     },
-  ]);
-  const [walletAddress, setWalletAddress] = useState({});
-  const [_walletBalances, setWalletBalances] = useState([]);
-  const [platformAddress, setPlatformAddress] = useState(null);
-  const [isPrivyWallet, setIsPrivyWallet] = useState(false);
-  const { sendTransaction: privySendTransaction } = useSendTransaction();
+  ])
+  const [walletAddress, setWalletAddress] = useState({})
+  const [_walletBalances, setWalletBalances] = useState([])
+  const [platformAddress, setPlatformAddress] = useState(null)
+  const [isPrivyWallet, setIsPrivyWallet] = useState(false)
+  const { sendTransaction: privySendTransaction } = useSendTransaction()
 
   useEffect(() => {
     const getProvider = async () => {
-      const wallet = wallets[0];
-      if (!wallet) return;
+      const wallet = wallets[0]
+      if (!wallet) return
       if (wallet.connectorType === "embedded") {
-        setIsPrivyWallet(true);
+        setIsPrivyWallet(true)
       } else {
-        setIsPrivyWallet(false);
+        setIsPrivyWallet(false)
       }
-      setWalletAddress(wallet.address);
+      setWalletAddress(wallet.address)
       await wallet.switchChain(
         process.env.NEXT_PUBLIC_CHAIN === "bsc" ? bsc.id : bscTestnet.id
-      );
-      const provider = await wallet.getEthersProvider();
-      setProvider(provider);
-      const signer = provider.getSigner();
-      setSigner(signer);
-    };
+      )
+      const provider = await wallet.getEthersProvider()
+      setProvider(provider)
+      const signer = provider.getSigner()
+      setSigner(signer)
+    }
 
-    getProvider();
-  }, [wallets]);
+    getProvider()
+  }, [wallets])
 
   useEffect(() => {
     async function fetchBSCUSDBalance(walletAddress, provider) {
-      const tokenAddress = process.env.NEXT_PUBLIC_USDT_ADDRESS;
+      const tokenAddress = process.env.NEXT_PUBLIC_USDT_ADDRESS
       const balance = await getWalletBalance({
         provider,
         walletAddress,
         tokenAddress,
-      });
-      return balance;
+      })
+      return balance
     }
     async function fetchNativeBalance(walletAddress, provider) {
       const balance = await getNativeWalletBalance({
         provider,
         walletAddress,
-      });
-      return balance;
+      })
+      return balance
     }
     if (provider) {
       fetchNativeBalance(walletAddress, provider).then((balance) => {
@@ -81,34 +81,33 @@ const WalletProvider = ({ children }) => {
           symbol: "BNB",
           imageUrl:
             "https://playbrainz-data.s3.amazonaws.com/token-logos/bnb.png",
-        };
-        setWalletBalances((prev) => ({ ...prev, BNB: balanceDetails }));
-      });
+        }
+        setWalletBalances((prev) => ({ ...prev, BNB: balanceDetails }))
+      })
       fetchBSCUSDBalance(walletAddress, provider).then((balance) => {
         const balanceDetails = {
           balance,
           symbol: "USDT",
           imageUrl:
             "https://playbrainz-data.s3.amazonaws.com/token-logos/usdt.png",
-        };
-        setWalletBalances((prev) => ({ ...prev, USDT: balanceDetails }));
-      });
+        }
+        setWalletBalances((prev) => ({ ...prev, USDT: balanceDetails }))
+      })
     }
-  }, [provider, walletAddress]);
-
+  }, [provider, walletAddress])
 
   const walletBalances = useMemo(() => {
-    return Object.values(_walletBalances);
-  }, [_walletBalances]);
+    return Object.values(_walletBalances)
+  }, [_walletBalances])
 
   const sendTransaction = useMemo(() => {
     if (isPrivyWallet) {
-      return privySendTransaction;
+      return privySendTransaction
     }
     if (signer) {
-      return signer.sendTransaction.bind(signer);
+      return signer.sendTransaction.bind(signer)
     }
-  }, [isPrivyWallet, signer, privySendTransaction]);
+  }, [isPrivyWallet, signer, privySendTransaction])
 
   return (
     <WalletContext.Provider
@@ -128,11 +127,11 @@ const WalletProvider = ({ children }) => {
     >
       {children}
     </WalletContext.Provider>
-  );
-};
+  )
+}
 
-export default WalletProvider;
+export default WalletProvider
 
 export const useWallet = () => {
-  return useContext(WalletContext);
-};
+  return useContext(WalletContext)
+}

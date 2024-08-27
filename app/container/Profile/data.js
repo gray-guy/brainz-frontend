@@ -23,4 +23,4 @@ export const tableData = [
     status: "Completed",
     amount: "+25USDT",
   },
-];
+]

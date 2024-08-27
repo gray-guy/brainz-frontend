@@ -32,7 +32,7 @@ export const SelectAnswer = ({
   powerUsed,
   playerCount,
   stage,
-  isSessionEnded
+  isSessionEnded,
 }) => {
   const [audio] = useState(new Audio(clickSound))
   const [wrong] = useState(new Audio(w))
@@ -49,12 +49,12 @@ export const SelectAnswer = ({
       const user = data[currentIndex]
       const updatedTable = [
         ...data.slice(0, currentIndex),
-        ...data.slice(currentIndex + 1)
+        ...data.slice(currentIndex + 1),
       ]
       const newTable = [
         ...updatedTable.slice(0, currentIndex - 1),
         user,
-        ...updatedTable.slice(currentIndex - 1)
+        ...updatedTable.slice(currentIndex - 1),
       ]
 
       setTable(newTable)
@@ -310,7 +310,7 @@ export const SelectAnswer = ({
                       isCurrentUser={isCurrentUser}
                       animate={questionTimeRemaining < 0}
                       style={{
-                        opacity: isCurrentUser || index <= 2 ? 1 : opacity
+                        opacity: isCurrentUser || index <= 2 ? 1 : opacity,
                       }}
                     />
                   )
@@ -326,7 +326,7 @@ export const SelectAnswer = ({
 const useTimer = ({
   questionTimeRemaining,
   restTimeRemaining,
-  isSessionEnded
+  isSessionEnded,
 }) => {
   const [internalTime, setInternalTime] = useState(0)
   const [showCapture, setShowCapture] = useState(false)
@@ -364,19 +364,19 @@ const useTimer = ({
   return {
     showCapture,
     timeToShow,
-    shouldPulse
+    shouldPulse,
   }
 }
 
 const QuestionTimer = ({
   questionTimeRemaining,
   isSessionEnded,
-  restTimeRemaining
+  restTimeRemaining,
 }) => {
   const { shouldPulse, showCapture, timeToShow } = useTimer({
     isSessionEnded,
     questionTimeRemaining,
-    restTimeRemaining
+    restTimeRemaining,
   })
 
   const label = isSessionEnded
@@ -424,7 +424,7 @@ const TimerCard = ({ timeToShow }) => {
 const QuestionTimerMobile = ({ questionTimeRemaining, restTimeRemaining }) => {
   const { showCapture, timeToShow } = useTimer({
     questionTimeRemaining,
-    restTimeRemaining
+    restTimeRemaining,
   })
 
   return (

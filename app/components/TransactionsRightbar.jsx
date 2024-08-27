@@ -1,96 +1,96 @@
-import { useEffect, useRef } from "react";
-import { BankIcon, ModalCrossIcon } from "./Svgs";
-import { Button } from "./Button";
+import { useEffect, useRef } from "react"
+import { BankIcon, ModalCrossIcon } from "./Svgs"
+import { Button } from "./Button"
 
 export const RightSidebar = ({ open, setOpen }) => {
-  const sidebarRef = useRef();
+  const sidebarRef = useRef()
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setOpen(false);
+        setOpen(false)
       }
-    };
+    }
 
     if (open) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside)
     } else {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside)
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [open, setOpen]);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [open, setOpen])
 
   return (
     <div ref={sidebarRef} className="mr-[20px]">
       <div
-        className={`scrollbar scrollbar-w-[10px] scrollbar-thumb-rounded-full scrollbar-thumb-primary overflow-y-scroll text-center fixed top-0 right-0 h-full w-[512px] bg-primary-375 text-white px-[54px] pt-[60px] transition-transform transform ${
+        className={`fixed right-0 top-0 h-full w-[512px] transform overflow-y-scroll bg-primary-375 px-[54px] pt-[60px] text-center text-white transition-transform scrollbar scrollbar-thumb-primary scrollbar-thumb-rounded-full scrollbar-w-[10px] ${
           open ? "translate-x-0" : "translate-x-full"
         } z-40`}
       >
         <div>
-          <h1 className="font-inter font-[800] text-[26px]">
+          <h1 className="font-inter text-[26px] font-[800]">
             Transaction Details
           </h1>
           <button
             onClick={() => setOpen(false)}
-            className="absolute top-[36px] right-[50px] text-2xl focus:outline-none"
+            className="absolute right-[50px] top-[36px] text-2xl focus:outline-none"
           >
             <ModalCrossIcon height="19" width="19" />
           </button>
         </div>
-        <div className="flex flex-col justify-center items-center mt-14 border-b border-grey pb-6">
-          <div className=" flex items-center justify-center border-[3px] border-secondary w-[120px] h-[120px] bg-primary-425 rounded-full">
+        <div className="mt-14 flex flex-col items-center justify-center border-b border-grey pb-6">
+          <div className="flex h-[120px] w-[120px] items-center justify-center rounded-full border-[3px] border-secondary bg-primary-425">
             <BankIcon />
           </div>
-          <h1 className="text-start mt-4 font-basement font-bold text-[34px] text-white">
+          <h1 className="mt-4 text-start font-basement text-[34px] font-bold text-white">
             +25 USDT
           </h1>
-          <h1 className="text-start mt-[6px] font-basement font-bold text-[22px] text-white">
+          <h1 className="mt-[6px] text-start font-basement text-[22px] font-bold text-white">
             Completed
           </h1>
         </div>
-        <h1 className="text-start mt-5 font-basement font-bold text-xl text-white">
+        <h1 className="mt-5 text-start font-basement text-xl font-bold text-white">
           Transaction Details
         </h1>
         <div className="pb-[82px]">
           <div>
-            <h1 className="font-inter font-bold text-start mt-5 font-basement font-bold text-lg text-white">
+            <h1 className="mt-5 text-start font-basement font-inter text-lg font-bold text-white">
               Transaction ID:
             </h1>
-            <p className="font-inter font-[600] text-start font-basement font-bold text-lg text-grey-600">
+            <p className="text-start font-basement font-inter text-lg font-[600] font-bold text-grey-600">
               656599538
             </p>
           </div>
           <div>
-            <h1 className="font-inter font-bold text-start mt-5 font-basement font-bold text-lg text-white">
+            <h1 className="mt-5 text-start font-basement font-inter text-lg font-bold text-white">
               Description:
             </h1>
-            <p className="font-inter font-[600] text-start font-basement font-bold text-lg text-grey-600">
+            <p className="text-start font-basement font-inter text-lg font-[600] font-bold text-grey-600">
               Reward
             </p>
           </div>
           <div>
-            <h1 className="font-inter font-bold text-start mt-5 font-basement font-bold text-lg text-white">
+            <h1 className="mt-5 text-start font-basement font-inter text-lg font-bold text-white">
               Session & ID:
             </h1>
-            <p className="font-inter font-[600] text-start font-basement font-bold text-lg text-grey-600">
+            <p className="text-start font-basement font-inter text-lg font-[600] font-bold text-grey-600">
               Cryto <br />
               545451454
             </p>
           </div>
           <div>
-            <h1 className="font-inter font-bold text-start mt-5 font-basement font-bold text-lg text-white">
+            <h1 className="mt-5 text-start font-basement font-inter text-lg font-bold text-white">
               Completed:
             </h1>
-            <p className="font-inter font-[600] text-start font-basement font-bold text-lg text-grey-600">
+            <p className="text-start font-basement font-inter text-lg font-[600] font-bold text-grey-600">
               22 March, 2024
             </p>
           </div>
-          <div className="flex flex-col justify-center items-center mt-14">
-            <h1 className="border-b pb-[4px] font-inter font-bold text-start mt-5 font-basement font-bold text-lg text-white">
+          <div className="mt-14 flex flex-col items-center justify-center">
+            <h1 className="mt-5 border-b pb-[4px] text-start font-basement font-inter text-lg font-bold text-white">
               Session Details
             </h1>
             <Button variant={"outlined"} className={"mt-8"}>
@@ -100,5 +100,5 @@ export const RightSidebar = ({ open, setOpen }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

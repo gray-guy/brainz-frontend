@@ -1,25 +1,25 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
-import { usePrivy } from "@privy-io/react-auth";
-import { DiamondIcon, TicketIcon } from "./Svgs";
-import myProfile from "@/public/images/avatar.png";
-import { socialLinks } from "@/lib/config";
-import SelectDropdown from "./SelectDropdown";
-import { useWallet } from "../contexts/WalletContext";
-import { useUser } from "../contexts/UserContext";
-import { formatNumber } from "@/lib/utils";
-import { PromotionTasks } from "./PromotionTasks";
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
+import Image from "next/image"
+import { usePrivy } from "@privy-io/react-auth"
+import { DiamondIcon, TicketIcon } from "./Svgs"
+import myProfile from "@/public/images/avatar.png"
+import { socialLinks } from "@/lib/config"
+import SelectDropdown from "./SelectDropdown"
+import { useWallet } from "../contexts/WalletContext"
+import { useUser } from "../contexts/UserContext"
+import { formatNumber } from "@/lib/utils"
+import { PromotionTasks } from "./PromotionTasks"
 
 export const MobileSidebar = ({ onNavLinkClick }) => {
-  const [activeLink, setActiveLink] = useState("");
-  const { walletBalances } = useWallet();
-  const { user } = useUser();
+  const [activeLink, setActiveLink] = useState("")
+  const { walletBalances } = useWallet()
+  const { user } = useUser()
 
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   const navLinks = useMemo(
     () => [
@@ -28,36 +28,36 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
       { title: "Profile", url: "/profile" },
       { title: "How to Play", url: "/htp/rules" },
     ],
-    [],
-  );
+    []
+  )
 
   useEffect(() => {
-    const active = navLinks.find((link) => link.url === pathname);
-    if (active) setActiveLink(active.title);
-  }, [pathname, navLinks]);
+    const active = navLinks.find((link) => link.url === pathname)
+    if (active) setActiveLink(active.title)
+  }, [pathname, navLinks])
 
   const handleLinkClick = () => {
     if (onNavLinkClick) {
-      onNavLinkClick();
+      onNavLinkClick()
     }
-  };
+  }
 
-  const { ready, authenticated, logout } = usePrivy();
+  const { ready, authenticated, logout } = usePrivy()
   // Disable logout when Privy is not ready or the user is not authenticated
-  const disableLogout = !ready || (ready && !authenticated);
+  const disableLogout = !ready || (ready && !authenticated)
 
   const handleLogout = async () => {
     // remove token from localstorage
-    localStorage.clear();
-    await logout();
-  };
+    localStorage.clear()
+    await logout()
+  }
 
   return (
-    <div className="flex flex-col justify-between h-full">
+    <div className="flex h-full flex-col justify-between">
       <div>
-        <div className="flex lg:hidden justify-between w-full gap-4 px-2 py-2 rounded-full  bg-primary-350">
+        <div className="flex w-full justify-between gap-4 rounded-full bg-primary-350 px-2 py-2 lg:hidden">
           <div className="flex items-center">
-            <div className="relative object-cover w-8 h-8 overflow-hidden border rounded-full border-secondary ">
+            <div className="relative h-8 w-8 overflow-hidden rounded-full border border-secondary object-cover">
               <Image
                 src={myProfile}
                 alt="Profile"
@@ -68,31 +68,31 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
                 priority={true}
               />
             </div>
-            <p className="ml-2 text-base font-normal text-white font-basement ">
+            <p className="ml-2 font-basement text-base font-normal text-white">
               {user.username}
             </p>
           </div>
           <div className="flex gap-2">
             <Link href="/shop">
-              <div className="w-fit bg-danger/25 flex gap-1 items-center py-[8px] px-[10px] rounded-full">
+              <div className="flex w-fit items-center gap-1 rounded-full bg-danger/25 px-[10px] py-[8px]">
                 <TicketIcon
                   width={19}
                   height={19}
                   className={"text-danger-100"}
                 />
-                <h1 className="text-sm font-bold text-white font-basement">
+                <h1 className="font-basement text-sm font-bold text-white">
                   {user.tickets}
                 </h1>
               </div>
             </Link>
             <Link href="/shop">
-              <div className="w-fit bg-[#58FF69]/25 flex gap-1 items-center py-[8px] px-[10px] rounded-full">
+              <div className="flex w-fit items-center gap-1 rounded-full bg-[#58FF69]/25 px-[10px] py-[8px]">
                 <DiamondIcon
                   width={19}
                   height={19}
                   className={"text-[#58FF69]"}
                 />
-                <h1 className="text-sm font-bold text-white font-basement">
+                <h1 className="font-basement text-sm font-bold text-white">
                   {user.diamonds}
                 </h1>
               </div>
@@ -106,7 +106,7 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
         </div>
       </div>
       {/* nav links */}
-      <ul className="flex flex-col items-center justify-center gap-5 mt-8 text-center">
+      <ul className="mt-8 flex flex-col items-center justify-center gap-5 text-center">
         {navLinks.map(({ title, url }, index) => (
           <li
             key={index}
@@ -116,7 +116,7 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
           >
             <Link
               href={url}
-              className="text-3xl font-bold font-basement hover:text-secondary"
+              className="font-basement text-3xl font-bold hover:text-secondary"
               onClick={handleLinkClick}
             >
               {title}
@@ -125,32 +125,32 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
         ))}
         <li>
           <button
-            className="text-white text-3xl font-bold font-basement hover:text-secondary"
+            className="font-basement text-3xl font-bold text-white hover:text-secondary"
             onClick={handleLogout}
           >
             Logout
           </button>
         </li>
       </ul>
-      <div className="w-full gap-2 px-3 pb-6 mt-8 bg-primary">
+      <div className="mt-8 w-full gap-2 bg-primary px-3 pb-6">
         <div>
           <div className="flex justify-center">
             <PromotionTasks />
           </div>
-          <div className="text-center mt-9">
+          <div className="mt-9 text-center">
             <div className="flex justify-center gap-5 border-white">
               {socialLinks.map((link, index) => (
                 <Link
                   key={index}
                   href={link.url}
                   target="_blank"
-                  className="group py-[8px] transition-colors flex items-center justify-center w-[36px] h-[38px] rounded-[4px] bg-primary-350 hover:bg-secondary duration-200"
+                  className="group flex h-[38px] w-[36px] items-center justify-center rounded-[4px] bg-primary-350 py-[8px] transition-colors duration-200 hover:bg-secondary"
                 >
                   <link.icon
                     width={21}
                     height={23}
                     className={
-                      "text-white cursor-pointer group-hover:text-dark"
+                      "cursor-pointer text-white group-hover:text-dark"
                     }
                   />
                 </Link>
@@ -163,5 +163,5 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

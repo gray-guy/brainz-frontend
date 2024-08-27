@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 export const OptionSelect = ({
   alphabet = "A",
@@ -8,20 +8,20 @@ export const OptionSelect = ({
   isActive = false,
   ...rest
 }) => {
-  let backgroundColor, borderColor;
+  let backgroundColor, borderColor
   switch (variant) {
     case "success":
-      backgroundColor = answer ? "bg-[#207E35] text-white" : "bg-[#8D4343]";
-      borderColor = answer ? "border-[#0D3616]" : "border-[#532C2C]";
-      break;
+      backgroundColor = answer ? "bg-[#207E35] text-white" : "bg-[#8D4343]"
+      borderColor = answer ? "border-[#0D3616]" : "border-[#532C2C]"
+      break
     case "danger":
-      backgroundColor = "bg-[#8D4343] !text-white";
-      borderColor = answer ? "border-[#0D3616]" : "border-[#532C2C]";
-      break;
+      backgroundColor = "bg-[#8D4343] !text-white"
+      borderColor = answer ? "border-[#0D3616]" : "border-[#532C2C]"
+      break
     default:
-      backgroundColor = isActive ? "bg-secondary text-[#000]" : "bg-primary-350";
-      borderColor = "border-primary-375";
-      break;
+      backgroundColor = isActive ? "bg-secondary text-[#000]" : "bg-primary-350"
+      borderColor = "border-primary-375"
+      break
   }
 
   return (
@@ -29,16 +29,18 @@ export const OptionSelect = ({
       {...rest}
       className={`flex items-center gap-3 lg:gap-5 ${backgroundColor} ${borderColor} ${
         isActive ? "" : "hover:bg-[#0A3049]"
-      }  hover:border-[#C2CBD1] w-full rounded-[20px] border border-1 py-2 px-4 lg:px-5 `}
+      } border-1 w-full rounded-[20px] border px-4 py-2 hover:border-[#C2CBD1] lg:px-5`}
     >
-      <div className="py-1.5 lg:py-2.5 px-3 lg:px-5 flex items-center justify-center bg-primary rounded-[8px] border border-primary-375">
-        <h1 className="text-sm font-normal text-white lg:text-lg font-basement">
+      <div className="flex items-center justify-center rounded-[8px] border border-primary-375 bg-primary px-3 py-1.5 lg:px-5 lg:py-2.5">
+        <h1 className="font-basement text-sm font-normal text-white lg:text-lg">
           {alphabet}
         </h1>
       </div>
-      <p className={`text-sm font-normal md:text-lg font-basement ${isActive ? "text-[#000]" : "text-white"}`}>
+      <p
+        className={`font-basement text-sm font-normal md:text-lg ${isActive ? "text-[#000]" : "text-white"}`}
+      >
         {description}
       </p>
     </div>
-  );
-};
+  )
+}

@@ -14,8 +14,8 @@ const nextConfig = {
           },
         },
       ],
-    });
-    return config;
+    })
+    return config
   },
   images: {
     remotePatterns: [
@@ -26,6 +26,6 @@ const nextConfig = {
     ],
   },
   reactStrictMode: false,
-};
+}
 
-export default nextConfig;
+export default nextConfig

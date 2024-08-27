@@ -1,47 +1,46 @@
-import React, { useState, useRef, useEffect } from "react";
-import { ArrowDownLightIcon, WalletIcon } from "./Svgs";
-import Image from "next/image";
+import React, { useState, useRef, useEffect } from "react"
+import { ArrowDownLightIcon, WalletIcon } from "./Svgs"
+import Image from "next/image"
 
 const SelectDropdown = ({ options, defaultIdx }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState(
     options[defaultIdx] ?? options[0]
-  );
-  const dropdownRef = useRef(null);
+  )
+  const dropdownRef = useRef(null)
 
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
 
   const handleOptionClick = (option) => {
-    setSelectedOption(option);
-    setIsOpen(false);
-  };
+    setSelectedOption(option)
+    setIsOpen(false)
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
   return (
-    <div className="relative cursor-pointer " ref={dropdownRef}>
+    <div className="relative cursor-pointer" ref={dropdownRef}>
       <div
         onClick={toggleDropdown}
-        className={`   ${
+        className={` ${
           isOpen ? "bg-primary-275" : "bg-primary-350"
-        } flex items-center justify-between relative w-full border border-primary-275 rounded-lg py-2 pl-2.5 pr-4 focus:shadow-outline z-[11] hover:bg-primary-275 transition duration-200
-         `}
+        } focus:shadow-outline relative z-[11] flex w-full items-center justify-between rounded-lg border border-primary-275 py-2 pl-2.5 pr-4 transition duration-200 hover:bg-primary-275`}
       >
         <div className="flex items-center font-basement">
-          <div className="bg-primary flex items-center py-1.5 px-2 rounded mr-2.5 font-bold text-grey-200">
+          <div className="mr-2.5 flex items-center rounded bg-primary px-2 py-1.5 font-bold text-grey-200">
             <span className="mr-2">
               <Image
                 src={selectedOption.imageUrl}
@@ -53,7 +52,7 @@ const SelectDropdown = ({ options, defaultIdx }) => {
             </span>
             <p className="mr-2 text-sm">{selectedOption.balance}</p>
           </div>
-          <p className="text-white text-sm">{selectedOption.symbol}</p>
+          <p className="text-sm text-white">{selectedOption.symbol}</p>
         </div>
 
         <div className="ml-4">
@@ -61,19 +60,19 @@ const SelectDropdown = ({ options, defaultIdx }) => {
         </div>
       </div>
       {isOpen && (
-        <div className="absolute z-10 w-full px-2 mt-[5px] rounded-lg	shadow-lg bg-dark-100 text-grey-200">
+        <div className="shadow-lg absolute z-10 mt-[5px] w-full rounded-lg bg-dark-100 px-2 text-grey-200">
           {options.map((option, index) => (
             <div
               key={index}
               onClick={() => handleOptionClick(option)}
-              className={`py-2 hover:text-white  ${
+              className={`py-2 hover:text-white ${
                 index === options.length - 1
-                  ? "border-b-0 "
+                  ? "border-b-0"
                   : "border-b-[0.5px] border-grey-200"
               }`}
             >
-              <div className="flex items-center pb-2 pt-2.5 px-2 justify-around">
-                <div className="flex font-normal font-basement flex-1 ">
+              <div className="flex items-center justify-around px-2 pb-2 pt-2.5">
+                <div className="flex flex-1 font-basement font-normal">
                   <span>
                     <Image
                       src={option.imageUrl}
@@ -85,8 +84,8 @@ const SelectDropdown = ({ options, defaultIdx }) => {
                   </span>
                   <p className="ml-2 text-sm">{option.balance}</p>
                 </div>
-                <p className="text-sm mr-2">{option.symbol}</p>
-                <div className="flex items-center justify-center w-6 h-6 p-1 rounded bg-primary-225">
+                <p className="mr-2 text-sm">{option.symbol}</p>
+                <div className="flex h-6 w-6 items-center justify-center rounded bg-primary-225 p-1">
                   <WalletIcon />
                 </div>
               </div>
@@ -95,7 +94,7 @@ const SelectDropdown = ({ options, defaultIdx }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default SelectDropdown;
+export default SelectDropdown

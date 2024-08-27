@@ -1,7 +1,7 @@
-import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import React from "react"
+import Slider from "react-slick"
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
 
 export const GameCarousel = ({
   slidesToShow = 7,
@@ -41,7 +41,7 @@ export const GameCarousel = ({
         },
       },
     ],
-  };
+  }
 
-  return <Slider {...settings}>{children}</Slider>;
-};
+  return <Slider {...settings}>{children}</Slider>
+}
