@@ -32,7 +32,7 @@ export const Shop = () => {
 
   return (
     <div className="text-white">
-      <div className="md:px-13 w-full rounded-[10px] bg-primary-350 px-6 py-8 md:pb-20">
+      <div className="md:px-13 w-full rounded-[10px] bg-primary-350 px-6 py-8">
         <h1 className="font-basement text-xl font-bold">
           Buy Tickets to enter a Session
         </h1>
@@ -41,9 +41,13 @@ export const Shop = () => {
             ? [...Array(ticketData.length)].map((_, index) => (
                 <Skeleton key={index} height={196} borderRadius={"1.5rem"} />
               ))
-            : ticketPacks
-                .toSorted((a, b) => a.price - b.price)
-                .map((ticket, index) => <TicketCard key={index} {...ticket} />)}
+            : ticketPacks.length > 0
+              ? ticketPacks
+                  .toSorted((a, b) => a.price - b.price)
+                  .map((ticket, index) => (
+                    <TicketCard key={index} {...ticket} />
+                  ))
+              : "No tickets available"}
         </div>
       </div>
       <div className="md:px-13 mb-0 mt-6 w-full rounded-[10px] bg-primary-350 px-6 py-8 md:mb-5">
@@ -55,11 +59,13 @@ export const Shop = () => {
             ? [...Array(gameData.length)].map((_, index) => (
                 <Skeleton key={index} height={196} borderRadius={"1.5rem"} />
               ))
-            : diamondPacks
-                .toSorted((a, b) => a.price - b.price)
-                .map((diamond, index) => (
-                  <TicketCard key={index} {...diamond} />
-                ))}
+            : diamondPacks.length > 0
+              ? diamondPacks
+                  .toSorted((a, b) => a.price - b.price)
+                  .map((diamond, index) => (
+                    <TicketCard key={index} {...diamond} />
+                  ))
+              : "No diamonds available"}
         </div>
       </div>
       <div className="md:px-13 mb-0 mt-6 w-full rounded-[10px] bg-primary-350 px-6 py-8 md:mb-5">
@@ -69,11 +75,13 @@ export const Shop = () => {
             ? [...Array(gameData.length)].map((_, index) => (
                 <Skeleton key={index} height={196} borderRadius={"1.5rem"} />
               ))
-            : bothPacks
-                .toSorted((a, b) => a.price - b.price)
-                .map((diamond, index) => (
-                  <TicketCard key={index} {...diamond} />
-                ))}
+            : bothPacks.length > 0
+              ? bothPacks
+                  .toSorted((a, b) => a.price - b.price)
+                  .map((diamond, index) => (
+                    <TicketCard key={index} {...diamond} />
+                  ))
+              : "No packs available"}
         </div>
       </div>
     </div>
