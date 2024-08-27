@@ -1,19 +1,19 @@
-"use client";
-import Image from "next/image";
-import Logo from "@/public/images/brainz-logo.svg";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { socialLinks } from "@/lib/config";
-import { usePrivy } from "@privy-io/react-auth";
-import { PromotionTasks } from "./PromotionTasks";
+"use client"
+import Image from "next/image"
+import Logo from "@/public/images/brainz-logo.svg"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
+import { socialLinks } from "@/lib/config"
+import { usePrivy } from "@privy-io/react-auth"
+import { PromotionTasks } from "./PromotionTasks"
 
 export const Sidebar = () => {
-  const [activeLink, setActiveLink] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const { authenticated } = usePrivy();
+  const [activeLink, setActiveLink] = useState("")
+  const [isOpen, setIsOpen] = useState(false)
+  const { authenticated } = usePrivy()
 
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   const navLinks = useMemo(
     () => [
@@ -22,21 +22,21 @@ export const Sidebar = () => {
       { title: "Profile", url: "/profile", isProtected: true },
       { title: "How to Play", url: "/htp/rules" },
     ],
-    [],
-  );
+    []
+  )
 
   useEffect(() => {
-    const active = navLinks.find((link) => link.url === pathname);
-    if (active) setActiveLink(active.title);
-  }, [pathname, navLinks]);
+    const active = navLinks.find((link) => link.url === pathname)
+    if (active) setActiveLink(active.title)
+  }, [pathname, navLinks])
 
-  const disabledClass = "opacity-50 cursor-not-allowed pointer-events-none";
+  const disabledClass = "opacity-50 cursor-not-allowed pointer-events-none"
 
   return (
-    <div className="sticky top-0 w-[243px] h-full max-md:hidden px-5">
-      <div className="flex flex-col justify-between h-screen">
-        <div className="mt-8 px-3">
-          <div className="">
+    <div className="sticky top-0 h-full w-[243px] px-5 max-md:hidden">
+      <div className="flex h-screen flex-col justify-between">
+        <div className="mt-4 px-3">
+          <div className="flex justify-center">
             <Link href={"/"} className="relative">
               <Image
                 src={Logo}
@@ -49,41 +49,41 @@ export const Sidebar = () => {
               />
             </Link>
           </div>
-          <div className="mt-10 ">
+          <div className="mt-6">
             <ul className="flex flex-col gap-6">
               {navLinks.map(
                 ({ title, url, className, isProtected = false }, index) => (
                   <li
                     key={index}
-                    className={`hover:text-secondary font-semibold text-xl ${
+                    className={`text-xl font-semibold hover:text-secondary ${
                       title === activeLink ? "text-secondary" : "text-white"
                     } ${className ?? ""} ${
                       isProtected && !authenticated ? disabledClass : ""
                     }`}
                   >
-                    <Link href={url} className="font-bold font-basement">
+                    <Link href={url} className="font-basement font-bold">
                       {title}
                     </Link>
                   </li>
-                ),
+                )
               )}
             </ul>
           </div>
         </div>
         <PromotionTasks />
         <div className="mt-[13%] pb-[5%] text-center">
-          <div className="border-white flex justify-center gap-4">
+          <div className="flex justify-center gap-4 border-white">
             {socialLinks.map((link, index) => (
               <Link
                 key={index}
                 href={link.url}
                 target="_blank"
-                className="group py-[8px] transition-colors flex items-center justify-center w-[36px] h-[38px] rounded-[4px] bg-primary-350 hover:bg-secondary duration-200"
+                className="group flex h-[38px] w-[36px] items-center justify-center rounded-[4px] bg-primary-350 py-[8px] transition-colors duration-200 hover:bg-secondary"
               >
                 <link.icon
                   width={21}
                   height={23}
-                  className={"text-white cursor-pointer group-hover:text-dark"}
+                  className={"cursor-pointer text-white group-hover:text-dark"}
                 />
               </Link>
             ))}
@@ -92,5 +92,5 @@ export const Sidebar = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

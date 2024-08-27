@@ -12,12 +12,13 @@ import Script from "next/script"
 
 const inter = Inter({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  subsets: ["latin"]
+  subsets: ["latin"],
 })
 
 export const metadata = {
   title: "Brainz | Play Live Trivia Games & Win Prizes",
-  description: "Join Brainz for exciting live trivia, quizzes, and games. From general trivia to crypto and sports challenges, test your knowledge and win big rewards. Play and win now!"
+  description:
+    "Join Brainz for exciting live trivia, quizzes, and games. From general trivia to crypto and sports challenges, test your knowledge and win big rewards. Play and win now!",
 }
 
 export default function RootLayout({ children }) {

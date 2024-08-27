@@ -14,7 +14,7 @@ import {
   TextCopyIcon,
   TextCopyTickIcon,
   TicketIcon,
-  UsdtIcon
+  UsdtIcon,
 } from "./Svgs"
 import Ticket from "./Ticket"
 import Image from "next/image"
@@ -74,157 +74,152 @@ const Header = () => {
 
   if (!privyUser || !user) {
     return (
-      <div className="sticky top-0 z-40 bg-primary-350 md:bg-primary">
-        <div className="px-4 mx-auto md:px-0  py-3.5 min-h-[60px] flex items-center justify-end">
+      <nav className="sticky top-0 z-40 mb-0 flex h-[80px] items-center justify-end border-secondary bg-primary-350 px-0 py-0 md:bg-primary md:py-4">
+        <div className="flex w-full items-center justify-between px-4 md:w-auto md:justify-between md:px-0">
+          <Link
+            href="/"
+            className="relative flex h-8 items-center gap-3 md:hidden"
+          >
+            <Image src={LogoMb} alt="Logo" width={74} priority={true} />
+
+            <p className="font-basement text-[10px] font-bold leading-[1.4] tracking-wider text-white">
+              PLAY TRIVIA, WIN CRYPTO
+            </p>
+          </Link>
           <ConnectButton />
         </div>
-      </div>
+      </nav>
     )
   }
 
   return (
-    <div className="sticky top-0 z-40">
-      <nav className="border-secondary bg-primary-350 py-3.5 md:bg-primary">
-        <div className="mx-auto px-4 md:px-0">
-          <div className="flex items-center justify-end border-white max-md:justify-between md:mt-0">
-            <Link
-              href="/"
-              className="flex items-center gap-3 relative h-8 md:hidden"
-            >
-              <Image
-                src={LogoMb}
-                alt="Logo"
-                width={74}
-                priority={true}
-              />
+    <nav className="sticky top-0 z-40 flex h-[80px] items-center justify-end border-secondary bg-primary-350 px-0 py-0 md:bg-primary md:py-4">
+      <div className="flex w-full justify-between px-4 md:w-auto md:justify-between md:px-0">
+        <Link
+          href="/"
+          className="relative flex h-8 items-center gap-3 md:hidden"
+        >
+          <Image src={LogoMb} alt="Logo" width={74} priority={true} />
 
-              <p className="font-basement tracking-wider text-[10px] font-bold leading-[1.4] text-white">
-                PLAY TRIVIA, WIN CRYPTO
+          <p className="font-basement text-[10px] font-bold leading-[1.4] tracking-wider text-white">
+            PLAY TRIVIA, WIN CRYPTO
+          </p>
+        </Link>
+        <div className="hidden items-center gap-4 md:flex lg:gap-10">
+          <div className="block max-[1200px]:hidden">
+            {walletBalances.length > 0 && (
+              <SelectDropdown
+                defaultIdx={walletBalances.findIndex((b) => b.symbol === "BNB")}
+                options={walletBalances}
+              />
+            )}
+          </div>
+          <div>
+            <Ticket
+              mainIcon={TicketIcon}
+              number={user.tickets}
+              label="Tickets"
+              bgColor="danger"
+              href="/shop"
+            />
+          </div>
+          <div>
+            <Ticket
+              mainIcon={DiamondIcon}
+              number={user.diamonds}
+              label="Diamonds"
+              bgColor="success"
+              href="/shop"
+            />
+          </div>
+          <div
+            className="relative rounded-[88px] max-md:hidden"
+            ref={profileRef}
+          >
+            <div
+              onClick={toggleDropdown}
+              className={`${
+                isOpenProfile ? "bg-primary-275" : "bg-primary-350"
+              } relative z-50 flex w-fit cursor-pointer items-center rounded-lg border border-primary-275 py-2 pl-3 pr-5 transition duration-200 hover:bg-primary-275`}
+            >
+              <div className="relative mr-3 h-8 w-8 overflow-hidden rounded-full border border-secondary object-cover">
+                <Image
+                  src={Profile}
+                  alt="Profile"
+                  layout="fill"
+                  className="rounded-full"
+                  objectFit="contain"
+                  draggable={false}
+                  placeholder="blur"
+                />
+              </div>
+              <p className="ml-2 font-basement text-sm font-normal text-white">
+                {user.username}
               </p>
-            </Link>
-            <div className="flex items-center gap-4 lg:gap-10 max-md:hidden">
-              <div className="block max-[1200px]:hidden">
-                {walletBalances.length > 0 && (
-                  <SelectDropdown
-                    defaultIdx={walletBalances.findIndex(
-                      (b) => b.symbol === "BNB"
-                    )}
-                    options={walletBalances}
-                  />
-                )}
+              <div className="ml-4 flex items-center justify-center">
+                <ArrowDownLightIcon />
               </div>
-              <div>
-                <Ticket
-                  mainIcon={TicketIcon}
-                  number={user.tickets}
-                  label="Tickets"
-                  bgColor="danger"
-                  href="/shop"
-                />
-              </div>
-              <div>
-                <Ticket
-                  mainIcon={DiamondIcon}
-                  number={user.diamonds}
-                  label="Diamonds"
-                  bgColor="success"
-                  href="/shop"
-                />
-              </div>
+            </div>
+            {isOpenProfile && (
               <div
-                className="relative rounded-[88px] max-md:hidden"
-                ref={profileRef}
+                ref={dropdownRef}
+                className="shadow-lg absolute right-0 z-10 mt-[5px] flex flex-col justify-center rounded-lg bg-dark-100 px-5 text-center font-basement text-sm text-grey-200"
               >
-                <div
-                  onClick={toggleDropdown}
-                  className={`${
-                    isOpenProfile ? "bg-primary-275" : "bg-primary-350"
-                  } relative z-50 flex w-fit cursor-pointer items-center rounded-lg border border-primary-275 py-2 pl-3 pr-5 transition duration-200 hover:bg-primary-275`}
-                >
-                  <div className="relative mr-3 h-8 w-8 overflow-hidden rounded-full border border-secondary object-cover">
-                    <Image
-                      src={Profile}
-                      alt="Profile"
-                      layout="fill"
-                      className="rounded-full"
-                      objectFit="contain"
-                      draggable={false}
-                      placeholder="blur"
-                    />
-                  </div>
-                  <p className="ml-2 font-basement text-sm font-normal text-white">
-                    {user.username}
-                  </p>
-                  <div className="ml-4 flex items-center justify-center">
-                    <ArrowDownLightIcon />
-                  </div>
-                </div>
-                {isOpenProfile && (
-                  <div
-                    ref={dropdownRef}
-                    className="shadow-lg absolute right-0 z-10 mt-[5px] flex flex-col justify-center rounded-lg bg-dark-100 px-5 text-center font-basement text-sm text-grey-200"
+                <div className="flex items-center justify-between pb-2 pt-4 text-sm text-grey-200">
+                  <p
+                    className={`max-w-[120px] overflow-hidden truncate text-ellipsis whitespace-nowrap hover:text-white ${
+                      !isCopied ? "" : "text-white"
+                    }`}
                   >
-                    <div className="flex items-center justify-between pb-2 pt-4 text-sm text-grey-200">
-                      <p
-                        className={`max-w-[120px] overflow-hidden truncate text-ellipsis whitespace-nowrap hover:text-white ${
-                          !isCopied ? "" : "text-white"
-                        }`}
-                      >
-                        {formatWalletAddress(privyUser.wallet.address)}
-                      </p>
-                      {isCopied ? (
-                        <TextCopyTickIcon
-                          height="22"
-                          width="24"
-                          className={"text-white"}
-                        />
-                      ) : (
-                        <button
-                          onClick={() =>
-                            copyToClipboard(privyUser.wallet.address)
-                          }
-                        >
-                          <TextCopyIcon
-                            className="text-grey-200 hover:text-white"
-                            height="22"
-                            width="24"
-                          />
-                        </button>
-                      )}
-                    </div>
-                    <div className="border-b border-grey-250" />
-                    <LoagoutButton
-                      onLogoutClick={() => setIsOpenProfile(false)}
+                    {formatWalletAddress(privyUser.wallet.address)}
+                  </p>
+                  {isCopied ? (
+                    <TextCopyTickIcon
+                      height="22"
+                      width="24"
+                      className={"text-white"}
                     />
-                  </div>
-                )}
+                  ) : (
+                    <button
+                      onClick={() => copyToClipboard(privyUser.wallet.address)}
+                    >
+                      <TextCopyIcon
+                        className="text-grey-200 hover:text-white"
+                        height="22"
+                        width="24"
+                      />
+                    </button>
+                  )}
+                </div>
+                <div className="border-b border-grey-250" />
+                <LoagoutButton onLogoutClick={() => setIsOpenProfile(false)} />
               </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="md:hidden">
-                <button
-                  className="hamburger text-white transition-opacity duration-300 focus:outline-none"
-                  onClick={toggleMenu}
-                >
-                  <div className={`bar-wrapper ${isOpen ? "cross" : ""}`}>
-                    <div className="bar mb-1.5 rounded-sm"></div>
-                    <div className="bar relative -right-3 mb-1.5 rounded-sm"></div>
-                    <div className="bar rounded-sm"></div>
-                  </div>
-                </button>
-              </div>
-            </div>
+            )}
           </div>
         </div>
-      </nav>
+        <div className="flex items-center gap-4">
+          <div className="md:hidden">
+            <button
+              className="hamburger text-white transition-opacity duration-300 focus:outline-none"
+              onClick={toggleMenu}
+            >
+              <div className={`bar-wrapper ${isOpen ? "cross" : ""}`}>
+                <div className="bar mb-1.5 rounded-sm"></div>
+                <div className="bar relative -right-3 mb-1.5 rounded-sm"></div>
+                <div className="bar rounded-sm"></div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
       {isOpen && (
-        <div className="broder fixed inset-0 top-[60px] z-40 flex justify-start border-white bg-primary md:hidden">
-          <div className="mt-6 h-[calc(100vh-84px)] w-full overflow-y-scroll px-2 scrollbar scrollbar-thumb-[#104061] scrollbar-thumb-rounded-full scrollbar-w-1.5">
+        <div className="broder fixed inset-0 top-[80px] z-40 flex justify-start border-white bg-primary md:hidden">
+          <div className="h-[calc(100vh-80px)] w-full overflow-y-scroll px-2 pt-6 scrollbar scrollbar-thumb-[#104061] scrollbar-thumb-rounded-full scrollbar-w-1.5">
             <MobileSidebar onNavLinkClick={toggleMenu} />
           </div>
         </div>
       )}
-    </div>
+    </nav>
   )
 }
 

@@ -1,68 +1,68 @@
-"use client";
-import { Button } from "@/app/components/Button";
-import Input from "@/app/components/Input";
-import WalletTabs from "@/app/components/WalletTabs";
-import { useUser } from "@/app/contexts/UserContext";
-import { apiCall, formatNumber } from "@/lib/utils";
-import { useLinkAccount, usePrivy } from "@privy-io/react-auth";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+"use client"
+import { Button } from "@/app/components/Button"
+import Input from "@/app/components/Input"
+import WalletTabs from "@/app/components/WalletTabs"
+import { useUser } from "@/app/contexts/UserContext"
+import { apiCall, formatNumber } from "@/lib/utils"
+import { useLinkAccount, usePrivy } from "@privy-io/react-auth"
+import Link from "next/link"
+import { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 
 export const Profile = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { user: privyUser } = usePrivy();
-  const { user, setUser } = useUser();
+  const [isOpen, setIsOpen] = useState(false)
+  const { user: privyUser } = usePrivy()
+  const { user, setUser } = useUser()
 
   const { linkEmail } = useLinkAccount({
     onSuccess: async (user) => {
       const data = await apiCall("patch", "/profile", {
         email: user.email?.address,
-      });
+      })
       if (data) {
-        setUser((prev) => (prev ? { ...prev, ...data.profile } : null));
+        setUser((prev) => (prev ? { ...prev, ...data.profile } : null))
       }
     },
-  });
+  })
 
   const open = () => {
-    setIsOpen(true);
-  };
+    setIsOpen(true)
+  }
 
   const close = () => {
-    setIsOpen(false);
-  };
+    setIsOpen(false)
+  }
 
   const handleUpdate = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const username = formData.get("username");
-    if (!username) return;
-    const data = await apiCall("patch", "/profile", { username });
+    e.preventDefault()
+    const formData = new FormData(e.target)
+    const username = formData.get("username")
+    if (!username) return
+    const data = await apiCall("patch", "/profile", { username })
     if (data) {
-      setUser((prev) => (prev ? { ...prev, ...data.profile } : null));
-      toast.success("Profile updated successfully!");
+      setUser((prev) => (prev ? { ...prev, ...data.profile } : null))
+      toast.success("Profile updated successfully!")
     }
-  };
+  }
 
   useEffect(() => {
     const fetchUserRewards = async () => {
-      const data = await apiCall("get", "/rewards/total");
-      setUser((prev) => (prev ? { ...prev, ...data } : null));
-    };
-    fetchUserRewards();
-  }, [setUser]);
+      const data = await apiCall("get", "/rewards/total")
+      setUser((prev) => (prev ? { ...prev, ...data } : null))
+    }
+    fetchUserRewards()
+  }, [setUser])
 
-  if (!user) return null;
+  if (!user) return null
 
   return (
     <div className="mb-0 md:mb-8">
-      <div className="bg-primary-350 pt-9 pb-12 w-full rounded-[10px] mt-6 pl-4 pr-4 sm:pl-6 sm:pr-6 md:pl-8 md:pr-12 text-white">
-        <h1 className="text-lg font-bold lg:text-xl font-basement ">
+      <div className="w-full rounded-[10px] bg-primary-350 pb-12 pl-4 pr-4 pt-9 text-white sm:pl-6 sm:pr-6 md:pl-8 md:pr-12">
+        <h1 className="font-basement text-lg font-bold lg:text-xl">
           Profile Settings
         </h1>
         <div className="mt-6 flex flex-wrap gap-12 lg:gap-[110]">
-          <div className="flex-1 flex flex-col relative">
+          <div className="relative flex flex-1 flex-col">
             {privyUser?.email?.address ? (
               <Input
                 type="text"
@@ -74,7 +74,7 @@ export const Profile = () => {
               />
             ) : (
               <div>
-                <label className="font-inter font-medium text-sm lg:text-lg text-gray-550 pl-[6px]">
+                <label className="text-gray-550 pl-[6px] font-inter text-sm font-medium lg:text-lg">
                   Email
                 </label>
                 <Button
@@ -87,7 +87,7 @@ export const Profile = () => {
               </div>
             )}
           </div>
-          <form onSubmit={handleUpdate} className="flex-1  relative">
+          <form onSubmit={handleUpdate} className="relative flex-1">
             <Input
               name="username"
               label="Username"
@@ -98,14 +98,14 @@ export const Profile = () => {
             />
             <button
               type="submit"
-              className="absolute right-0 bottom-2.5  h-max text-white py-2 px-6 rounded-md focus:outline-none"
+              className="absolute bottom-2.5 right-0 h-max rounded-md px-6 py-2 text-white focus:outline-none"
             >
               Update
             </button>
           </form>
         </div>
-        <div className="flex flex-wrap gap-12 mt-8">
-          <div className="flex-1 max-w-full lg:max-w-[48%]">
+        <div className="mt-8 flex flex-wrap gap-12">
+          <div className="max-w-full flex-1 lg:max-w-[48%]">
             <Input
               type="text"
               label={"Wallet Address"}
@@ -162,5 +162,5 @@ export const Profile = () => {
         <WalletTabs />
       </div>
     </div>
-  );
-};
+  )
+}
