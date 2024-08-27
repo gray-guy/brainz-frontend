@@ -1,5 +1,6 @@
-import { Session } from "@/app/container/Session/Session";
+import { Session } from "@/app/container/Session/Session"
 
 export default function Page() {
-  return <Session />;
+  const params = { id: null }
+  return <Session params={params} />
 }
