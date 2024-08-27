@@ -6,7 +6,6 @@ const SessionCard = ({ game, activeIdx }) => {
   let minSliceStart = Math.max(0, sessions.length - 3)
   minSliceStart = Math.min(minSliceStart, activeIdx)
 
-  console.log("sessions", minSliceStart, sessions)
   return (
     <div className="h-auto w-full rounded-[10px] bg-primary-100 px-4 py-4 text-base shadow-sessionCard md:py-7 lg:px-5 lg:py-5">
       <h2 className="captilize font-grey-400 text-center font-basement text-lg font-bold md:text-left">

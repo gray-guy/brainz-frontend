@@ -137,7 +137,6 @@ export const Dashboard = () => {
     router.push(`/session/${id}`)
   }
 
-  console.log("nextGame", nextGame)
   return (
     <div className="bg-primary text-white">
       {nextGame && session ? (
