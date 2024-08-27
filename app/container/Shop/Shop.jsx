@@ -1,34 +1,34 @@
-"use client";
+"use client"
 
-import { TicketCard } from "@/app/components/TicketCard";
-import { gameData, ticketData } from "./data";
-import { useEffect, useState } from "react";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { apiCall } from "@/lib/utils";
-import { DiamondIcon, TicketIcon } from "@/app/components/Svgs";
+import { TicketCard } from "@/app/components/TicketCard"
+import { gameData, ticketData } from "./data"
+import { useEffect, useState } from "react"
+import Skeleton from "react-loading-skeleton"
+import "react-loading-skeleton/dist/skeleton.css"
+import { apiCall } from "@/lib/utils"
+import { DiamondIcon, TicketIcon } from "@/app/components/Svgs"
 
 export const Shop = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [ticketPacks, setTicketPacks] = useState([]);
-  const [diamondPacks, setDiamondPacks] = useState([]);
-  const [bothPacks, setBothPacks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true)
+  const [ticketPacks, setTicketPacks] = useState([])
+  const [diamondPacks, setDiamondPacks] = useState([])
+  const [bothPacks, setBothPacks] = useState([])
 
   useEffect(() => {
     const getShopItems = async () => {
-      const packs = await apiCall("get", "/shop");
+      const packs = await apiCall("get", "/shop")
       // const packs = data.packs;
-      const ticketPacks = packs.filter((pack) => pack.type === "ticket");
-      const diamondPacks = packs.filter((pack) => pack.type === "diamond");
-      const bothPacks = packs.filter((pack) => pack.type === "both");
-      setBothPacks(bothPacks);
-      setTicketPacks(ticketPacks);
-      setDiamondPacks(diamondPacks);
-      setIsLoading(false);
-    };
+      const ticketPacks = packs.filter((pack) => pack.type === "ticket")
+      const diamondPacks = packs.filter((pack) => pack.type === "diamond")
+      const bothPacks = packs.filter((pack) => pack.type === "both")
+      setBothPacks(bothPacks)
+      setTicketPacks(ticketPacks)
+      setDiamondPacks(diamondPacks)
+      setIsLoading(false)
+    }
 
-    getShopItems();
-  }, []);
+    getShopItems()
+  }, [])
 
   return (
     <div className="text-white">
@@ -77,5 +77,5 @@ export const Shop = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

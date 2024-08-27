@@ -1,7 +1,7 @@
-import React from "react";
-import { Button } from "./Button";
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import React from "react"
+import { Button } from "./Button"
+import { Dialog, Transition } from "@headlessui/react"
+import { Fragment, useState } from "react"
 import {
   BtcIcon,
   DiamondIcon,
@@ -10,10 +10,10 @@ import {
   TickIcon,
   TicketIcon,
   UsdtIcon,
-} from "./Svgs";
-import { useWallet } from "../contexts/WalletContext";
-import { ethers } from "ethers";
-import TokenSelectDropdown from "./TokenSelectDropdown";
+} from "./Svgs"
+import { useWallet } from "../contexts/WalletContext"
+import { ethers } from "ethers"
+import TokenSelectDropdown from "./TokenSelectDropdown"
 import {
   apiCall,
   getOtherTokenAmountForExactUSDT,
@@ -21,20 +21,20 @@ import {
   getWalletBalance,
   getNativeWalletBalance,
   uniswapAbi,
-} from "@/lib/utils";
-import { erc20Abi } from "viem";
-import Link from "next/link";
-import { toast } from "react-toastify";
-import { useUser } from "../contexts/UserContext";
+} from "@/lib/utils"
+import { erc20Abi } from "viem"
+import Link from "next/link"
+import { toast } from "react-toastify"
+import { useUser } from "../contexts/UserContext"
 
-const USDT_ADDRESS = process.env.NEXT_PUBLIC_USDT_ADDRESS;
+const USDT_ADDRESS = process.env.NEXT_PUBLIC_USDT_ADDRESS
 
 const discounts = {
   35: { discount: "25%", newPrice: 15 }, // 10 tickets
   37: { discount: "20%", newPrice: 8 }, // 10 diamonds
   38: { discount: "40%", newPrice: 12 }, // 20 diamonds
   2: { discount: "40%", newPrice: 12 }, // 20 diamonds
-};
+}
 
 export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   const {
@@ -47,125 +47,125 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
     isPrivyWallet,
     platformAddress,
     setWalletBalances,
-  } = useWallet();
-  const { setUser } = useUser();
-  let [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("USDT");
-  const [priceInOtherToken, setPriceInOtherToken] = useState(0);
-  const [txPending, setTxPending] = useState(false);
-  const [purchased, setPurchased] = useState(false);
-  const [txHash, setTxHash] = useState("");
+  } = useWallet()
+  const { setUser } = useUser()
+  let [isOpen, setIsOpen] = useState(false)
+  const [selectedOption, setSelectedOption] = useState("USDT")
+  const [priceInOtherToken, setPriceInOtherToken] = useState(0)
+  const [txPending, setTxPending] = useState(false)
+  const [purchased, setPurchased] = useState(false)
+  const [txHash, setTxHash] = useState("")
 
   const closeModal = () => {
-    setIsOpen(false);
-    setPurchased(false);
-  };
+    setIsOpen(false)
+    setPurchased(false)
+  }
 
   const updateWalletBalances = async () => {
     tokens.forEach(async (token) => {
-      let balance;
+      let balance
       if (token.isNative) {
         balance = await getNativeWalletBalance({
           provider,
           walletAddress,
-        });
+        })
       } else {
         balance = await getWalletBalance({
           provider,
           walletAddress,
           tokenAddress: token.contractAddress,
-        });
+        })
       }
       const balanceDetails = {
         balance,
         symbol: token.symbol,
         imageUrl: token.imageUrl,
-      };
+      }
       setWalletBalances((prev) => ({
         ...prev,
         [token.symbol.toUpperCase()]: balanceDetails,
-      }));
-    });
-  };
+      }))
+    })
+  }
 
   const updateUserDetails = async () => {
-    const userData = await apiCall("get", "/profile");
+    const userData = await apiCall("get", "/profile")
     if (userData) {
-      setUser(userData.profile);
+      setUser(userData.profile)
     }
-  };
+  }
 
   const openModal = () => {
-    setIsOpen(true);
-  };
+    setIsOpen(true)
+  }
   const handlePurchase = async () => {
-    await sendTransactionInternal();
-  };
+    await sendTransactionInternal()
+  }
 
   const handleTokenChange = async (value) => {
-    setSelectedOption(value.symbol);
+    setSelectedOption(value.symbol)
     if (value.symbol === "USDT") {
-      setPriceInOtherToken(0);
-      return;
+      setPriceInOtherToken(0)
+      return
     }
     const tokenAddress = tokens.find(
       (token) => token.symbol === value.symbol
-    )?.contractAddress;
-    console.log("tokenAddress===>", tokenAddress);
+    )?.contractAddress
+    console.log("tokenAddress===>", tokenAddress)
     let priceInOtherToken = await getOtherTokenAmountForExactUSDT(
       price,
       5, //5% slippage
       tokenAddress,
       signer
-    );
-    console.log("priceInOtherToken===>", priceInOtherToken);
+    )
+    console.log("priceInOtherToken===>", priceInOtherToken)
     // limit 5 decimal places if there are more
     if (priceInOtherToken.includes(".")) {
-      const parts = priceInOtherToken.split(".");
+      const parts = priceInOtherToken.split(".")
       if (parts[1].length > 5) {
-        priceInOtherToken = `${parts[0]}.${parts[1].slice(0, 5)}`;
+        priceInOtherToken = `${parts[0]}.${parts[1].slice(0, 5)}`
       }
     }
-    setPriceInOtherToken(priceInOtherToken);
-  };
+    setPriceInOtherToken(priceInOtherToken)
+  }
 
   const sendTransactionInternal = async () => {
     if (!signer) {
-      toast.error("Please connect your wallet first.");
-      return;
+      toast.error("Please connect your wallet first.")
+      return
     }
 
     if (selectedOption === "USDT") {
-      await depositToken(price);
+      await depositToken(price)
     } else {
-      await convertOtherTokenToUSDTAndTransferToPlatformAddress(price, 5); //Slippage at 5%
+      await convertOtherTokenToUSDTAndTransferToPlatformAddress(price, 5) //Slippage at 5%
     }
-  };
+  }
 
   async function depositToken(amount) {
     try {
       if (!USDT_ADDRESS) {
         throw new Error(
           "USDT_ADDRESS is not defined in the environment variables"
-        );
+        )
       }
-      setTxPending(true);
+      setTxPending(true)
       const usdtTokenContract = new ethers.Contract(
         USDT_ADDRESS,
         erc20Abi,
         signer
-      );
-      const decimals = await usdtTokenContract.decimals();
+      )
+      const decimals = await usdtTokenContract.decimals()
       // TODO: check allowance
       const depositData = usdtTokenContract.interface.encodeFunctionData(
         "transfer",
         [platformAddress, ethers.utils.parseUnits(amount.toString(), decimals)]
-      );
+      )
 
       const depositTx = await sendTransaction({
         to: USDT_ADDRESS,
         data: depositData,
-      });
+      })
 
       const depositResultData = {
         packID: id,
@@ -175,40 +175,40 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
         swapToken: USDT_ADDRESS,
         amountIn: amount.toString(),
         amountOut: amount.toString(),
-      };
+      }
 
-      console.log("depositResultData===>", depositResultData);
+      console.log("depositResultData===>", depositResultData)
       // // POST API CREATE TRANSACTION (/transaction) WITH ABOVE DATA
-      const data = await apiCall("post", "/transaction", depositResultData);
+      const data = await apiCall("post", "/transaction", depositResultData)
 
       if (depositTx.wait) {
-        const depositReceipt = await depositTx.wait();
+        const depositReceipt = await depositTx.wait()
         // Check if the transaction was successful
         if (depositReceipt.status !== 1) {
-          toast.error("Transaction failed. Please try again.");
-          return;
+          toast.error("Transaction failed. Please try again.")
+          return
         }
       }
 
-      toast.success("Deposit successful!");
-      setPurchased(true);
-      setTxHash(depositTx.hash ?? depositTx.transactionHash);
+      toast.success("Deposit successful!")
+      setPurchased(true)
+      setTxHash(depositTx.hash ?? depositTx.transactionHash)
       setTimeout(() => {
-        updateWalletBalances();
-        updateUserDetails();
-      }, 5000);
+        updateWalletBalances()
+        updateUserDetails()
+      }, 5000)
     } catch (err) {
-      console.error(err);
-      let message = "Please try again.";
+      console.error(err)
+      let message = "Please try again."
       if (err.message.includes("cannot estimate gas")) {
         message =
-          "Cannot estimate gas, make sure you have bnb and selected token";
+          "Cannot estimate gas, make sure you have bnb and selected token"
       } else if (err.reason) {
-        message = err.reason;
+        message = err.reason
       }
-      toast.error(`Transaction failed. ${message}`);
+      toast.error(`Transaction failed. ${message}`)
     } finally {
-      setTxPending(false);
+      setTxPending(false)
     }
   }
 
@@ -216,102 +216,102 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
     USDTRequired,
     slippageTolerance
   ) {
-    const otherToken = tokens.find((token) => token.symbol === selectedOption);
-    let tokenAddress = otherToken?.contractAddress;
-    const isBNBToken = otherToken?.symbol === "BNB";
+    const otherToken = tokens.find((token) => token.symbol === selectedOption)
+    let tokenAddress = otherToken?.contractAddress
+    const isBNBToken = otherToken?.symbol === "BNB"
 
     if (!tokenAddress) {
-      toast.error("No token address found");
-      return;
+      toast.error("No token address found")
+      return
     }
-    const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, signer);
+    const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, signer)
 
     // Get decimals for USDT and OtherToken
-    const usdtDecimals = await getTokenDecimals(USDT_ADDRESS, signer);
-    const otherTokenDecimals = await getTokenDecimals(tokenAddress, signer);
+    const usdtDecimals = await getTokenDecimals(USDT_ADDRESS, signer)
+    const otherTokenDecimals = await getTokenDecimals(tokenAddress, signer)
 
     // Calculate the exact amount of USDT required
     const amountOutExactUSDT = ethers.utils.parseUnits(
       USDTRequired.toString(),
       usdtDecimals
-    );
+    )
 
     console.log(
       "amountOutExactUSDT===>",
       ethers.utils.formatUnits(amountOutExactUSDT, usdtDecimals)
-    );
+    )
 
     const routerContract = new ethers.Contract(
       process.env.NEXT_PUBLIC_ROUTER_V2_ADDRESS,
       uniswapAbi,
       signer
-    );
+    )
 
     // Get the amount of OtherToken needed for the exact amount of USDT required
     const amountsIn = await routerContract.getAmountsIn(amountOutExactUSDT, [
       tokenAddress,
       USDT_ADDRESS,
-    ]);
+    ])
 
-    const amountInOtherToken = amountsIn[0];
+    const amountInOtherToken = amountsIn[0]
 
     console.log(
       "amountInOtherToken===>",
       ethers.utils.formatUnits(amountInOtherToken, otherTokenDecimals)
-    );
+    )
 
-    const slippage = 1 + slippageTolerance / 100;
+    const slippage = 1 + slippageTolerance / 100
     const amountInMaxWithSlippage = amountInOtherToken
       .mul(ethers.BigNumber.from(Math.floor(slippage * 100)))
-      .div(ethers.BigNumber.from(100));
+      .div(ethers.BigNumber.from(100))
 
     console.log(
       "amountInMaxWithSlippage===>",
       ethers.utils.formatUnits(amountInMaxWithSlippage, otherTokenDecimals)
-    );
+    )
 
-    const otherTokenAllowance = await checkAllowance(tokenAddress);
+    const otherTokenAllowance = await checkAllowance(tokenAddress)
 
     if (!isBNBToken && otherTokenAllowance.lt(amountInMaxWithSlippage)) {
       try {
-        setTxPending(true);
+        setTxPending(true)
         const approveData = tokenContract.interface.encodeFunctionData(
           "approve",
           [process.env.NEXT_PUBLIC_ROUTER_V2_ADDRESS, amountInOtherToken]
-        );
+        )
         const approveTx = await sendTransaction({
           to: tokenAddress,
           data: approveData,
-        });
+        })
 
         if (approveTx.wait) {
-          const approveReceipt = await approveTx.wait();
+          const approveReceipt = await approveTx.wait()
 
           // Check if the transaction was successful
           if (approveReceipt.status !== 1) {
-            toast.error("Approve transaction failed!");
-            return;
+            toast.error("Approve transaction failed!")
+            return
           }
         }
       } catch (err) {
-        toast.error("Approve failed!");
-        return;
+        toast.error("Approve failed!")
+        return
       } finally {
-        setTxPending(false);
+        setTxPending(false)
       }
     } else {
-      console.log("ALLOWANCE MATCHED, CONTINUE");
+      console.log("ALLOWANCE MATCHED, CONTINUE")
     }
 
     try {
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 minutes from now
+      const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from now
 
-      setTxPending(true);
+      setTxPending(true)
 
-      let swapTx;
+      let swapTx
       // const platformAddress = process.env.NEXT_PUBLIC_PLATFORM_ADDRESS;
       if (isBNBToken) {
-        console.log("SWAP TRANSACTION WITH BNB");
+        console.log("SWAP TRANSACTION WITH BNB")
         const swapData = routerContract.interface.encodeFunctionData(
           "swapETHForExactTokens",
           [
@@ -320,7 +320,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
             platformAddress,
             deadline,
           ]
-        );
+        )
         swapTx = await sendTransaction({
           to: process.env.NEXT_PUBLIC_ROUTER_V2_ADDRESS,
           data: swapData,
@@ -328,9 +328,9 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
             ? amountInMaxWithSlippage.toBigInt()
             : amountInMaxWithSlippage,
           gasLimit: 1000000,
-        });
+        })
       } else {
-        console.log("SWAP TRANSACTION WITH OTHER TOKEN");
+        console.log("SWAP TRANSACTION WITH OTHER TOKEN")
         const swapData = routerContract.interface.encodeFunctionData(
           "swapTokensForExactTokens",
           [
@@ -340,12 +340,12 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
             platformAddress,
             deadline,
           ]
-        );
+        )
         swapTx = await sendTransaction({
           to: process.env.NEXT_PUBLIC_ROUTER_V2_ADDRESS,
           data: swapData,
           gasLimit: 1000000,
-        });
+        })
       }
 
       const swapResultData = {
@@ -359,54 +359,54 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
           otherTokenDecimals
         ),
         amountOut: ethers.utils.formatUnits(amountOutExactUSDT, usdtDecimals),
-      };
+      }
 
-      console.log("swapResultData===>", swapResultData);
+      console.log("swapResultData===>", swapResultData)
 
-      const data = await apiCall("post", "/transaction", swapResultData);
+      const data = await apiCall("post", "/transaction", swapResultData)
 
       if (swapTx.wait) {
-        const swapReceipt = await swapTx.wait();
+        const swapReceipt = await swapTx.wait()
         // Check if the transaction was successful
         if (swapReceipt.status !== 1) {
-          toast.error("Transaction failed. Please try again.");
-          return;
+          toast.error("Transaction failed. Please try again.")
+          return
         }
       }
 
-      toast.success("Swap successful!");
-      setPurchased(true);
-      setTxHash(swapTx.hash ?? swapTx.transactionHash);
+      toast.success("Swap successful!")
+      setPurchased(true)
+      setTxHash(swapTx.hash ?? swapTx.transactionHash)
       setTimeout(() => {
-        updateWalletBalances();
-        updateUserDetails();
-      }, 5000);
+        updateWalletBalances()
+        updateUserDetails()
+      }, 5000)
     } catch (err) {
-      console.error(err);
-      let message = "Please try again.";
+      console.error(err)
+      let message = "Please try again."
       if (err.message.includes("cannot estimate gas")) {
-        message = "Can't estimate gas for some reason";
+        message = "Can't estimate gas for some reason"
       } else if (err.reason) {
-        message = err.reason;
+        message = err.reason
       }
-      toast.error(`Transaction failed. ${message}`);
+      toast.error(`Transaction failed. ${message}`)
     } finally {
-      setTxPending(false);
+      setTxPending(false)
     }
   }
 
   async function checkAllowance(token) {
-    const tokenContract = new ethers.Contract(token, erc20Abi, signer);
+    const tokenContract = new ethers.Contract(token, erc20Abi, signer)
 
     const allowance = await tokenContract.allowance(
       walletAddress, // user's wallet address
       process.env.NEXT_PUBLIC_ROUTER_V2_ADDRESS
-    );
+    )
 
-    return allowance;
+    return allowance
   }
 
-  const hasDiscount = !!discounts[id];
+  const hasDiscount = !!discounts[id]
 
   return (
     <div className="w-full rounded-[20px] border border-primary-275 bg-primary-350 px-[18px] py-5 text-center">
@@ -610,5 +610,5 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
         </Dialog>
       </Transition>
     </div>
-  );
-};
+  )
+}
