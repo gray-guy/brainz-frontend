@@ -36,6 +36,13 @@ const discounts = {
   2: { discount: "40%", newPrice: 12 }, // 20 diamonds
 }
 
+const discounts = {
+  35: { discount: "25%", oldPrice: 20 }, // 10 tickets
+  37: { discount: "20%", oldPrice: 10 }, // 10 diamonds
+  38: { discount: "40%", oldPrice: 20 }, // 20 diamonds
+  2: { discount: "40%", oldPrice: 0.04 }, // 20 diamonds
+}
+
 export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   const {
     walletBalances,
@@ -432,16 +439,15 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
         For
       </p>
       <h2 className="mt-2.5 font-basement text-base font-bold lg:text-lg">
-        {/* add diagnoal red slash */}
         <span
           className={`relative ${discounts[id] && "text-base font-normal text-grey-400"}`}
         >
           {hasDiscount && (
-            <span className="absolute -left-1 top-1/2 h-[3px] w-[110%] translate-y-[-50%] rotate-[-10deg] bg-danger-100" />
+            <span className="absolute -left-[1px] top-1/2 h-[3px] w-[112%] translate-y-[-50%] rotate-[-10deg] bg-danger-100" />
           )}
-          {price}
+          {hasDiscount ? discounts[id].oldPrice : price}
         </span>
-        {hasDiscount && ` ${discounts[id].newPrice}`}
+        {hasDiscount && ` ${price}`}
         &nbsp;USDT
       </h2>
       {hasDiscount && (
