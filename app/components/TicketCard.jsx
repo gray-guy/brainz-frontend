@@ -29,6 +29,13 @@ import { useUser } from "../contexts/UserContext";
 
 const USDT_ADDRESS = process.env.NEXT_PUBLIC_USDT_ADDRESS;
 
+const discounts = {
+  35: { discount: "25%", oldPrice: 20 }, // 10 tickets
+  37: { discount: "20%", oldPrice: 10 }, // 10 diamonds
+  38: { discount: "40%", oldPrice: 20 }, // 20 diamonds
+  2: { discount: "40%", oldPrice: 0.04 }, // 20 diamonds
+};
+
 export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   const {
     walletBalances,
@@ -111,7 +118,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
       tokenAddress,
       signer
     );
-    console.log("priceInOtherToken===>",priceInOtherToken)
+    console.log("priceInOtherToken===>", priceInOtherToken);
     // limit 5 decimal places if there are more
     if (priceInOtherToken.includes(".")) {
       const parts = priceInOtherToken.split(".");
@@ -170,7 +177,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
         amountOut: amount.toString(),
       };
 
-      console.log("depositResultData===>",depositResultData)
+      console.log("depositResultData===>", depositResultData);
       // // POST API CREATE TRANSACTION (/transaction) WITH ABOVE DATA
       const data = await apiCall("post", "/transaction", depositResultData);
 
@@ -194,7 +201,8 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
       console.error(err);
       let message = "Please try again.";
       if (err.message.includes("cannot estimate gas")) {
-        message = "Cannot estimate gas, make sure you have bnb and selected token";
+        message =
+          "Cannot estimate gas, make sure you have bnb and selected token";
       } else if (err.reason) {
         message = err.reason;
       }
@@ -228,7 +236,10 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
       usdtDecimals
     );
 
-    console.log("amountOutExactUSDT===>", ethers.utils.formatUnits(amountOutExactUSDT, usdtDecimals));
+    console.log(
+      "amountOutExactUSDT===>",
+      ethers.utils.formatUnits(amountOutExactUSDT, usdtDecimals)
+    );
 
     const routerContract = new ethers.Contract(
       process.env.NEXT_PUBLIC_ROUTER_V2_ADDRESS,
@@ -244,14 +255,20 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
 
     const amountInOtherToken = amountsIn[0];
 
-    console.log("amountInOtherToken===>", ethers.utils.formatUnits(amountInOtherToken, otherTokenDecimals));
+    console.log(
+      "amountInOtherToken===>",
+      ethers.utils.formatUnits(amountInOtherToken, otherTokenDecimals)
+    );
 
     const slippage = 1 + slippageTolerance / 100;
     const amountInMaxWithSlippage = amountInOtherToken
       .mul(ethers.BigNumber.from(Math.floor(slippage * 100)))
       .div(ethers.BigNumber.from(100));
 
-    console.log("amountInMaxWithSlippage===>", ethers.utils.formatUnits(amountInMaxWithSlippage, otherTokenDecimals));
+    console.log(
+      "amountInMaxWithSlippage===>",
+      ethers.utils.formatUnits(amountInMaxWithSlippage, otherTokenDecimals)
+    );
 
     const otherTokenAllowance = await checkAllowance(tokenAddress);
 
@@ -290,7 +307,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 minutes from now
 
       setTxPending(true);
-      
+
       let swapTx;
       // const platformAddress = process.env.NEXT_PUBLIC_PLATFORM_ADDRESS;
       if (isBNBToken) {
@@ -344,7 +361,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
         amountOut: ethers.utils.formatUnits(amountOutExactUSDT, usdtDecimals),
       };
 
-      console.log("swapResultData===>",swapResultData)
+      console.log("swapResultData===>", swapResultData);
 
       const data = await apiCall("post", "/transaction", swapResultData);
 
@@ -389,12 +406,14 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
     return allowance;
   }
 
+  const hasDiscount = !!discounts[id];
+
   return (
-    <div className="bg-primary-350 rounded-[20px] border border-primary-275 py-5 px-[18px] text-center w-full">
+    <div className="w-full rounded-[20px] border border-primary-275 bg-primary-350 px-[18px] py-5 text-center">
       <div className="flex items-center justify-center gap-5">
         {ticketAmount > 0 && (
           <div className="flex items-center justify-center gap-[10px]">
-            <h1 className="text-xl lg:text-3xl font-basement font-bold">
+            <h1 className="font-basement text-xl font-bold lg:text-3xl">
               {ticketAmount}
             </h1>
             <TicketIcon className={"text-danger-100"} />
@@ -402,24 +421,39 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
         )}
         {diamondAmount > 0 && (
           <div className="flex items-center justify-center gap-[10px]">
-            <h1 className="text-xl lg:text-3xl font-basement font-bold">
+            <h1 className="font-basement text-xl font-bold lg:text-3xl">
               {diamondAmount}
             </h1>
             <DiamondIcon className={"text-success"} />
           </div>
         )}
       </div>
-      <p className="my-2 font-basement font-normal text-grey-400 text-sm">
+      <p className="my-2 font-basement text-sm font-normal text-grey-400">
         For
       </p>
-      <h2 className="font-basement font-bold text-base lg:text-lg mt-2.5">
-        {price} USDT
+      <h2 className="mt-2.5 font-basement text-base font-bold lg:text-lg">
+        {/* add diagnoal red slash */}
+        <span
+          className={`relative ${discounts[id] && "text-base font-normal text-grey-400"}`}
+        >
+          {hasDiscount && (
+            <span className="absolute -left-1 top-1/2 h-[3px] w-[110%] translate-y-[-50%] rotate-[-10deg] bg-danger-100" />
+          )}
+          {hasDiscount ? discounts[id].oldPrice : price}
+        </span>
+        {hasDiscount && ` ${price}`}
+        &nbsp;USDT
       </h2>
+      {hasDiscount && (
+        <p className="mt-2 font-basement text-xs font-normal text-grey-400">
+          ({discounts[id].discount} Saving)
+        </p>
+      )}
       <div className="mt-[8px]">
         <Button
           variant={"outlined"}
           size="text-sm lg:text-base"
-          className={"sm:px-5 py-1 md:px-6 lg:px-10"}
+          className={"py-1 sm:px-5 md:px-6 lg:px-10"}
           onClick={openModal}
         >
           Buy now
@@ -427,7 +461,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-50 " onClose={closeModal}>
+        <Dialog as="div" className="relative z-50" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -437,7 +471,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black/25" />
+            <div className="bg-black/25 fixed inset-0" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -451,13 +485,13 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-[724px] text-center text-white transform overflow-hidden rounded-[20px] bg-primary-275 py-6 px-6 md:px-12  align-middle shadow-xl transition-all">
+                <Dialog.Panel className="shadow-xl w-full max-w-[724px] transform overflow-hidden rounded-[20px] bg-primary-275 px-6 py-6 text-center align-middle text-white transition-all md:px-12">
                   <div>
-                    <h1 className="text-[26px] md:text-4xl font-basement font-bold">
+                    <h1 className="font-basement text-[26px] font-bold md:text-4xl">
                       Buy
                     </h1>
                     <div className="flex justify-center">
-                      <h2 className="text-lg md:text-2xl font-basement font-bold mt-10 max-w-[458px]">
+                      <h2 className="mt-10 max-w-[458px] font-basement text-lg font-bold md:text-2xl">
                         You are purchasing{" "}
                         {ticketAmount > 0 && (
                           <span>{ticketAmount} tickets </span>
@@ -469,18 +503,18 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                         {selectedOption}.
                       </h2>
                     </div>
-                    <div className="flex justify-center mt-8">
-                      <p className="text-sm e md:text-lg font-basement font-normal max-w-[458px] ">
+                    <div className="mt-8 flex justify-center">
+                      <p className="e max-w-[458px] font-basement text-sm font-normal md:text-lg">
                         Select USDT or Equivalent Token to purchase the bundles
                       </p>
                     </div>
-                    <div className="flex flex-col gap-4  max-w-xs mx-auto text-left mt-5">
-                      <div className="flex flex-col gap-3 w-full">
+                    <div className="mx-auto mt-5 flex max-w-xs flex-col gap-4 text-left">
+                      <div className="flex w-full flex-col gap-3">
                         <TokenSelectDropdown
                           options={tokens}
                           onChange={handleTokenChange}
                           selected={"USDT"}
-                          className={"max-h-44 "}
+                          className={"max-h-44"}
                         />
 
                         <p className="text-right text-sm">
@@ -489,26 +523,28 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                             Object.values(walletBalances).find(
                               (balance) => balance.symbol === selectedOption
                             )?.balance
-                          }{" "}{selectedOption}
+                          }{" "}
+                          {selectedOption}
                         </p>
                       </div>
                       <div className="flex justify-between gap-3">
-                        <h1 className="font-bold font-basement text-xl">
+                        <h1 className="font-basement text-xl font-bold">
                           You pay
                         </h1>
-                        <h1 className="font-bold font-basement text-xl">
-                          {priceInOtherToken > 0 ? priceInOtherToken : price}{" "}{selectedOption}
+                        <h1 className="font-basement text-xl font-bold">
+                          {priceInOtherToken > 0 ? priceInOtherToken : price}{" "}
+                          {selectedOption}
                         </h1>
                       </div>
                     </div>
-                    <div className="mt-[48px] flex justify-center gap-[34px] ">
+                    <div className="mt-[48px] flex justify-center gap-[34px]">
                       {purchased ? (
                         <Link
                           href={`https://bscscan.com/tx/${txHash}`}
-                          className=" gap-4 outline-none	text-nowrap font-basement  bg-transparent  border-secondary border-2 text-white font-bold py-2 rounded-full inline-flex items-center duration-200 hover:bg-secondary hover:text-dark px-10 "
+                          className="bg-transparent inline-flex items-center gap-4 text-nowrap rounded-full border-2 border-secondary px-10 py-2 font-basement font-bold text-white outline-none duration-200 hover:bg-secondary hover:text-dark"
                         >
-                          <TickIcon className={"text-success "} />
-                          <p className="text-lg font-basement font-bold">
+                          <TickIcon className={"text-success"} />
+                          <p className="font-basement text-lg font-bold">
                             Purchase successful
                           </p>
                         </Link>
@@ -523,7 +559,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                           <div role="status">
                             <svg
                               aria-hidden="true"
-                              class="w-6 h-6 text-[#ddd] animate-spin  fill-primary-100"
+                              class="h-6 w-6 animate-spin fill-primary-100 text-[#ddd]"
                               viewBox="0 0 100 101"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
@@ -547,7 +583,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                             Purchase
                           </Button>
                           <button
-                            className="text-nowrap font-basement font-bold bg-transparent border border-white border-2 text-white font-bold py-2 rounded-full inline-flex items-center duration-200 hover:bg-white hover:text-dark px-[41px] py-[4px]"
+                            className="bg-transparent inline-flex items-center text-nowrap rounded-full border border-2 border-white px-[41px] py-2 py-[4px] font-basement font-bold text-white duration-200 hover:bg-white hover:text-dark"
                             onClick={closeModal}
                           >
                             Cancel
@@ -559,11 +595,11 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
 
                   <button
                     onClick={closeModal}
-                    className="absolute top-[38px] right-[50px] "
+                    className="absolute right-[50px] top-[38px]"
                   >
                     <ModalCrossIcon
                       className={
-                        "text-white hover:text-secondary cursor-pointer"
+                        "cursor-pointer text-white hover:text-secondary"
                       }
                     />
                   </button>

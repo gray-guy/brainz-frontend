@@ -41,12 +41,9 @@ export const Shop = () => {
             ? [...Array(ticketData.length)].map((_, index) => (
                 <Skeleton key={index} height={196} borderRadius={"1.5rem"} />
               ))
-            : ticketPacks.map((ticket, index) => (
-                <TicketCard
-                  key={index}
-                  {...ticket}
-                />
-              ))}
+            : ticketPacks
+                .toSorted((a, b) => a.price - b.price)
+                .map((ticket, index) => <TicketCard key={index} {...ticket} />)}
         </div>
       </div>
       <div className="bg-primary-350 px-6 md:px-13 py-8 w-full rounded-[10px] mt-6 mb-0 md:mb-5">
@@ -58,12 +55,11 @@ export const Shop = () => {
             ? [...Array(gameData.length)].map((_, index) => (
                 <Skeleton key={index} height={196} borderRadius={"1.5rem"} />
               ))
-            : diamondPacks.map((diamond, index) => (
-                <TicketCard
-                  key={index}
-                  {...diamond}
-                />
-              ))}
+            : diamondPacks
+                .toSorted((a, b) => a.price - b.price)
+                .map((diamond, index) => (
+                  <TicketCard key={index} {...diamond} />
+                ))}
         </div>
       </div>
       <div className="bg-primary-350 px-6 md:px-13 py-8 w-full rounded-[10px] mt-6 mb-0 md:mb-5">
@@ -75,12 +71,11 @@ export const Shop = () => {
             ? [...Array(gameData.length)].map((_, index) => (
                 <Skeleton key={index} height={196} borderRadius={"1.5rem"} />
               ))
-            : bothPacks.map((diamond, index) => (
-                <TicketCard
-                  key={index}
-                  {...diamond}
-                />
-              ))}
+            : bothPacks
+                .toSorted((a, b) => a.price - b.price)
+                .map((diamond, index) => (
+                  <TicketCard key={index} {...diamond} />
+                ))}
         </div>
       </div>
     </div>
