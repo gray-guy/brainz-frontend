@@ -30,13 +30,6 @@ import { useUser } from "../contexts/UserContext"
 const USDT_ADDRESS = process.env.NEXT_PUBLIC_USDT_ADDRESS
 
 const discounts = {
-  35: { discount: "25%", newPrice: 15 }, // 10 tickets
-  37: { discount: "20%", newPrice: 8 }, // 10 diamonds
-  38: { discount: "40%", newPrice: 12 }, // 20 diamonds
-  2: { discount: "40%", newPrice: 12 }, // 20 diamonds
-}
-
-const discounts = {
   35: { discount: "25%", oldPrice: 20 }, // 10 tickets
   37: { discount: "20%", oldPrice: 10 }, // 10 diamonds
   38: { discount: "40%", oldPrice: 20 }, // 20 diamonds
