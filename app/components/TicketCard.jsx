@@ -23,10 +23,10 @@ import { useUser } from "../contexts/UserContext"
 const USDT_ADDRESS = process.env.NEXT_PUBLIC_USDT_ADDRESS
 
 const discounts = {
-  35: { discount: "25%", newPrice: 15 }, // 10 tickets
-  37: { discount: "20%", newPrice: 8 }, // 10 diamonds
-  38: { discount: "40%", newPrice: 12 }, // 20 diamonds
-  2: { discount: "40%", newPrice: 12 }, // 20 diamonds
+  35: { discount: "25%", oldPrice: 15 }, // 10 tickets
+  37: { discount: "20%", oldPrice: 8 }, // 10 diamonds
+  38: { discount: "40%", oldPrice: 12 }, // 20 diamonds
+  2: { discount: "40%", oldPrice: 12 }, // 10 diamonds (dev)
 }
 
 export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
@@ -48,6 +48,8 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   const [txPending, setTxPending] = useState(false)
   const [purchased, setPurchased] = useState(false)
   const [txHash, setTxHash] = useState("")
+  const [buyMethod, setBuyMethod] = useState("")
+  const { user } = useUser()
 
   const closeModal = () => {
     setIsOpen(false)
@@ -523,16 +525,19 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                           <Image
                             src="/images/usdt-logo.png"
                             width={40}
+                            height={40}
                             alt="usdt logo"
                           />
                           <Image
                             src="/images/eth-logo.webp"
                             alt="wallet"
                             width={40}
+                            height={40}
                           />
                           <Image
                             src="/images/bnb-logo.png"
                             width={40}
+                            height={40}
                             alt="bnb logo"
                           />
                         </span>
@@ -554,6 +559,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                           <span className="mb-3 flex justify-center">
                             <Image
                               width={110}
+                              height={40}
                               src="/images/stripe-logo.png"
                               alt="stripe logo"
                             />
