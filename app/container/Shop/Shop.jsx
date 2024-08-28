@@ -1,6 +1,7 @@
 "use client"
 
 import { TicketCard } from "@/app/components/TicketCard"
+import StripeModal from "@/app/components/StripeModal"
 import { gameData, ticketData } from "./data"
 import { useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton"
@@ -84,6 +85,7 @@ export const Shop = () => {
               : "No packs available"}
         </div>
       </div>
+      <StripeModal />
     </div>
   )
 }

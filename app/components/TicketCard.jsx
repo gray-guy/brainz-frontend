@@ -2,15 +2,7 @@ import React from "react"
 import { Button } from "./Button"
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment, useState } from "react"
-import {
-  BtcIcon,
-  DiamondIcon,
-  EthIcon,
-  ModalCrossIcon,
-  TickIcon,
-  TicketIcon,
-  UsdtIcon,
-} from "./Svgs"
+import { DiamondIcon, ModalCrossIcon, TickIcon, TicketIcon } from "./Svgs"
 import { useWallet } from "../contexts/WalletContext"
 import { ethers } from "ethers"
 import TokenSelectDropdown from "./TokenSelectDropdown"
@@ -25,6 +17,7 @@ import {
 import { erc20Abi } from "viem"
 import Link from "next/link"
 import { toast } from "react-toastify"
+import Image from "next/image"
 import { useUser } from "../contexts/UserContext"
 
 const USDT_ADDRESS = process.env.NEXT_PUBLIC_USDT_ADDRESS
@@ -34,13 +27,6 @@ const discounts = {
   37: { discount: "20%", newPrice: 8 }, // 10 diamonds
   38: { discount: "40%", newPrice: 12 }, // 20 diamonds
   2: { discount: "40%", newPrice: 12 }, // 20 diamonds
-}
-
-const discounts = {
-  35: { discount: "25%", oldPrice: 20 }, // 10 tickets
-  37: { discount: "20%", oldPrice: 10 }, // 10 diamonds
-  38: { discount: "40%", oldPrice: 20 }, // 20 diamonds
-  2: { discount: "40%", oldPrice: 0.04 }, // 20 diamonds
 }
 
 export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
@@ -66,6 +52,9 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   const closeModal = () => {
     setIsOpen(false)
     setPurchased(false)
+    setTimeout(() => {
+      setBuyMethod("")
+    }, 500)
   }
 
   const updateWalletBalances = async () => {
@@ -477,7 +466,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="bg-black/25 fixed inset-0" />
+            <div className="bg-black/25 fixed inset-0 backdrop-blur-sm" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -492,113 +481,90 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="shadow-xl w-full max-w-[724px] transform overflow-hidden rounded-[20px] bg-primary-275 px-6 py-6 text-center align-middle text-white transition-all md:px-12">
-                  <div>
+                  <div className="relative">
+                    {buyMethod !== "" && (
+                      <button
+                        className="absolute left-5 top-1/2 -translate-y-1/2 font-basement hover:text-secondary"
+                        onClick={() => setBuyMethod("")}
+                      >
+                        Back
+                      </button>
+                    )}
                     <h1 className="font-basement text-[26px] font-bold md:text-4xl">
                       Buy
                     </h1>
-                    <div className="flex justify-center">
-                      <h2 className="mt-10 max-w-[458px] font-basement text-lg font-bold md:text-2xl">
-                        You are purchasing{" "}
-                        {ticketAmount > 0 && (
-                          <span>{ticketAmount} tickets </span>
-                        )}
-                        {diamondAmount > 0 && (
-                          <span> {diamondAmount} diamonds </span>
-                        )}
-                        for {priceInOtherToken > 0 ? priceInOtherToken : price}{" "}
-                        {selectedOption}.
-                      </h2>
-                    </div>
-                    <div className="mt-8 flex justify-center">
-                      <p className="e max-w-[458px] font-basement text-sm font-normal md:text-lg">
-                        Select USDT or Equivalent Token to purchase the bundles
-                      </p>
-                    </div>
-                    <div className="mx-auto mt-5 flex max-w-xs flex-col gap-4 text-left">
-                      <div className="flex w-full flex-col gap-3">
-                        <TokenSelectDropdown
-                          options={tokens}
-                          onChange={handleTokenChange}
-                          selected={"USDT"}
-                          className={"max-h-44"}
-                        />
-
-                        <p className="text-right text-sm">
-                          Balance:{" "}
-                          {
-                            Object.values(walletBalances).find(
-                              (balance) => balance.symbol === selectedOption
-                            )?.balance
-                          }{" "}
-                          {selectedOption}
-                        </p>
-                      </div>
-                      <div className="flex justify-between gap-3">
-                        <h1 className="font-basement text-xl font-bold">
-                          You pay
-                        </h1>
-                        <h1 className="font-basement text-xl font-bold">
-                          {priceInOtherToken > 0 ? priceInOtherToken : price}{" "}
-                          {selectedOption}
-                        </h1>
-                      </div>
-                    </div>
-                    <div className="mt-[48px] flex justify-center gap-[34px]">
-                      {purchased ? (
-                        <Link
-                          href={`https://bscscan.com/tx/${txHash}`}
-                          className="bg-transparent inline-flex items-center gap-4 text-nowrap rounded-full border-2 border-secondary px-10 py-2 font-basement font-bold text-white outline-none duration-200 hover:bg-secondary hover:text-dark"
-                        >
-                          <TickIcon className={"text-success"} />
-                          <p className="font-basement text-lg font-bold">
-                            Purchase successful
-                          </p>
-                        </Link>
-                      ) : txPending ? (
-                        <Button
-                          variant={"outlined"}
-                          disabled
-                          className={
-                            "flex items-center gap-4 hover:bg-opacity-0 hover:text-white"
-                          }
-                        >
-                          <div role="status">
-                            <svg
-                              aria-hidden="true"
-                              class="h-6 w-6 animate-spin fill-primary-100 text-[#ddd]"
-                              viewBox="0 0 100 101"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                fill="currentColor"
-                              />
-                              <path
-                                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                fill="currentFill"
-                              />
-                            </svg>
-                            <span class="sr-only">Loading...</span>
-                          </div>
-                          Transaction processing...
-                        </Button>
-                      ) : (
-                        <>
-                          <Button variant={"outlined"} onClick={handlePurchase}>
-                            Purchase
-                          </Button>
-                          <button
-                            className="bg-transparent inline-flex items-center text-nowrap rounded-full border border-2 border-white px-[41px] py-2 py-[4px] font-basement font-bold text-white duration-200 hover:bg-white hover:text-dark"
-                            onClick={closeModal}
-                          >
-                            Cancel
-                          </button>
-                        </>
-                      )}
-                    </div>
                   </div>
 
+                  {buyMethod === "crypto" ? (
+                    <BuyWithToken
+                      ticketAmount={ticketAmount}
+                      diamondAmount={diamondAmount}
+                      priceInOtherToken={priceInOtherToken}
+                      price={price}
+                      selectedOption={selectedOption}
+                      tokens={tokens}
+                      handleTokenChange={handleTokenChange}
+                      walletBalances={walletBalances}
+                      setBuyMethod={setBuyMethod}
+                      purchased={purchased}
+                      setPurchased={setPurchased}
+                      txHash={txHash}
+                      handlePurchase={handlePurchase}
+                      txPending={txPending}
+                      closeModal={closeModal}
+                    />
+                  ) : (
+                    <div className="mb-10 mt-14 flex justify-center gap-4 font-basement">
+                      <button
+                        onClick={() => setBuyMethod("crypto")}
+                        className="min-w-[200px] rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
+                      >
+                        <span className="mb-4 flex items-center justify-center">
+                          <Image
+                            src="/images/usdt-logo.png"
+                            width={40}
+                            alt="usdt logo"
+                          />
+                          <Image
+                            src="/images/eth-logo.webp"
+                            alt="wallet"
+                            width={40}
+                          />
+                          <Image
+                            src="/images/bnb-logo.png"
+                            width={40}
+                            alt="bnb logo"
+                          />
+                        </span>
+                        <span className="text:lg lg:text-xl">
+                          Buy with Crypto
+                        </span>
+                      </button>
+
+                      <form
+                        id="checkout-form"
+                        action={`${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`}
+                        method="POST"
+                        className="min-w-[200px] rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
+                      >
+                        <input type="hidden" name="packId" value={id} />
+                        <input type="hidden" name="userId" value={user?.id} />
+
+                        <button>
+                          <span className="mb-3 flex justify-center">
+                            <Image
+                              width={110}
+                              src="/images/stripe-logo.png"
+                              alt="stripe logo"
+                            />
+                          </span>
+                          <span className="text:lg lg:text-xl">
+                            Buy with USD
+                          </span>
+                        </button>
+                      </form>
+                    </div>
+                  )}
                   <button
                     onClick={closeModal}
                     className="absolute right-[50px] top-[38px]"
@@ -615,6 +581,122 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
           </div>
         </Dialog>
       </Transition>
+    </div>
+  )
+}
+
+const BuyWithToken = ({
+  ticketAmount = 0,
+  diamondAmount = 0,
+  priceInOtherToken,
+  price,
+  selectedOption = "USDT",
+  tokens,
+  handleTokenChange,
+  walletBalances,
+  purchased,
+  txHash,
+  handlePurchase,
+  txPending,
+  closeModal,
+}) => {
+  return (
+    <div>
+      <div className="flex justify-center">
+        <h2 className="mt-10 max-w-[458px] font-basement text-lg font-bold md:text-2xl">
+          You are purchasing{" "}
+          {ticketAmount > 0 && <span>{ticketAmount} tickets </span>}
+          {diamondAmount > 0 && <span> {diamondAmount} diamonds </span>}
+          for {priceInOtherToken > 0 ? priceInOtherToken : price}{" "}
+          {selectedOption}.
+        </h2>
+      </div>
+
+      <div className="mt-4 flex justify-center">
+        <p className="max-w-[458px] font-basement text-sm font-normal md:text-lg">
+          Select USDT or Equivalent Token to purchase the bundles
+        </p>
+      </div>
+      <div className="mx-auto mt-5 flex max-w-xs flex-col gap-4 text-left">
+        <div className="flex w-full flex-col gap-3">
+          <TokenSelectDropdown
+            options={tokens}
+            onChange={handleTokenChange}
+            selected={"USDT"}
+            className={"max-h-44"}
+          />
+
+          <p className="text-right text-sm">
+            Balance:{" "}
+            {
+              Object.values(walletBalances).find(
+                (balance) => balance.symbol === selectedOption
+              )?.balance
+            }{" "}
+            {selectedOption}
+          </p>
+        </div>
+        <div className="flex justify-between gap-3">
+          <h1 className="font-basement text-xl font-bold">You pay</h1>
+          <h1 className="font-basement text-xl font-bold">
+            {priceInOtherToken > 0 ? priceInOtherToken : price} {selectedOption}
+          </h1>
+        </div>
+      </div>
+      <div className="mb-3 mt-[48px] flex justify-center gap-[34px]">
+        {purchased ? (
+          <Link
+            href={`https://bscscan.com/tx/${txHash}`}
+            className="bg-transparent inline-flex items-center gap-4 text-nowrap rounded-full border-2 border-secondary px-10 py-2 font-basement font-bold text-white outline-none duration-200 hover:bg-secondary hover:text-dark"
+          >
+            <TickIcon className={"text-success"} />
+            <p className="font-basement text-lg font-bold">
+              Purchase successful
+            </p>
+          </Link>
+        ) : txPending ? (
+          <Button
+            variant={"outlined"}
+            disabled
+            className={
+              "flex items-center gap-4 hover:bg-opacity-0 hover:text-white"
+            }
+          >
+            <div role="status">
+              <svg
+                aria-hidden="true"
+                class="h-6 w-6 animate-spin fill-primary-100 text-[#ddd]"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="currentFill"
+                />
+              </svg>
+              <span class="sr-only">Loading...</span>
+            </div>
+            Transaction processing...
+          </Button>
+        ) : (
+          <>
+            <Button variant={"outlined"} onClick={handlePurchase}>
+              Purchase
+            </Button>
+            <button
+              className="bg-transparent inline-flex items-center text-nowrap rounded-full border-2 border-white px-[41px] py-[4px] font-basement font-bold text-white duration-200 hover:bg-white hover:text-dark"
+              onClick={closeModal}
+            >
+              Cancel
+            </button>
+          </>
+        )}
+      </div>
     </div>
   )
 }
