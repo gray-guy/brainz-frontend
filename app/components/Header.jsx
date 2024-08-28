@@ -23,7 +23,7 @@ import Link from "next/link"
 import { MobileSidebar } from "./MobileSidebar"
 import LoagoutButton from "./LoagoutButton"
 import { usePrivy } from "@privy-io/react-auth"
-import { formatWalletAddress } from "@/lib/utils"
+import { formatNumber, formatWalletAddress } from "@/lib/utils"
 import { useWallet } from "../contexts/WalletContext"
 import { useUser } from "../contexts/UserContext"
 import ConnectButton from "../container/Home/ConnectButton"
@@ -113,6 +113,15 @@ const Header = () => {
                 options={walletBalances}
               />
             )}
+          </div>
+          <div className="flex w-fit items-center gap-2.5">
+            <img width={40} src="/images/usdc-logo.png" alt="usdc logo" />
+            <div className="font-basement text-white">
+              <h1 className="text-base font-bold">
+                {formatNumber(user.credit, true)}
+              </h1>
+              <p className="text-sm">Rewards</p>
+            </div>
           </div>
           <div>
             <Ticket
