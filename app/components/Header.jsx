@@ -100,12 +100,11 @@ const Header = () => {
           className="relative flex h-8 items-center gap-3 md:hidden"
         >
           <Image src={LogoMb} alt="Logo" width={74} priority={true} />
-
           <p className="font-basement text-[10px] font-bold leading-[1.4] tracking-wider text-white">
             PLAY TRIVIA, WIN CRYPTO
           </p>
         </Link>
-        <div className="hidden items-center gap-4 md:flex lg:gap-10">
+        <div className="hidden items-center gap-4 md:flex lg:gap-7">
           <div className="block max-[1200px]:hidden">
             {walletBalances.length > 0 && (
               <SelectDropdown
@@ -114,7 +113,7 @@ const Header = () => {
               />
             )}
           </div>
-          <div className="flex w-fit items-center gap-2.5">
+          <div className="hidden lg:flex w-fit items-center gap-2.5">
             <img width={40} src="/images/usdc-logo.png" alt="usdc logo" />
             <div className="font-basement text-white">
               <h1 className="text-base font-bold">
