@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Button } from "./Button"
 import { PriceAdjuster } from "./PriceAdjuster"
 import { LinkIcon } from "./Svgs"
@@ -7,6 +7,7 @@ import { apiCall, formatWalletAddress } from "@/lib/utils"
 import { isAddress } from "viem"
 import { toast } from "react-toastify"
 import { useUser } from "../contexts/UserContext"
+import { RefreshCw } from "lucide-react"
 
 const isMainnet = process.env.NEXT_PUBLIC_CHAIN === "bsc"
 
@@ -16,16 +17,17 @@ const WithdrawRewards = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [tableData, setTableData] = useState([])
   const [amount, setAmount] = useState(0)
+  const [isFetching, setisFetching] = useState(false)
   const [errors, setErrors] = useState({})
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await apiCall("get", "/withdraw/self")
-      if (data) setTableData(data)
-    }
-
-    fetchData().finally(() => setIsLoading(false))
+  const fetchTableData = useCallback(async () => {
+    const data = await apiCall("get", "/withdraw/self")
+    if (data) setTableData(data)
   }, [])
+
+  useEffect(() => {
+    fetchTableData().finally(() => setIsLoading(false))
+  }, [fetchTableData])
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -40,9 +42,10 @@ const WithdrawRewards = () => {
     console.log("Submitted", JSON.stringify({ recipient, amount }))
     const data = await apiCall("post", "/withdraw", {
       amount,
-      walletAddress: recipient
+      walletAddress: recipient,
     })
     if (data) {
+      toast.success("Your withdraw request was submitted successfully")
       // TODO: refetch user profile data
       setUser((prev) => ({ ...prev, credit: prev.credit - amount }))
       setTableData((prev) => [data.data, ...prev])
@@ -93,9 +96,26 @@ const WithdrawRewards = () => {
 
       {(isLoading || tableData.length > 0) && (
         <>
-          <h3 className="mb-5 mt-10 font-basement text-lg font-bold text-white lg:text-2xl">
-            Withdraw Requests
-          </h3>
+          <div className="flex items-center justify-between">
+            <h3 className="mb-5 mt-10 font-basement text-lg font-bold text-white lg:text-2xl">
+              Withdraw Requests
+            </h3>
+
+            <button
+              className={`p-3 text-white ${isFetching ? "animate-spin" : ""}`}
+              onClick={async () => {
+                try {
+                  setisFetching(true)
+                  await fetchTableData()
+                } finally {
+                  setisFetching(false)
+                }
+              }}
+              title="Refresh Data"
+            >
+              <RefreshCw />
+            </button>
+          </div>
           {isLoading ? (
             <div className="z-50 h-10 w-10 animate-spin rounded-full border-4 border-secondary border-s-secondary/20" />
           ) : (
