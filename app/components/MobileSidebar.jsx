@@ -26,7 +26,7 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
       { title: "Home", url: "/" },
       { title: "Shop", url: "/shop" },
       { title: "Profile", url: "/profile" },
-      { title: "How to Play", url: "/htp/rules" },
+      { title: "How to Play", url: "/htp/rules" }
     ],
     []
   )
@@ -73,6 +73,12 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
             </p>
           </div>
           <div className="flex gap-2">
+            <div className="flex w-fit items-center gap-1 rounded-full bg-[#20BCFF]/20 px-[10px] py-[8px]">
+              <img src="/images/usdc-logo.png" alt="coins" width={21} />
+              <h1 className="font-basement text-sm font-bold text-white">
+                {formatNumber(user.credit)}
+              </h1>
+            </div>
             <Link href="/shop">
               <div className="flex w-fit items-center gap-1 rounded-full bg-danger/25 px-[10px] py-[8px]">
                 <TicketIcon

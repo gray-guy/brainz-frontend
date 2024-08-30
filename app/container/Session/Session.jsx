@@ -204,6 +204,7 @@ export const Session = ({ params }) => {
     })
 
     socket.emit("joinSession", { sessionId: params.id })
+    // TODO: make it true in response of acknowledgement from server
     setIsConnected(true)
   }, [joined, params.id])
 

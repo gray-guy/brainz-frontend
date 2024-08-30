@@ -11,9 +11,10 @@ export const PriceAdjuster = ({ value, onChange, currency = "ETH" }) => {
   }
 
   return (
-    <div className="flex w-full items-center justify-between gap-4 rounded-3xl border border-primary-250 bg-primary px-[10px] py-3.5 md:w-60 lg:px-6">
+    <div className="flex w-full items-center justify-between gap-4 rounded-3xl border border-primary-250 bg-primary px-[10px] py-3.5 md:w-64 lg:px-6">
       <div className="flex-2.5 flex">
         <button
+        type="button"
           onClick={() => updatePrice("decrement")}
           className="font-basement text-base font-bold text-white hover:text-secondary lg:text-lg"
         >
@@ -51,6 +52,7 @@ export const PriceAdjuster = ({ value, onChange, currency = "ETH" }) => {
           {currency}
         </h1>
         <button
+        type="button"
           onClick={() => updatePrice("increment")}
           className="font-basement text-base font-bold text-white hover:text-secondary lg:text-lg"
         >

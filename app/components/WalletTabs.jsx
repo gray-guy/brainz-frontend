@@ -12,6 +12,7 @@ import { ethers } from "ethers"
 import { useWallet } from "../contexts/WalletContext"
 import { erc20Abi } from "viem"
 import { toast } from "react-toastify"
+import WithdrawRewards from "./WithdrawRewards"
 
 const WalletTabs = () => {
   const {
@@ -142,10 +143,10 @@ const WalletTabs = () => {
           "flex flex-row justify-center gap-4 px-3 md:justify-start md:gap-6 md:px-0 lg:gap-8"
         }
       >
-        {/* <Tab className="w-full outline-none max-w-40 md:max-w-fit">
+        {/* <Tab className={"w-full max-w-40 outline-none md:ml-0 md:max-w-fit"}>
           {({ selected }) => (
             <div
-              className={`transition  ease-in-out border border-[#132836] text-nowrap text-base lg:text-xl font-basement  bg-gradient-to-r from-[#2e414e] to-[#132836] font-bold rounded-[10px] inline-flex items-center duration-200 px-6 md:px-10 py-3  ${
+              className={`inline-flex w-full items-center justify-center text-nowrap rounded-[10px] border border-[#132836] bg-gradient-to-r from-[#2e414e] to-[#132836] px-6 py-3 font-basement text-base font-bold transition duration-200 ease-in-out md:px-10 lg:text-xl ${
                 selected
                   ? "text-secondary border-[#132836]"
                   : "text-white hover:border-white"
@@ -154,7 +155,7 @@ const WalletTabs = () => {
               Transactions
             </div>
           )}
-        </Tab> */}
+        </Tab>  */}
 
         <Tab className={"w-full max-w-40 outline-none md:ml-0 md:max-w-fit"}>
           {({ selected }) => (
@@ -166,6 +167,19 @@ const WalletTabs = () => {
               }`}
             >
               Wallet
+            </div>
+          )}
+        </Tab>
+        <Tab className="w-full max-w-40 outline-none md:max-w-fit">
+          {({ selected }) => (
+            <div
+              className={`inline-flex items-center text-nowrap rounded-[10px] border border-[#132836] bg-gradient-to-r from-[#2e414e] to-[#132836] px-6 py-3 font-basement text-base font-bold transition duration-200 ease-in-out md:px-10 lg:text-xl ${
+                selected
+                  ? "border-[#132836] text-secondary"
+                  : "text-white hover:border-white"
+              }`}
+            >
+              Rewards
             </div>
           )}
         </Tab>
@@ -439,6 +453,11 @@ const WalletTabs = () => {
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
+          </div>
+        </Tab.Panel>
+        <Tab.Panel className={"rounded-[10px] bg-primary-350 pb-6"}>
+          <div className="mt-6 pl-0 pr-0 pb-4 pt-6 md:pl-8 md:pr-16">
+            <WithdrawRewards />
           </div>
         </Tab.Panel>
       </Tab.Panels>
