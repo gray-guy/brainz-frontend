@@ -421,6 +421,7 @@ const WalletTabs = () => {
                         placeholder={`Paste your BSC Chain Wallet Address here `}
                         className={`mt-2.5 text-gray-500 z-0	bg-primary text-white w-full pl-4 pr-[88px] py-4 rounded-[20px] border border-primary-275 focus:outline-none `}
                       />
+                      <p className="mt-2.5 text-secondary max-w-[500px]">Important: make sure to send only on the BSC network</p>
                     </div>
                     <div className="mt-7">
                       <h1 className="text-base font-bold text-white lg:text-xl font-basement ">
