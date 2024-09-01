@@ -418,7 +418,7 @@ const WalletTabs = () => {
                         type="text"
                         value={recipient}
                         onChange={(e) => setRecipient(e.target.value)}
-                        placeholder={`Paste your ${depositToken} Wallet Address here`}
+                        placeholder={`Paste your BSC Chain Wallet Address here `}
                         className={`mt-2.5 text-gray-500 z-0	bg-primary text-white w-full pl-4 pr-[88px] py-4 rounded-[20px] border border-primary-275 focus:outline-none `}
                       />
                     </div>
