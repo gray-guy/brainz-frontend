@@ -37,8 +37,8 @@ export const Session = ({ params }) => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(true)
   const [joined, setJoined] = useState(false)
   const [isExpired, setIsExpired] = useState(false)
-  const [isSessionEnd, setIsSessionEnd] = useState(false)
   const [playerCount, setPlayerCount] = useState(0)
+  const [gameState, setGameState] = useState("question")
 
   useEffect(() => {
     const getSession = async (id) => {
@@ -163,6 +163,9 @@ export const Session = ({ params }) => {
       setQuestionTimeRemaining(timeRemaining)
     })
     socket.on("restTimeRemaining", ({ timeRemaining }) => {
+      // this event is emitted even after the session has ended
+      // TODO: fix this on backend
+      setGameState((prev) => (prev === "complete" ? "complete" : "resting"))
       setRestTimeRemaining(timeRemaining)
     })
     socket.on("userLeaderboard", (data) => {
@@ -183,10 +186,11 @@ export const Session = ({ params }) => {
       const q = question.question
       q.answers = q.answers.map((ans, idx) => ({ index: idx, text: ans }))
       setQuestion(q)
+      setGameState("question")
     })
 
     socket.on("sessionComplete", () => {
-      setIsSessionEnd(true)
+      setGameState("complete")
       setTimeout(() => {
         setStage("sessionResult")
       }, 4000)
@@ -325,7 +329,8 @@ export const Session = ({ params }) => {
           </div>
           <div className="mt-0 md:mt-8 lg:mt-10">
             <SelectAnswer
-              isSessionEnded={isSessionEnd}
+              gameState={gameState}
+              // isSessionEnded={isSessionEnd}
               playerCount={playerCount}
               setSelectedOption={handleAnswerSelect}
               question={question}
