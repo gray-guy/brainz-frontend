@@ -17,6 +17,7 @@ import tickSound from "@/public/sounds/ticking.mp3";
 import { useUser } from "../contexts/UserContext";
 
 const alphabets = ["A", "B", "C", "D"];
+const circumference = 2 * Math.PI * 45;
 
 export const SelectAnswer = ({
   setSelectedOption,
@@ -116,8 +117,8 @@ export const SelectAnswer = ({
   }, [questionTimeRemaining, restTimeRemaining]);
 
   const { user: currentUser } = useUser();
-  const [count, setCount] = useState(5);
-  const [totalRestTimeRemaining, setTotalRestTimeRemaining] = useState(0);
+  const [totalDuration, setTotalDuration] = useState(0);
+  const [timerOffset, setTimerOffset] = useState(0);
 
   useEffect(() => {
     if (restTimeRemaining === 0 && !alertSound) {
@@ -126,33 +127,25 @@ export const SelectAnswer = ({
     } else {
       setAlertSound(false);
     }
-    if (isRestActive && totalRestTimeRemaining === 0 && restTimeRemaining > 0) {
-      setTotalRestTimeRemaining(restTimeRemaining);
+
+    if (isRestActive && totalDuration === 0) {
+      setTotalDuration(restTimeRemaining - 2);
+    }
+
+    if (isRestActive && totalDuration) {
+      const offset =
+        restTimeRemaining >= 0 && restTimeRemaining <= totalDuration
+          ? circumference - (restTimeRemaining / totalDuration) * circumference
+          : 0;
+      setTimerOffset(offset);
+    } else {
+      setTimerOffset(0);
     }
   }, [restTimeRemaining]);
-
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setCount((prevCount) => (prevCount > 1 ? prevCount - 1 : 0));
-  //   }, 1000);
-
-  //   return () => clearInterval(timer);
-  // }, []);
 
   const isSessionEnded = gameState === "complete";
   const isRestActive = gameState === "resting";
   const isQuestionActive = gameState === "question";
-
-  const circumference = 2 * Math.PI * 45; // 45 is the radius
-  const offset =
-    totalRestTimeRemaining > 0 && isRestActive
-      ? circumference -
-        (restTimeRemaining / totalRestTimeRemaining) * circumference
-      : 0;
-
-  console.log("restTimeRemaining ==>", restTimeRemaining);
-  console.log("totalRestTimeRemaining ==>", totalRestTimeRemaining);
-  console.log("offset ==>", offset);
 
   return (
     <div className="pb-4">
@@ -243,15 +236,10 @@ export const SelectAnswer = ({
               </div>
             )}
           </div>
-          {isRestActive && restTimeRemaining ? (
-            // <div className="mt-6 flex min-h-[340px] max-w-[900px] flex-col items-center rounded-[20px] border border-primary-275 bg-primary-350 py-10 font-basement text-white md:min-h-[390px] md:justify-center">
-            //   <p className="mb-16 mt-0 text-center text-lg font-bold md:mb-10 lg:text-2xl">
-            //     Next Question In...
-            //   </p>
-            //   <div className="flex size-[110px] items-center justify-center rounded-full border-[10px] border-secondary text-2xl font-bold lg:size-[150px] lg:text-5xl">
-            //     {restTimeRemaining}
-            //   </div>
-            // </div>
+          {isRestActive &&
+          restTimeRemaining >= 0 &&
+          totalDuration > 0 &&
+          restTimeRemaining <= totalDuration ? (
             <div className="mt-6 flex min-h-[340px] max-w-[900px] flex-col items-center justify-center rounded-[20px] border border-primary-275 bg-primary-350 py-10 font-basement text-white md:min-h-[390px]">
               <p className="mb-6 mt-0 text-center text-lg font-bold md:mb-10 lg:text-2xl">
                 Next Question In...
@@ -271,7 +259,7 @@ export const SelectAnswer = ({
                     strokeWidth="6"
                     fill="none"
                     strokeDasharray={circumference}
-                    strokeDashoffset={offset}
+                    strokeDashoffset={timerOffset}
                     className="transition-stroke text-secondary duration-1000 ease-linear"
                   />
                 </svg>
