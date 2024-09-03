@@ -1,28 +1,28 @@
-import React, { useMemo } from "react"
-import { useEffect, useState } from "react"
-import { OptionSelect } from "./OptionSelect"
-import { LongArrowRightIcon } from "./Svgs"
-import { SessionButton } from "./SessionButton"
-import { ProgressBar } from "./Progressbar"
-import { MobilePointsCard } from "./MobilePointsCard"
-import { ParticipationsRankTable } from "./ParticipationsRankTable"
-import { GameCarousel } from "./GameCarousel"
-import "react-loading-skeleton/dist/skeleton.css"
-import Skeleton from "react-loading-skeleton"
-import { apiCall } from "@/lib/utils"
-import clickSound from "@/public/sounds/anwer-select-sound.wav"
-import a from "@/public/sounds/new-question-alert-sound.mp3"
-import w from "@/public/sounds/wrong.mp3"
-import r from "@/public/sounds/right.mp3"
-import tickSound from "@/public/sounds/ticking.mp3"
-import { useUser } from "../contexts/UserContext"
+import React, { useMemo } from "react";
+import { useEffect, useState } from "react";
+import { OptionSelect } from "./OptionSelect";
+import { LongArrowRightIcon } from "./Svgs";
+import { SessionButton } from "./SessionButton";
+import { ProgressBar } from "./Progressbar";
+import { MobilePointsCard } from "./MobilePointsCard";
+import { ParticipationsRankTable } from "./ParticipationsRankTable";
+import { GameCarousel } from "./GameCarousel";
+import "react-loading-skeleton/dist/skeleton.css";
+import Skeleton from "react-loading-skeleton";
+import clickSound from "@/public/sounds/anwer-select-sound.wav";
+import a from "@/public/sounds/new-question-alert-sound.mp3";
+import w from "@/public/sounds/wrong.mp3";
+import r from "@/public/sounds/right.mp3";
+import tickSound from "@/public/sounds/ticking.mp3";
+import { useUser } from "../contexts/UserContext";
 
-const alphabets = ["A", "B", "C", "D"]
+const alphabets = ["A", "B", "C", "D"];
 
 export const SelectAnswer = ({
   setSelectedOption,
   question = {},
   step = 0,
+  gameState,
   questionTimeRemaining,
   restTimeRemaining,
   progress,
@@ -32,52 +32,51 @@ export const SelectAnswer = ({
   powerUsed,
   playerCount,
   stage,
-  isSessionEnded
 }) => {
-  const [audio] = useState(new Audio(clickSound))
-  const [wrong] = useState(new Audio(w))
-  const [right] = useState(new Audio(r))
-  const [tickSoundeffect] = useState(new Audio(tickSound))
-  const [alert] = useState(new Audio(a))
+  const [audio] = useState(new Audio(clickSound));
+  const [wrong] = useState(new Audio(w));
+  const [right] = useState(new Audio(r));
+  const [tickSoundeffect] = useState(new Audio(tickSound));
+  const [alert] = useState(new Audio(a));
 
-  const [tickingAudioPlaying, setTickingAudioPlaying] = useState(false)
-  const [alertSound, setAlertSound] = useState(false)
-  const [table, setTable] = useState()
+  const [tickingAudioPlaying, setTickingAudioPlaying] = useState(false);
+  const [alertSound, setAlertSound] = useState(false);
+  const [table, setTable] = useState();
 
   const moveUser = (currentIndex, targetIndex, data) => {
     if (currentIndex >= targetIndex && currentIndex >= 0 && targetIndex >= 0) {
-      const user = data[currentIndex]
+      const user = data[currentIndex];
       const updatedTable = [
         ...data.slice(0, currentIndex),
-        ...data.slice(currentIndex + 1)
-      ]
+        ...data.slice(currentIndex + 1),
+      ];
       const newTable = [
         ...updatedTable.slice(0, currentIndex - 1),
         user,
-        ...updatedTable.slice(currentIndex - 1)
-      ]
+        ...updatedTable.slice(currentIndex - 1),
+      ];
 
-      setTable(newTable)
+      setTable(newTable);
 
       if (currentIndex > targetIndex) {
         setTimeout(() => {
-          moveUser(currentIndex - 1, targetIndex, newTable)
-        }, 100)
+          moveUser(currentIndex - 1, targetIndex, newTable);
+        }, 100);
       }
     }
-  }
+  };
 
   const getOptionVariant = (answer, wrong) => {
-    if (questionTimeRemaining > 0) return "default"
-    return answer ? "success" : wrong ? "danger" : "default"
-  }
+    if (questionTimeRemaining > 0) return "default";
+    return answer ? "success" : wrong ? "danger" : "default";
+  };
 
   const onAnswerSelect = (answer) => {
     if (questionTimeRemaining > 0 && !question.answer) {
-      setSelectedOption(answer)
-      audio.play()
+      setSelectedOption(answer);
+      audio.play();
     }
-  }
+  };
 
   useEffect(() => {
     if (
@@ -87,12 +86,12 @@ export const SelectAnswer = ({
       stage === "selectAnswer"
     ) {
       if (question.answer === question.correctAnswer) {
-        right.play()
+        right.play();
       } else {
-        wrong.play()
+        wrong.play();
       }
     }
-  }, [question.answer, question.correctAnswer, questionTimeRemaining, stage])
+  }, [question.answer, question.correctAnswer, questionTimeRemaining, stage]);
   useEffect(() => {
     if (
       (questionTimeRemaining > 0 &&
@@ -100,9 +99,9 @@ export const SelectAnswer = ({
         !tickingAudioPlaying) ||
       (restTimeRemaining > 0 && restTimeRemaining <= 5 && !tickingAudioPlaying)
     ) {
-      tickSoundeffect.currentTime = 0
-      tickSoundeffect.play()
-      setTickingAudioPlaying(true)
+      tickSoundeffect.currentTime = 0;
+      tickSoundeffect.play();
+      setTickingAudioPlaying(true);
     }
 
     if (
@@ -110,22 +109,50 @@ export const SelectAnswer = ({
       restTimeRemaining === 0 &&
       tickingAudioPlaying
     ) {
-      tickSoundeffect.pause()
-      tickSoundeffect.currentTime = 0
-      setTickingAudioPlaying(false)
+      tickSoundeffect.pause();
+      tickSoundeffect.currentTime = 0;
+      setTickingAudioPlaying(false);
     }
-  }, [questionTimeRemaining, restTimeRemaining])
+  }, [questionTimeRemaining, restTimeRemaining]);
+
+  const { user: currentUser } = useUser();
+  const [count, setCount] = useState(5);
+  const [totalRestTimeRemaining, setTotalRestTimeRemaining] = useState(0);
 
   useEffect(() => {
     if (restTimeRemaining === 0 && !alertSound) {
-      alert.play()
-      setAlertSound(true)
+      alert.play();
+      setAlertSound(true);
     } else {
-      setAlertSound(false)
+      setAlertSound(false);
     }
-  }, [restTimeRemaining])
+    if (isRestActive && totalRestTimeRemaining === 0 && restTimeRemaining > 0) {
+      setTotalRestTimeRemaining(restTimeRemaining);
+    }
+  }, [restTimeRemaining]);
 
-  const { user: currentUser } = useUser()
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setCount((prevCount) => (prevCount > 1 ? prevCount - 1 : 0));
+  //   }, 1000);
+
+  //   return () => clearInterval(timer);
+  // }, []);
+
+  const isSessionEnded = gameState === "complete";
+  const isRestActive = gameState === "resting";
+  const isQuestionActive = gameState === "question";
+
+  const circumference = 2 * Math.PI * 45; // 45 is the radius
+  const offset =
+    totalRestTimeRemaining > 0 && isRestActive
+      ? circumference -
+        (restTimeRemaining / totalRestTimeRemaining) * circumference
+      : 0;
+
+  console.log("restTimeRemaining ==>", restTimeRemaining);
+  console.log("totalRestTimeRemaining ==>", totalRestTimeRemaining);
+  console.log("offset ==>", offset);
 
   return (
     <div className="pb-4">
@@ -136,9 +163,8 @@ export const SelectAnswer = ({
               {title}
             </h1>
             <QuestionTimerMobile
-              isSessionEnded={isSessionEnded}
               questionTimeRemaining={questionTimeRemaining}
-              restTimeRemaining={restTimeRemaining}
+              isRestActive={isRestActive}
             />
           </div>
           {leaderboard?.top10.length > 0 && (
@@ -217,63 +243,105 @@ export const SelectAnswer = ({
               </div>
             )}
           </div>
-          <div className="mt-7 flex max-w-[830px] gap-4 text-start text-white md:mt-12">
-            <div className="flex hidden items-center gap-4 md:flex">
-              <h1 className="font-basement text-lg font-bold text-secondary lg:text-xl">
-                {step}
-              </h1>
-              <div className="hidden md:block">
-                <LongArrowRightIcon height="24" width="24" />
+          {isRestActive && restTimeRemaining ? (
+            // <div className="mt-6 flex min-h-[340px] max-w-[900px] flex-col items-center rounded-[20px] border border-primary-275 bg-primary-350 py-10 font-basement text-white md:min-h-[390px] md:justify-center">
+            //   <p className="mb-16 mt-0 text-center text-lg font-bold md:mb-10 lg:text-2xl">
+            //     Next Question In...
+            //   </p>
+            //   <div className="flex size-[110px] items-center justify-center rounded-full border-[10px] border-secondary text-2xl font-bold lg:size-[150px] lg:text-5xl">
+            //     {restTimeRemaining}
+            //   </div>
+            // </div>
+            <div className="mt-6 flex min-h-[340px] max-w-[900px] flex-col items-center justify-center rounded-[20px] border border-primary-275 bg-primary-350 py-10 font-basement text-white md:min-h-[390px]">
+              <p className="mb-6 mt-0 text-center text-lg font-bold md:mb-10 lg:text-2xl">
+                Next Question In...
+              </p>
+              <div className="relative flex h-[150px] items-center justify-center">
+                <svg
+                  className="absolute"
+                  width="150px"
+                  height="150px"
+                  viewBox="0 0 100 100"
+                >
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="45"
+                    stroke="currentColor"
+                    strokeWidth="6"
+                    fill="none"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={offset}
+                    className="transition-stroke text-secondary duration-1000 ease-linear"
+                  />
+                </svg>
+                <span className="text-2xl font-bold lg:text-5xl">
+                  {restTimeRemaining}
+                </span>
               </div>
             </div>
-            <p className="pl-2 font-inter text-lg font-semibold md:pl-0 md:text-xl lg:text-2xl">
-              {question.question}
-            </p>
-          </div>
-          <div className="mt-6 flex max-w-[784px] flex-col gap-4 pb-5 md:pb-0 lg:mt-11">
-            {restTimeRemaining < 2 &&
-            restTimeRemaining >= 0 &&
-            !question.answer &&
-            questionTimeRemaining === 0 ? (
-              <>
-                <div className="hidden md:block">
-                  <Skeleton
-                    count={4}
-                    height={64}
-                    borderRadius={"1rem"}
-                    style={{ marginBottom: "1rem" }}
-                  />
+          ) : (
+            <>
+              <div className="mt-7 flex max-w-[830px] gap-4 text-start text-white md:mt-12">
+                <div className="flex items-center gap-4 md:flex">
+                  <h1 className="font-basement text-lg font-bold text-secondary lg:text-xl">
+                    {step}
+                  </h1>
+                  <div className="hidden md:block">
+                    <LongArrowRightIcon height="24" width="24" />
+                  </div>
                 </div>
-                <div className="md:hidden">
-                  <Skeleton
-                    count={4}
-                    height={48}
-                    borderRadius={"1rem"}
-                    style={{ marginBottom: "1rem" }}
-                  />
-                </div>
-              </>
-            ) : (
-              question.answers.map(({ text, index }, idx) => {
-                return (
-                  <OptionSelect
-                    key={index}
-                    alphabet={alphabets[idx]}
-                    description={text}
-                    isActive={question.answer === index + 1}
-                    variant={getOptionVariant(
-                      question.correctAnswer === index + 1,
-                      question.answer === index + 1 &&
-                        question.correctAnswer &&
-                        question.answer !== question.correctAnswer
-                    )}
-                    answer={questionTimeRemaining === 0 && true}
-                    onClick={() => onAnswerSelect(index + 1)}
-                  />
-                )
-              })
-            )}
-          </div>
+                <p className="pl-2 font-inter text-lg font-semibold md:pl-0 md:text-xl lg:text-2xl">
+                  {question.question}
+                </p>
+              </div>
+              <div className="mt-6 flex max-w-[784px] flex-col gap-4 pb-5 md:pb-0 lg:mt-11">
+                {restTimeRemaining < 2 &&
+                restTimeRemaining >= 0 &&
+                !question.answer &&
+                questionTimeRemaining === 0 ? (
+                  <>
+                    <div className="hidden md:block">
+                      <Skeleton
+                        count={4}
+                        height={64}
+                        borderRadius={"1rem"}
+                        style={{ marginBottom: "1rem" }}
+                      />
+                    </div>
+                    <div className="md:hidden">
+                      <Skeleton
+                        count={4}
+                        height={48}
+                        borderRadius={"1rem"}
+                        style={{ marginBottom: "1rem" }}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  question.answers.map(({ text, index }, idx) => {
+                    return (
+                      <OptionSelect
+                        key={index}
+                        alphabet={alphabets[idx]}
+                        description={text}
+                        isActive={question.answer === index + 1}
+                        variant={getOptionVariant(
+                          question.correctAnswer === index + 1,
+                          question.answer === index + 1 &&
+                            question.correctAnswer &&
+                            question.answer !== question.correctAnswer
+                        )}
+                        answer={questionTimeRemaining === 0 && true}
+                        onClick={() => onAnswerSelect(index + 1)}
+                      />
+                    );
+                  })
+                )}
+              </div>
+            </>
+          )}
+
           {/* <div className="hidden md:flex flex items-center justify-center rounded-lg mt-16 bg-dark-200 h-[166px]">
             <h1 className="text-base font-normal uppercase font-basement text-grey-525">
               AD PLACEMENT SPACE
@@ -285,6 +353,7 @@ export const SelectAnswer = ({
             isSessionEnded={isSessionEnded}
             questionTimeRemaining={questionTimeRemaining}
             restTimeRemaining={restTimeRemaining}
+            isRestActive={isRestActive}
           />
           <div className="rounded-lg bg-gradient-to-b from-[#061F30] to-[#061F30] px-3 pb-3 pt-5">
             <h1 className="pt-2.5 font-basement text-xl font-bold text-white">
@@ -296,120 +365,120 @@ export const SelectAnswer = ({
                   const opacity =
                     index <= 3
                       ? 1
-                      : 1 - (index - 3) / (leaderboard.top10.length - 4)
-                  const isCurrentUser = user.userId === currentUser.id
+                      : 1 - (index - 3) / (leaderboard.top10.length - 4);
+                  const isCurrentUser = user.userId === currentUser.id;
                   return (
                     <ParticipationsRankTable
                       key={index}
                       rank={user.rank}
                       userName={user.username}
-                      // userId={user.userId}
                       points={user.totalPoints}
-                      // profileImage={user.profileImage}
-                      // showWinnerIcon={index < 3}
                       isCurrentUser={isCurrentUser}
                       animate={questionTimeRemaining < 0}
                       style={{
-                        opacity: isCurrentUser || index <= 2 ? 1 : opacity
+                        opacity: isCurrentUser || index <= 2 ? 1 : opacity,
                       }}
                     />
-                  )
+                  );
                 })}
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const useTimer = ({
   questionTimeRemaining,
-  restTimeRemaining,
-  isSessionEnded
+  // restTimeRemaining,
+  isSessionEnded,
 }) => {
-  const [internalTime, setInternalTime] = useState(0)
-  const [showCapture, setShowCapture] = useState(false)
-  let nonZeroTime = questionTimeRemaining || restTimeRemaining
+  const [internalTime, setInternalTime] = useState(0);
+  const [showCapture, setShowCapture] = useState(false);
+  let nonZeroTime = questionTimeRemaining; /*|| restTimeRemaining*/
   if (isSessionEnded) {
-    nonZeroTime = 4
+    nonZeroTime = 4;
   }
 
   // countdown in miliseconds
   useEffect(() => {
-    setInternalTime(nonZeroTime * 1000)
+    setInternalTime(nonZeroTime * 1000);
     const interval = setInterval(() => {
-      setInternalTime((prev) => (prev - 10 < 0 ? 0 : prev - 10))
-    }, 10)
-    return () => clearInterval(interval)
-  }, [nonZeroTime])
+      setInternalTime((prev) => (prev - 10 < 0 ? 0 : prev - 10));
+    }, 10);
+    return () => clearInterval(interval);
+  }, [nonZeroTime]);
 
   useEffect(() => {
     const handleShowCapture = () => {
-      setShowCapture(true)
+      setShowCapture(true);
       setTimeout(() => {
-        setShowCapture(false)
-      }, 1500)
-    }
-    document.addEventListener("answerSubmitted", handleShowCapture)
+        setShowCapture(false);
+      }, 1500);
+    };
+    document.addEventListener("answerSubmitted", handleShowCapture);
 
     return () => {
-      document.removeEventListener("answerSubmitted", handleShowCapture)
-    }
-  }, [])
+      document.removeEventListener("answerSubmitted", handleShowCapture);
+    };
+  }, []);
 
-  const timeToShow = (internalTime / 1000).toFixed(2)
-  const shouldPulse = nonZeroTime > 0 && nonZeroTime < 5
+  const timeToShow = (internalTime / 1000).toFixed(2);
+  const shouldPulse = nonZeroTime > 0 && nonZeroTime < 5;
 
   return {
     showCapture,
     timeToShow,
-    shouldPulse
-  }
-}
+    shouldPulse,
+  };
+};
 
 const QuestionTimer = ({
   questionTimeRemaining,
+  isRestActive,
   isSessionEnded,
-  restTimeRemaining
 }) => {
   const { shouldPulse, showCapture, timeToShow } = useTimer({
     isSessionEnded,
     questionTimeRemaining,
-    restTimeRemaining
-  })
+  });
 
   const label = isSessionEnded
     ? "Ending session in"
-    : questionTimeRemaining === 0
-      ? "Next question in"
-      : "Time remaining"
+    : isRestActive
+      ? "Preparing next question..."
+      : "Time remaining";
 
   return (
     <div className="desktop relative w-full rounded-lg bg-gradient-to-r from-[#2e414e] to-[#132836] px-6 py-4 text-4xl">
       <p className={`font-basement text-lg font-normal text-secondary`}>
         {label}
       </p>
-      <div
-        className={`font-basement text-3xl font-bold text-white ${
-          shouldPulse ? "animate-pulse" : ""
-        }`}
-      >
-        <span className="inline-block w-[94px]">{timeToShow}</span>
-        <span>secs</span>
-      </div>
+      {isRestActive ? (
+        <div className="h-[36px]" />
+      ) : (
+        <div
+          className={`font-basement text-3xl font-bold text-white ${
+            shouldPulse ? "animate-pulse" : ""
+          }`}
+        >
+          <span className="inline-block w-[94px]">{timeToShow}</span>
+          <span>secs</span>
+        </div>
+      )}
       {showCapture && <TimerCard timeToShow={timeToShow} />}
     </div>
-  )
-}
+  );
+};
 
 const TimerCard = ({ timeToShow }) => {
-  const [capturedTime] = useState(timeToShow)
+  const [capturedTime] = useState(timeToShow);
 
   const baseStyles =
-    "absolute top-0 left-0 right-0 font-basement text-[#000] text-4xl rounded-lg py-4 px-6 bg-secondary"
+    "absolute top-0 left-0 right-0 font-basement text-[#000] text-4xl rounded-lg py-4 px-6 bg-secondary";
   const animateStyles =
-    "max-lg:animate-scoreSlideY lg:animate-scoreSlide ease-out slide"
+    "max-lg:animate-scoreSlideY lg:animate-scoreSlide ease-out slide";
   return (
     <div className={`${baseStyles} ${animateStyles}`}>
       <p className="font-basement text-lg font-normal">Your Time</p>
@@ -418,32 +487,31 @@ const TimerCard = ({ timeToShow }) => {
         <span>secs</span>
       </div>
     </div>
-  )
-}
+  );
+};
 
-const QuestionTimerMobile = ({ questionTimeRemaining, restTimeRemaining }) => {
-  const { showCapture, timeToShow } = useTimer({
-    questionTimeRemaining,
-    restTimeRemaining
-  })
+const QuestionTimerMobile = ({ questionTimeRemaining, isRestActive }) => {
+  const { showCapture, timeToShow } = useTimer({ questionTimeRemaining });
+
+  if (isRestActive) return null;
 
   return (
     <div className="mobile relative p-2 font-basement text-2xl font-bold text-white">
       <span className="inline-block w-[74px]">{timeToShow}</span> s
       {showCapture && <TimerCardMobile timeToShow={timeToShow} />}
     </div>
-  )
-}
+  );
+};
 
 const TimerCardMobile = ({ timeToShow }) => {
-  const [capturedTime] = useState(timeToShow)
+  const [capturedTime] = useState(timeToShow);
   const baseStyles =
-    "absolute top-0 -left-6 p-2 rounded-[10px] text-2xl font-bold text-[#000] font-basement bg-secondary"
-  const animateStyles = "animate-scoreSlide ease-out duration-1500"
+    "absolute top-0 -left-6 p-2 rounded-[10px] text-2xl font-bold text-[#000] font-basement bg-secondary";
+  const animateStyles = "animate-scoreSlide ease-out duration-1500";
 
   return (
     <div className={`${baseStyles} ${animateStyles}`}>
       <span className="inline-block w-[74px]">{capturedTime}</span> s
     </div>
-  )
-}
+  );
+};
