@@ -26,7 +26,7 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
       { title: "Home", url: "/" },
       { title: "Shop", url: "/shop" },
       { title: "Profile", url: "/profile" },
-      { title: "How to Play", url: "/htp/rules" }
+      { title: "How to Play", url: "/htp/rules" },
     ],
     []
   )

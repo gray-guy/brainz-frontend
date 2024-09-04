@@ -113,7 +113,7 @@ const Header = () => {
               />
             )}
           </div>
-          <div className="hidden lg:flex w-fit items-center gap-2.5">
+          <div className="hidden w-fit items-center gap-2.5 lg:flex">
             <img width={40} src="/images/usdc-logo.png" alt="usdc logo" />
             <div className="font-basement text-white">
               <h1 className="text-base font-bold">

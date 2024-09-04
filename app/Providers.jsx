@@ -6,7 +6,6 @@ import { bsc, bscTestnet } from "viem/chains"
 import WalletProvider from "./contexts/WalletContext"
 import UserProvider from "./contexts/UserContext"
 
-
 export default function Providers({ children }) {
   // const config = {
   //   networks: [Arbitrum],
