@@ -19,6 +19,7 @@ import Link from "next/link"
 import { toast } from "react-toastify"
 import Image from "next/image"
 import { useUser } from "../contexts/UserContext"
+import BuyWithUsdt from "./BuyWithUsdt"
 
 const USDT_ADDRESS = process.env.NEXT_PUBLIC_USDT_ADDRESS
 
@@ -515,6 +516,15 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                       txPending={txPending}
                       closeModal={closeModal}
                     />
+                  ) : buyMethod === "usdt" ? (
+                    <BuyWithUsdt
+                      ticketAmount={ticketAmount}
+                      diamondAmount={diamondAmount}
+                      priceInOtherToken={priceInOtherToken}
+                      price={price}
+                      selectedOption={selectedOption}
+                      closeModal={closeModal}
+                    />
                   ) : (
                     <div className="mb-10 mt-14 flex justify-center gap-4 font-basement">
                       <button
@@ -569,6 +579,23 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                           </span>
                         </button>
                       </form>
+
+                      <button
+                        onClick={() => setBuyMethod("usdt")}
+                        className="min-w-[200px] rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
+                      >
+                        <span className="mb-4 flex items-center justify-center">
+                          <Image
+                            src="/images/usdt-logo.png"
+                            width={40}
+                            height={40}
+                            alt="usdt logo"
+                          />
+                        </span>
+                        <span className="text:lg lg:text-xl">
+                          Deposit USDT
+                        </span>
+                      </button>
                     </div>
                   )}
                   <button
