@@ -516,7 +516,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                       closeModal={closeModal}
                     />
                   ) : (
-                    <div className="mb-10 mt-14 flex justify-center gap-4 font-basement">
+                    <div className="mb-10 mt-14 flex flex-col justify-center gap-4 font-basement sm:flex-row">
                       <button
                         onClick={() => setBuyMethod("crypto")}
                         className="min-w-[200px] rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
