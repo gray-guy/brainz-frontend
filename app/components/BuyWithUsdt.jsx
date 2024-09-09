@@ -4,121 +4,127 @@ import { Button } from "./Button"
 import { toast } from "react-toastify"
 import { TextCopyIcon } from "./Svgs"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { apiCall } from "@/lib/utils"
 
 const BuyWithUsdt = ({
+  packId,
   ticketAmount = 0,
   diamondAmount = 0,
-  priceInOtherToken,
   price,
-  selectedOption = "USDT",
   closeModal,
 }) => {
   const { user } = usePrivy()
-  const [code, setCode] = useState("0")
+  const [buyData, setBuyData] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isBuying, setIsBuying] = useState(false)
+  const [encodedPrice, setEncodedPrice] = useState("")
 
-  //   useEffect(() => {
-  //     const getCurrentPaymentCode = async () => {
-  //       const newCode = await apiCall("get", "/current-payment-code")
-  //       setCode(newCode)
-  //     }
-  //     getCurrentPaymentCode()
-  //   }, [])
+  console.log("buyData===>", buyData)
+
+  const getBuyData = useCallback(async () => {
+    const data = await apiCall("get", `/buy-requests/self`)
+    // NOTE: user have only one open buy request
+    if (data && data[0]?.packID === packId) {
+      setBuyData(data[0])
+    }
+  }, [packId])
+
+  useEffect(() => {
+    if (!buyData) return
+    setEncodedPrice(price + String(buyData.paymentCode).padStart(4, "0"))
+  }, [price, buyData])
+
+  useEffect(() => {
+    getBuyData().finally(() => setIsLoading(false))
+  }, [getBuyData])
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text)
     toast.success("Address copied to Clipboard!")
   }
 
+  const handleBuy = async () => {
+    setIsBuying(true)
+    const data = await apiCall("post", "/buy-requests", {
+      packID: packId,
+    })
+    if (data) {
+      setBuyData(data)
+    }
+    setIsBuying(false)
+  }
+
   return (
     <div>
       <div className="flex justify-center">
-        <h2 className="mt-10 max-w-[458px] font-basement text-lg font-bold md:text-2xl">
-          You are purchasing{" "}
-          {ticketAmount > 0 && <span>{ticketAmount} tickets </span>}
-          {diamondAmount > 0 && <span> {diamondAmount} diamonds </span>}
-          for {priceInOtherToken > 0 ? priceInOtherToken : price}{" "}
-          {selectedOption}.
+        <h2 className="mt-10 max-w-[458px] font-basement text-lg md:text-2xl">
+          You are purchasing
+          {ticketAmount > 0 && (
+            <span className="font-bold"> {ticketAmount} tickets </span>
+          )}
+          {diamondAmount > 0 && (
+            <span className="font-bold"> {diamondAmount} diamonds </span>
+          )}
         </h2>
       </div>
 
-      <div className="mt-5 flex w-full justify-between gap-8">
-        <div>
-          <div className="text-left font-inter text-sm font-medium text-grey-550 lg:text-sm">
-            Send the amount of USDT of your choice to the following address to
-            receive the equivalent in Coins.
+      {isLoading ? (
+        <div>Loading</div>
+      ) : (
+        <div
+          style={{ gridTemplateColumns: "1fr 250px" }}
+          className="mt-5 grid w-full justify-between text-left font-basement"
+        >
+          <div className="text-lg md:text-xl">
+            <p className="mb-5 font-bold text-secondary">
+              Only deposit over the BSC network.
+            </p>
+            <p className="text-sm md:text-lg">Amount</p>
+            <p className="flex gap-2 text-lg font-bold md:text-xl">
+              {encodedPrice} USDT
+              <button onClick={() => handleCopy(price)}>
+                <TextCopyIcon
+                  className="text-grey-200 hover:text-white"
+                  height="30"
+                  width="30"
+                />
+              </button>
+            </p>
           </div>
-          <div className="lg:text-s my-3 text-left font-inter text-sm font-medium text-secondary">
-            Only deposit over the BSC network. Do not use Ethereum, Base,
-            Arbitrum or Optimism networks.
-          </div>
-          <div className="mb-3 text-left font-inter text-sm font-medium text-secondary lg:text-sm">
-            Do NOT send NFT's to this USDT deposit address. In order to recover
-            NFTs deposited to this address an administrative fee will be
-            charged.
-          </div>
-        </div>
-        <div className="relative">
-          <QRCode
-            size={160}
-            value={user?.wallet?.address}
-            bgColor={"#ffffff"} // The QR Background Color
-            fgColor={"#000000"} // The Qr Color
-            level={"Q"} // Levels Can be L,M,Q,H Default is L
-            includeMargin={false}
-            renderAs={"svg"}
-          />
-        </div>
-      </div>
-
-      <div>
-        <div className="mt-8 max-w-full">
-          <div className="text-left font-inter text-sm font-medium text-grey-550 lg:text-lg">
-            YOUR PERSONAL USDT DEPOSIT ADDRESS
-          </div>
-          <div className="relative mt-2 flex w-full justify-between rounded-[20px] border border-primary-275 bg-primary">
-            <input
-              type="text"
-              readOnly={true}
-              placeholder={"0xjhsduh7ehpaefklafo8y678t78ghjkbn"}
+          <div className="relative justify-self-center">
+            <QRCode
+              size={160}
               value={user?.wallet?.address}
-              className={`text-gray-500 z-0 w-full bg-[transparent] px-4 py-4 text-white focus:outline-none`}
+              bgColor={"#ffffff"} // The QR Background Color
+              fgColor={"#000000"} // The Qr Color
+              level={"Q"} // Levels Can be L,M,Q,H Default is L
+              includeMargin={false}
+              renderAs={"svg"}
             />
-            <Button
-              variant={"outlined"}
-              onClick={() => handleCopy(user?.wallet?.address)}
-            >
-              Copy Address
-            </Button>
+          </div>
+          <div className="col-span-2">
+            <p className="text-sm md:text-lg">Send to:</p>
+            <p className="flex gap-2 text-sm md:text-lg">
+              <span className="rounded-[5px] bg-primary px-3">
+                {user?.wallet?.address}
+              </span>
+              <button onClick={() => handleCopy(price)}>
+                <TextCopyIcon
+                  className="text-grey-200 hover:text-white"
+                  height="30"
+                  width="30"
+                />
+              </button>
+            </p>
           </div>
         </div>
-      </div>
-      <div className="mx-auto mt-5 flex max-w-xs flex-col gap-4 text-left">
-        <div className="flex justify-between gap-3">
-          <h1 className="font-basement text-xl font-bold">You pay</h1>
-          <div className="flex gap-3 align-middle">
-            <Image
-              src="/images/usdt-logo.png"
-              width={40}
-              height={40}
-              alt="usdt logo"
-            />
-            <h1 className="font-basement text-xl font-bold">
-              {priceInOtherToken > 0 ? priceInOtherToken : price}{" "}
-              {selectedOption}
-            </h1>
-            <button onClick={() => handleCopy(price)}>
-              <TextCopyIcon
-                className="text-grey-200 hover:text-white"
-                height="26"
-                width="24"
-              />
-            </button>
-          </div>
-        </div>
-      </div>
+      )}
+
       <div className="mb-3 mt-[48px] flex justify-center gap-[34px]">
+        <Button variant="outlined" onClick={handleBuy} disabled={isBuying}>
+          Create Buy Request
+        </Button>
         <button
           className="bg-transparent inline-flex items-center text-nowrap rounded-full border-2 border-white px-[41px] py-[4px] font-basement font-bold text-white duration-200 hover:bg-white hover:text-dark"
           onClick={closeModal}

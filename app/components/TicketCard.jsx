@@ -518,11 +518,10 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                     />
                   ) : buyMethod === "usdt" ? (
                     <BuyWithUsdt
+                      price={price}
                       ticketAmount={ticketAmount}
                       diamondAmount={diamondAmount}
-                      priceInOtherToken={priceInOtherToken}
-                      price={price}
-                      selectedOption={selectedOption}
+                      packId={id}
                       closeModal={closeModal}
                     />
                   ) : (
@@ -592,9 +591,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                             alt="usdt logo"
                           />
                         </span>
-                        <span className="text:lg lg:text-xl">
-                          Deposit USDT
-                        </span>
+                        <span className="text:lg lg:text-xl">Deposit USDT</span>
                       </button>
                     </div>
                   )}
