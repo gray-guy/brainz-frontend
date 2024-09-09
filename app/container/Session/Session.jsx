@@ -23,6 +23,7 @@ export const Session = ({ params }) => {
   const [remainingTime, setRemainingTime] = useState(0)
   const [questionTimeRemaining, setQuestionTimeRemaining] = useState(0)
   const [restTimeRemaining, setRestTimeRemaining] = useState(0)
+  const [totalRestTimeRemaining, setTotalRestTimeRemaining] = useState(0)
   const [question, setQuestion] = useState()
   const router = useRouter()
   const socketRef = useRef(null)
@@ -39,6 +40,7 @@ export const Session = ({ params }) => {
   const [isExpired, setIsExpired] = useState(false)
   const [playerCount, setPlayerCount] = useState(0)
   const [gameState, setGameState] = useState("question")
+  const [showTimer, setShowTimer] = useState(false)
 
   useEffect(() => {
     const getSession = async (id) => {
@@ -48,6 +50,9 @@ export const Session = ({ params }) => {
         setIsExpired(true)
         return
       }
+      if (sessionData.questionInterval)
+        setTotalRestTimeRemaining(Number(sessionData.questionInterval - 3))
+
       setSession(sessionData)
       if (new Date(sessionData.endTime) < new Date()) {
         setIsExpired(true)
@@ -166,6 +171,22 @@ export const Session = ({ params }) => {
       // this event is emitted even after the session has ended
       // TODO: fix this on backend
       setGameState((prev) => (prev === "complete" ? "complete" : "resting"))
+
+      console.log("restTimeRemaining socket event ===>", {
+        gameState: gameState,
+        showTimer: showTimer,
+      })
+
+      if (
+        gameState !== "complete" &&
+        timeRemaining >= 0 &&
+        timeRemaining === totalRestTimeRemaining &&
+        totalRestTimeRemaining >= 3
+      ) {
+        console.log("setting Timer Count", gameState)
+        setShowTimer(true)
+      }
+
       setRestTimeRemaining(timeRemaining)
     })
     socket.on("userLeaderboard", (data) => {
@@ -294,6 +315,7 @@ export const Session = ({ params }) => {
       </div>
     )
   }
+  console.log("<=================== Question ===================>", step)
 
   return (
     <div className="relative">
@@ -344,6 +366,9 @@ export const Session = ({ params }) => {
               powerUsed={powerUsed}
               session={session}
               stage={stage}
+              totalRestTimeRemaining={totalRestTimeRemaining}
+              showTimer={showTimer}
+              setShowTimer={setShowTimer}
               // handleStageChange={handleStageChange}
             />
           </div>

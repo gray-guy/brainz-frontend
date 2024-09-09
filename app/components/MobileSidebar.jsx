@@ -26,7 +26,7 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
       { title: "Home", url: "/" },
       { title: "Shop", url: "/shop" },
       { title: "Profile", url: "/profile" },
-      { title: "How to Play", url: "/htp/rules" }
+      { title: "How to Play", url: "/htp/rules" },
     ],
     []
   )
@@ -55,7 +55,7 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
   return (
     <div className="flex h-full flex-col justify-between">
       <div>
-        <div className="flex w-full justify-between gap-4 rounded-full bg-primary-350 px-2 py-2 lg:hidden">
+        <div className="flex w-full flex-col items-center justify-between gap-4 rounded-full bg-primary-350 px-2 py-2 sm:flex-row lg:hidden">
           <div className="flex items-center">
             <div className="relative h-8 w-8 overflow-hidden rounded-full border border-secondary object-cover">
               <Image

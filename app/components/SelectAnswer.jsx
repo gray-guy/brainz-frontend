@@ -15,6 +15,7 @@ import w from "@/public/sounds/wrong.mp3"
 import r from "@/public/sounds/right.mp3"
 import tickSound from "@/public/sounds/ticking.mp3"
 import { useUser } from "../contexts/UserContext"
+import CountdownTimer from "./session/countdown-timer"
 
 const alphabets = ["A", "B", "C", "D"]
 
@@ -32,13 +33,16 @@ export const SelectAnswer = ({
   powerUsed,
   playerCount,
   stage,
+  totalRestTimeRemaining,
+  showTimer,
+  setShowTimer,
 }) => {
   const [audio] = useState(new Audio(clickSound))
   const [wrong] = useState(new Audio(w))
   const [right] = useState(new Audio(r))
   const [tickSoundeffect] = useState(new Audio(tickSound))
   const [alert] = useState(new Audio(a))
-
+  const { user: currentUser } = useUser()
   const [tickingAudioPlaying, setTickingAudioPlaying] = useState(false)
   const [alertSound, setAlertSound] = useState(false)
   const [table, setTable] = useState()
@@ -124,12 +128,11 @@ export const SelectAnswer = ({
     }
   }, [restTimeRemaining])
 
-  const { user: currentUser } = useUser()
-
   const isSessionEnded = gameState === "complete"
   const isRestActive = gameState === "resting"
   const isQuestionActive = gameState === "question"
 
+  console.log("showTimer ==>", showTimer)
   return (
     <div className="pb-4">
       <div className="mb-8 block bg-primary-350 md:hidden">
@@ -139,6 +142,7 @@ export const SelectAnswer = ({
               {title}
             </h1>
             <QuestionTimerMobile
+              totalRestTimeRemaining={totalRestTimeRemaining}
               questionTimeRemaining={questionTimeRemaining}
               isRestActive={isRestActive}
             />
@@ -219,15 +223,14 @@ export const SelectAnswer = ({
               </div>
             )}
           </div>
-          {isRestActive && restTimeRemaining < 5 ? (
-            <div className="mt-6 flex min-h-[640px] max-w-[900px] flex-col items-center rounded-[20px] border border-primary-275 bg-primary-350 py-10 font-basement text-white md:min-h-[390px] md:justify-center">
-              <p className="mb-16 mt-[100px] text-center text-lg lg:text-2xl font-bold md:mb-10 md:mt-0">
-                Next Question In...
-              </p>
-              <div className="flex size-[110px] lg:size-[150px] items-center justify-center rounded-full border-[10px] border-secondary text-2xl lg:text-5xl font-bold">
-                {restTimeRemaining}
-              </div>
-            </div>
+          {showTimer ? (
+            <CountdownTimer
+              gameState={gameState}
+              setShowTimer={setShowTimer}
+              restTimeRemaining={restTimeRemaining}
+              totalRestTimeRemaining={totalRestTimeRemaining}
+              // setTimerCount={setTimerCount}
+            />
           ) : (
             <>
               <div className="mt-7 flex max-w-[830px] gap-4 text-start text-white md:mt-12">
@@ -298,6 +301,7 @@ export const SelectAnswer = ({
         </div>
         <div className="hidden w-full space-y-6 md:block lg:w-[344px]">
           <QuestionTimer
+            totalRestTimeRemaining={totalRestTimeRemaining}
             isSessionEnded={isSessionEnded}
             questionTimeRemaining={questionTimeRemaining}
             restTimeRemaining={restTimeRemaining}
@@ -383,13 +387,18 @@ const useTimer = ({
 }
 
 const QuestionTimer = ({
+  totalRestTimeRemaining,
   questionTimeRemaining,
   isRestActive,
   isSessionEnded,
 }) => {
   const { shouldPulse, showCapture, timeToShow } = useTimer({
-    isSessionEnded,
-    questionTimeRemaining,
+    isSessionEnded: isSessionEnded,
+    questionTimeRemaining: isRestActive
+      ? totalRestTimeRemaining >= 3
+        ? questionTimeRemaining
+        : totalRestTimeRemaining + 2
+      : questionTimeRemaining,
   })
 
   const label = isSessionEnded
@@ -403,7 +412,7 @@ const QuestionTimer = ({
       <p className={`font-basement text-lg font-normal text-secondary`}>
         {label}
       </p>
-      {isRestActive ? (
+      {isRestActive && totalRestTimeRemaining >= 3 ? (
         <div className="h-[36px]" />
       ) : (
         <div
@@ -438,10 +447,20 @@ const TimerCard = ({ timeToShow }) => {
   )
 }
 
-const QuestionTimerMobile = ({ questionTimeRemaining, isRestActive }) => {
-  const { showCapture, timeToShow } = useTimer({ questionTimeRemaining })
+const QuestionTimerMobile = ({
+  totalRestTimeRemaining,
+  questionTimeRemaining,
+  isRestActive,
+}) => {
+  const { showCapture, timeToShow } = useTimer({
+    questionTimeRemaining: isRestActive
+      ? totalRestTimeRemaining >= 3
+        ? questionTimeRemaining
+        : totalRestTimeRemaining + 2
+      : questionTimeRemaining,
+  })
 
-  if (isRestActive) return null
+  if (isRestActive && totalRestTimeRemaining >= 3) return null
 
   return (
     <div className="mobile relative p-2 font-basement text-2xl font-bold text-white">

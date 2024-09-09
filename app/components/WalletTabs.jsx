@@ -428,6 +428,9 @@ const WalletTabs = () => {
                         placeholder={`Paste your ${depositToken} Wallet Address here`}
                         className={`text-gray-500 z-0 mt-2.5 w-full rounded-[20px] border border-primary-275 bg-primary py-4 pl-4 pr-[88px] text-white focus:outline-none`}
                       />
+                      <p className="mt-2.5 max-w-[500px] text-secondary">
+                        Important: make sure to send only on the BSC network
+                      </p>
                     </div>
                     <div className="mt-7">
                       <h1 className="font-basement text-base font-bold text-white lg:text-xl">
@@ -456,7 +459,7 @@ const WalletTabs = () => {
           </div>
         </Tab.Panel>
         <Tab.Panel className={"rounded-[10px] bg-primary-350 pb-6"}>
-          <div className="mt-6 pl-0 pr-0 pb-4 pt-6 md:pl-8 md:pr-16">
+          <div className="mt-6 pb-4 pl-0 pr-0 pt-6 md:pl-8 md:pr-16">
             <WithdrawRewards />
           </div>
         </Tab.Panel>
