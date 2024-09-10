@@ -50,8 +50,10 @@ export const Session = ({ params }) => {
         setIsExpired(true)
         return
       }
-      if (sessionData.questionInterval)
+      if (sessionData.questionInterval) {
+        // take 3 seconds to show previous question
         setTotalRestTimeRemaining(Number(sessionData.questionInterval - 3))
+      }
 
       setSession(sessionData)
       if (new Date(sessionData.endTime) < new Date()) {
@@ -165,26 +167,26 @@ export const Session = ({ params }) => {
       setRemainingTime(timeRemaining)
     })
     socket.on("questionTimeRemaining", ({ timeRemaining }) => {
-      setQuestionTimeRemaining(timeRemaining)
+      setQuestionTimeRemaining(timeRemaining + 1)
     })
     socket.on("restTimeRemaining", ({ timeRemaining }) => {
       // this event is emitted even after the session has ended
       // TODO: fix this on backend
+      setQuestionTimeRemaining(0)
       setGameState((prev) => (prev === "complete" ? "complete" : "resting"))
 
-      console.log("restTimeRemaining socket event ===>", {
-        gameState: gameState,
-        showTimer: showTimer,
-      })
-
       if (
-        gameState !== "complete" &&
-        timeRemaining >= 0 &&
+        // gameState !== "complete" && // not working
         timeRemaining === totalRestTimeRemaining &&
         totalRestTimeRemaining >= 3
       ) {
-        console.log("setting Timer Count", gameState)
         setShowTimer(true)
+      }
+
+      if (timeRemaining === 0) {
+        setTimeout(() => {
+          setShowTimer(false)
+        }, 1000)
       }
 
       setRestTimeRemaining(timeRemaining)
@@ -231,7 +233,7 @@ export const Session = ({ params }) => {
     socket.emit("joinSession", { sessionId: params.id })
     // TODO: make it true in response of acknowledgement from server
     setIsConnected(true)
-  }, [joined, params.id])
+  }, [joined, params.id, totalRestTimeRemaining])
 
   // useEffect(() => {
   //   return () => {
@@ -315,7 +317,6 @@ export const Session = ({ params }) => {
       </div>
     )
   }
-  console.log("<=================== Question ===================>", step)
 
   return (
     <div className="relative">

@@ -225,11 +225,8 @@ export const SelectAnswer = ({
           </div>
           {showTimer ? (
             <CountdownTimer
-              gameState={gameState}
-              setShowTimer={setShowTimer}
               restTimeRemaining={restTimeRemaining}
               totalRestTimeRemaining={totalRestTimeRemaining}
-              // setTimerCount={setTimerCount}
             />
           ) : (
             <>
