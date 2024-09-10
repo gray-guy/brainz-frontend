@@ -1,12 +1,7 @@
 import React, { useMemo } from "react"
 import { useEffect, useState } from "react"
 
-const CountdownTimer = ({
-  gameState,
-  setShowTimer,
-  restTimeRemaining,
-  totalRestTimeRemaining,
-}) => {
+const CountdownTimer = ({ restTimeRemaining, totalRestTimeRemaining }) => {
   const [timerCount, setTimerCount] = useState(totalRestTimeRemaining)
 
   useEffect(() => {
@@ -16,38 +11,6 @@ const CountdownTimer = ({
 
     return () => clearInterval(timer)
   }, [])
-
-  //   useEffect(() => {
-  //     if (timerCount === 0) {
-  //       const timer = setTimeout(() => {
-  //         setShowTimer(false)
-  //       }, 1000)
-  //       return () => clearTimeout(timer)
-  //     }
-  //   }, [timerCount])
-
-  useEffect(() => {
-    if (restTimeRemaining === 0) {
-      const timer = setTimeout(() => {
-        setShowTimer(false)
-      }, 1000)
-      return () => clearTimeout(timer)
-    }
-  }, [restTimeRemaining])
-
-  //   useEffect(() => {
-  //     const isRestingState = gameState === "resting"
-  //     setShowTimer(restTimeRemaining <= totalRestTimeRemaining)
-
-  //     if (isRestingState && totalRestTimeRemaining > 0) {
-  //       const offset =
-  //         restTimeRemaining >= 0 && restTimeRemaining <= totalRestTimeRemaining
-  //           ? circumference -
-  //             (restTimeRemaining / totalRestTimeRemaining) * circumference
-  //           : 0
-  //       setTimerOffset(offset)
-  //     }
-  //   }, [restTimeRemaining, gameState])
 
   const circumference = 2 * Math.PI * 45 // 45 is the radius
   const timerOffset =
