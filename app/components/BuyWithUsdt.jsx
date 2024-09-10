@@ -18,6 +18,7 @@ const BuyWithUsdt = ({
   const [buyData, setBuyData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isBuying, setIsBuying] = useState(false)
+  const [isCanceling, setIsCanceling] = useState(false)
   const [encodedPrice, setEncodedPrice] = useState("")
 
   console.log("buyData===>", buyData)
@@ -31,10 +32,14 @@ const BuyWithUsdt = ({
   }, [packId])
 
   useEffect(() => {
-    if (!buyData) return
+    if (!buyData) {
+      setEncodedPrice("");
+      return
+    }
     setEncodedPrice(price + String(buyData.paymentCode).padStart(4, "0"))
   }, [price, buyData])
 
+  // TODO: use sse or something to auto update buy data when it is closed
   useEffect(() => {
     getBuyData().finally(() => setIsLoading(false))
   }, [getBuyData])
@@ -42,6 +47,16 @@ const BuyWithUsdt = ({
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text)
     toast.success("Address copied to Clipboard!")
+  }
+
+  const handleCancel = async () => {
+    if (!buyData) return
+    setIsCanceling(true)
+    const data = await apiCall("patch", `/buy-requests/${buyData.id}`)
+    if (data) {
+      setBuyData(null)
+    }
+    setIsCanceling(false)
   }
 
   const handleBuy = async () => {
@@ -81,16 +96,28 @@ const BuyWithUsdt = ({
               Only deposit over the BSC network.
             </p>
             <p className="text-sm md:text-lg">Amount</p>
-            <p className="flex gap-2 text-lg font-bold md:text-xl">
-              {encodedPrice} USDT
-              <button onClick={() => handleCopy(price)}>
-                <TextCopyIcon
-                  className="text-grey-200 hover:text-white"
-                  height="30"
-                  width="30"
-                />
-              </button>
-            </p>
+            <div className="text-lg font-bold md:text-xl">
+              {encodedPrice ? (
+                <p className="flex gap-2">
+                  <span>{encodedPrice} USDT</span>
+                  <button onClick={() => handleCopy(encodedPrice)}>
+                    <TextCopyIcon
+                      className="text-grey-200 hover:text-white"
+                      height="30"
+                      width="30"
+                    />
+                  </button>
+                </p>
+              ) : (
+                <Button
+                  onClick={handleBuy}
+                  isLoading={isBuying}
+                  className="mt-2 w-full"
+                >
+                  Create Buy Request
+                </Button>
+              )}
+            </div>
           </div>
           <div className="relative justify-self-center">
             <QRCode
@@ -122,15 +149,15 @@ const BuyWithUsdt = ({
       )}
 
       <div className="mb-3 mt-[48px] flex justify-center gap-[34px]">
-        <Button variant="outlined" onClick={handleBuy} disabled={isBuying}>
-          Create Buy Request
-        </Button>
-        <button
-          className="bg-transparent inline-flex items-center text-nowrap rounded-full border-2 border-white px-[41px] py-[4px] font-basement font-bold text-white duration-200 hover:bg-white hover:text-dark"
-          onClick={closeModal}
-        >
-          Cancel
-        </button>
+        {buyData && (
+          <Button
+            variant="outlinedWhite"
+            onClick={handleCancel}
+            disabled={ isCanceling }
+          >
+            Close buy request
+          </Button>
+        )}
       </div>
     </div>
   )
