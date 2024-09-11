@@ -23,7 +23,7 @@ import Link from "next/link"
 import { MobileSidebar } from "./MobileSidebar"
 import LoagoutButton from "./LoagoutButton"
 import { usePrivy } from "@privy-io/react-auth"
-import { formatNumber, formatWalletAddress } from "@/lib/utils"
+import { apiCall, formatNumber, formatWalletAddress } from "@/lib/utils"
 import { useWallet } from "../contexts/WalletContext"
 import { useUser } from "../contexts/UserContext"
 import ConnectButton from "../container/Home/ConnectButton"
@@ -36,13 +36,24 @@ const Header = () => {
   const [isCopied, setIsCopied] = useState(false)
 
   const { user: privyUser } = usePrivy()
-  const { user } = useUser()
+  const { user, setUser } = useUser()
   const toggleDropdown = () => {
     setIsOpenProfile(!isOpenProfile)
     if (isOpenProfile == false) {
       setIsCopied(false)
     }
   }
+
+  // refetch data on navigation from session to home
+  useEffect(() => {
+    const getProfile = async () => {
+      const userData = await apiCall("get", "/profile")
+      if (userData) {
+        setUser(userData.profile)
+      }
+    }
+    getProfile()
+  }, [setUser])
 
   const toggleMenu = () => setIsOpen(!isOpen)
 

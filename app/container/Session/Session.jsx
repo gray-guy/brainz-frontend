@@ -172,8 +172,8 @@ export const Session = ({ params }) => {
     socket.on("restTimeRemaining", ({ timeRemaining }) => {
       // this event is emitted even after the session has ended
       // TODO: fix this on backend
-      setQuestionTimeRemaining(0)
       setGameState((prev) => (prev === "complete" ? "complete" : "resting"))
+      setQuestionTimeRemaining(0)
 
       if (
         // gameState !== "complete" && // not working

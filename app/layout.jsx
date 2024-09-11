@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
         <Suspense>
           <NotificationContext>
             <ToastContainer hideProgressBar={true} position="bottom-center" />
-            <Providers> {children}</Providers>
+            <Providers>{children}</Providers>
           </NotificationContext>
           <GoogleAnalytics gaId="G-68EFCMX8V4" />
         </Suspense>
