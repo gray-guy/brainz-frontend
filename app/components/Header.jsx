@@ -65,6 +65,24 @@ const Header = () => {
     }
   }, [isOpenProfile])
 
+  useEffect(() => {
+    if (!user) return
+
+    const evtSource = new EventSource(
+      `${process.env.NEXT_PUBLIC_API_URL}/buy-requests/events`
+    )
+
+    evtSource.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      if (data.userId !== user.id) return
+
+      // TODO: refetch profile to get updated tickets, set buy data to null
+      console.log(event)
+    }
+  }, [user])
+
+  console.log("user", user)
+
   const copyToClipboard = (string) => {
     setIsCopied(true)
     navigator.clipboard.writeText(string)
