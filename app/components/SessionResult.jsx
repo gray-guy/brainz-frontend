@@ -46,7 +46,7 @@ export const SessionResult = ({
     } else {
       loserAudio.play()
     }
-  }, [])
+  }, [loserAudio, rewardEarned.type, winnerAudio])
 
   // if game has sessions get the next session
   useEffect(() => {
@@ -130,12 +130,11 @@ export const SessionResult = ({
 
   const getWinningPrize = async () => {
     const data = apiCall("post", `/wheels/spin`, { sessionId: session.id })
-    if (data) {
-      setWiningPrize(data)
-      return data
-    } else {
+    if (!data) {
       toast.error("Error spinning the wheel!")
     }
+
+    return data
   }
 
   const handleSpin = async () => {
