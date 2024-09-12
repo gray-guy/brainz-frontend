@@ -17,7 +17,7 @@ export const SessionHeader = ({ title }) => {
               priority={true}
             />
               <span className="font-basement absolute bottom-0 text-[12px] leading-[1.4] tracking-wider">
-                Skilled Games
+                Skill Games
               </span>
           </Link>
         </div>

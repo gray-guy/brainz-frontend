@@ -95,7 +95,7 @@ const Header = () => {
             <Image src={LogoMb} alt="Logo" width={74} priority={true} />
 
             <p className="font-basement text-[12px] font-bold leading-[1.4] tracking-wider text-white">
-              Skilled Games
+              Skill Games
             </p>
           </Link>
           <ConnectButton />
@@ -113,7 +113,7 @@ const Header = () => {
         >
           <Image src={LogoMb} alt="Logo" width={74} priority={true} />
           <p className="font-basement text-[12px] font-bold leading-[1.4] tracking-wider text-white">
-            Skilled Games
+            Skill Games
           </p>
         </Link>
         <div className="hidden items-center gap-4 md:flex lg:gap-7">
