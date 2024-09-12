@@ -572,7 +572,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                           </span>
                         </button>
                         <span className="text:lg mt-auto text-center lg:text-xl">
-                          Buy with USD
+                          Buy with Fiat
                         </span>
                       </form>
                     </div>
