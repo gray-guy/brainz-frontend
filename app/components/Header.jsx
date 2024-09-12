@@ -46,6 +46,7 @@ const Header = () => {
 
   // refetch data on navigation from session to home
   useEffect(() => {
+  // TODO: replace this with refetchuser from userContext, after payment merge
     const getProfile = async () => {
       const userData = await apiCall("get", "/profile")
       if (userData) {
