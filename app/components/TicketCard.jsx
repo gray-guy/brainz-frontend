@@ -519,9 +519,9 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                     <div className="mb-10 mt-14 flex flex-col justify-center gap-4 font-basement sm:flex-row">
                       <button
                         onClick={() => setBuyMethod("crypto")}
-                        className="min-w-[200px] rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
+                        className="flex min-h-[120px] min-w-[200px] flex-col rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
                       >
-                        <span className="mb-4 flex items-center justify-center">
+                        <span className="flex w-full items-center justify-center">
                           <Image
                             src="/images/usdt-logo.png"
                             width={40}
@@ -541,33 +541,42 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                             alt="bnb logo"
                           />
                         </span>
-                        <span className="text:lg lg:text-xl">
+                        <span className="text:lg mt-auto w-full text-center lg:text-xl">
                           Buy with Crypto
                         </span>
                       </button>
 
                       <form
                         id="checkout-form"
-                        action={`${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`}
-                        method="POST"
-                        className="min-w-[200px] rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
+                        // action={`${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`}
+                        // method="POST"
+                        onSubmit={(e) => {
+                          e.preventDefault()
+                        }}
+                        className="flex min-h-[120px] min-w-[200px] flex-col rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
                       >
                         <input type="hidden" name="packId" value={id} />
                         <input type="hidden" name="userId" value={user?.id} />
 
                         <button>
-                          <span className="mb-3 flex justify-center">
+                          <span className="flex items-center justify-center gap-2">
                             <Image
-                              width={110}
-                              height={40}
-                              src="/images/stripe-logo.png"
-                              alt="stripe logo"
+                              width={60}
+                              height={30}
+                              src="/images/master-card-logo.png"
+                              alt="master card logo"
+                            />
+                            <Image
+                              width={80}
+                              height={30}
+                              src="/images/visa-logo.png"
+                              alt="master card logo"
                             />
                           </span>
-                          <span className="text:lg lg:text-xl">
-                            Buy with USD
-                          </span>
                         </button>
+                        <span className="text:lg mt-auto text-center lg:text-xl">
+                          Buy with Fiat
+                        </span>
                       </form>
                     </div>
                   )}
