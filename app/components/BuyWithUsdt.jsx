@@ -128,7 +128,7 @@ const BuyWithUsdt = ({
                 <span className="rounded-[5px] bg-primary px-3">
                   {usdtAddress.slice(0, 10)}...{usdtAddress.slice(-10)}
                 </span>
-                <button onClick={() => handleCopy(price)}>
+                <button onClick={() => handleCopy(usdtAddress)}>
                   <TextCopyIcon
                     className="text-grey-200 hover:text-white"
                     height="30"
