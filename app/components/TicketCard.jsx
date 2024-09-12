@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback, useEffect } from "react"
 import { Button } from "./Button"
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment, useState } from "react"
@@ -53,13 +53,22 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   const [buyMethod, setBuyMethod] = useState("")
   const { user } = useUser()
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsOpen(false)
     setPurchased(false)
     setTimeout(() => {
       setBuyMethod("")
     }, 500)
-  }
+  }, [])
+
+  useEffect(() => {
+    // event fired from header, when user completes payment
+    document.addEventListener("closeBuyModal", closeModal)
+
+    return () => {
+      document.removeEventListener("closeBuyModal", closeModal)
+    }
+  }, [closeModal])
 
   const updateWalletBalances = async () => {
     tokens.forEach(async (token) => {

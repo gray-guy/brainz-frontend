@@ -36,7 +36,7 @@ const Header = () => {
   const [isCopied, setIsCopied] = useState(false)
 
   const { user: privyUser } = usePrivy()
-  const { user } = useUser()
+  const { user, refetchUser } = useUser()
   const toggleDropdown = () => {
     setIsOpenProfile(!isOpenProfile)
     if (isOpenProfile == false) {
@@ -76,8 +76,10 @@ const Header = () => {
       const data = JSON.parse(event.data)
       if (data.userId !== user.id) return
 
-      // TODO: refetch profile to get updated tickets, set buy data to null
-      console.log(event)
+      // refresh user profile and close buy modal
+      refetchUser()
+      console.log("event", event)
+      document.dispatchEvent(new CustomEvent("closeBuyModal"))
     }
   }, [user])
 

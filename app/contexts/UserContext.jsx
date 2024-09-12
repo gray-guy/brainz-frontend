@@ -1,6 +1,12 @@
 import TermsConditionsModal from "@/app/components/ConditionsModal"
 import { apiCall, getLocalAccessToken } from "@/lib/utils"
-import React, { createContext, useContext, useState, useEffect } from "react"
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react"
 import WelcomeModal from "../components/WelcomeModal"
 
 const UserContext = createContext(null)
@@ -24,8 +30,15 @@ const UserProvider = ({ children }) => {
     }, 2500)
   }, [])
 
+  const refetchUser = useCallback(async () => {
+    const userData = await apiCall("get", "/profile")
+    if (userData) {
+      setUser(userData.profile)
+    }
+  }, [])
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, refetchUser }}>
       {children}
       <TermsConditionsModal
         isOpen={!!user && !user.hasAcceptedToc}
