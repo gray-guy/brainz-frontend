@@ -12,16 +12,14 @@ const BuyWithUsdt = ({
   ticketAmount = 0,
   diamondAmount = 0,
   price,
+  payAddress,
   closeModal,
 }) => {
-  const { user } = usePrivy()
   const [buyData, setBuyData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isBuying, setIsBuying] = useState(false)
   const [isCanceling, setIsCanceling] = useState(false)
   const [encodedPrice, setEncodedPrice] = useState("")
-
-  console.log("buyData===>", buyData)
 
   const getBuyData = useCallback(async () => {
     const data = await apiCall("get", `/buy-requests/self`)
@@ -33,10 +31,12 @@ const BuyWithUsdt = ({
 
   useEffect(() => {
     if (!buyData) {
-      setEncodedPrice("");
+      setEncodedPrice("")
       return
     }
-    setEncodedPrice(price + String(buyData.paymentCode).padStart(4, "0"))
+    setEncodedPrice(
+      String(price) + String(buyData.paymentCode).padStart(4, "0")
+    )
   }, [price, buyData])
 
   // TODO: use sse or something to auto update buy data when it is closed
@@ -85,7 +85,9 @@ const BuyWithUsdt = ({
       </div>
 
       {isLoading ? (
-        <div>Loading</div>
+        <div className="mt-8 flex justify-center">
+          <div className="z-50 h-16 w-16 animate-spin rounded-full border-4 border-secondary border-s-secondary/20" />
+        </div>
       ) : (
         <div
           style={{ gridTemplateColumns: "1fr 250px" }}
@@ -122,7 +124,7 @@ const BuyWithUsdt = ({
           <div className="relative justify-self-center">
             <QRCode
               size={160}
-              value={user?.wallet?.address}
+              value={payAddress}
               bgColor={"#ffffff"} // The QR Background Color
               fgColor={"#000000"} // The Qr Color
               level={"Q"} // Levels Can be L,M,Q,H Default is L
@@ -134,7 +136,7 @@ const BuyWithUsdt = ({
             <p className="text-sm md:text-lg">Send to:</p>
             <p className="flex gap-2 text-sm md:text-lg">
               <span className="rounded-[5px] bg-primary px-3">
-                {user?.wallet?.address}
+                {payAddress}
               </span>
               <button onClick={() => handleCopy(price)}>
                 <TextCopyIcon
@@ -153,7 +155,7 @@ const BuyWithUsdt = ({
           <Button
             variant="outlinedWhite"
             onClick={handleCancel}
-            disabled={ isCanceling }
+            disabled={isCanceling}
           >
             Close buy request
           </Button>

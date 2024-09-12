@@ -40,6 +40,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
     sendTransaction,
     isPrivyWallet,
     platformAddress,
+    paymentAddress,
     setWalletBalances,
   } = useWallet()
   const { setUser } = useUser()
@@ -518,6 +519,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                     />
                   ) : buyMethod === "usdt" ? (
                     <BuyWithUsdt
+                      payAddress={paymentAddress}
                       price={price}
                       ticketAmount={ticketAmount}
                       diamondAmount={diamondAmount}
