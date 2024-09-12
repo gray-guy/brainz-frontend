@@ -134,8 +134,8 @@ const WithdrawTable = ({ tableData }) => {
         <thead className="bg-primary">
           <tr className="h-[36px] [&>th]:text-start [&>th]:font-basement [&>th]:font-normal">
             <th className="min-w-36 pl-[20px] text-[14px]">Date</th>
-            <th className="min-w-36 text-[14px]">Status</th>
-            <th className="min-w-52 text-[14px]">Address</th>
+            <th className="min-w-44 text-[14px]">Status</th>
+            <th className="min-w-44 text-[14px]">Address</th>
             <th className="min-w-20 text-[14px]">Amount</th>
           </tr>
         </thead>
@@ -147,7 +147,9 @@ const WithdrawTable = ({ tableData }) => {
                   {new Date(item.createdAt).toLocaleDateString()}
                 </td>
                 <td className="text-nowrap font-inter text-lg font-medium text-grey-600">
-                  {item.status}
+                  {item.status === "initiated"
+                    ? "waitingApproval"
+                    : item.status}
                 </td>
                 <td
                   title={item.walletAddress}
