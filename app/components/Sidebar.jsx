@@ -37,7 +37,7 @@ export const Sidebar = () => {
       <div className="flex h-screen flex-col justify-between">
         <div className="mt-4 px-3">
           <div className="flex justify-center">
-            <Link href={"/"} className="relative">
+            <Link href={"/"} className="relative text-white">
               <Image
                 src={Logo}
                 alt="Logo"
@@ -47,6 +47,9 @@ export const Sidebar = () => {
                 draggable={false}
                 priority={true}
               />
+              <span className="font-basement absolute bottom-1 text-[12px] leading-[1.4] tracking-wider">
+                Skilled Games
+              </span>
             </Link>
           </div>
           <div className="mt-6">
