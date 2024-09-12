@@ -53,6 +53,8 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   const [buyMethod, setBuyMethod] = useState("")
   const { user } = useUser()
 
+  console.log({ tokens })
+
   const closeModal = useCallback(() => {
     setIsOpen(false)
     setPurchased(false)

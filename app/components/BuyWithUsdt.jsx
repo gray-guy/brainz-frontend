@@ -5,7 +5,7 @@ import { toast } from "react-toastify"
 import { TextCopyIcon } from "./Svgs"
 import Image from "next/image"
 import { useCallback, useEffect, useState } from "react"
-import { apiCall } from "@/lib/utils"
+import { apiCall, formatWalletAddress } from "@/lib/utils"
 
 const BuyWithUsdt = ({
   packId,
@@ -70,6 +70,8 @@ const BuyWithUsdt = ({
     setIsBuying(false)
   }
 
+  const usdtAddress = process.env.NEXT_PUBLIC_USDT_ADDRESS
+
   return (
     <div>
       <div className="flex justify-center">
@@ -120,8 +122,23 @@ const BuyWithUsdt = ({
                 </Button>
               )}
             </div>
+            <div className="my-3">
+              <p className="text-sm md:text-lg">USDT Address</p>
+              <p className="flex gap-2 text-sm md:text-lg">
+                <span className="rounded-[5px] bg-primary px-3">
+                  {usdtAddress.slice(0, 10)}...{usdtAddress.slice(-10)}
+                </span>
+                <button onClick={() => handleCopy(price)}>
+                  <TextCopyIcon
+                    className="text-grey-200 hover:text-white"
+                    height="30"
+                    width="30"
+                  />
+                </button>
+              </p>
+            </div>
           </div>
-          <div className="relative justify-self-center">
+          <div className="relative flex items-center justify-self-center">
             <QRCode
               size={160}
               value={payAddress}
