@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import SelectDropdown from "./SelectDropdown"
 import Logo from "@/public/images/brainz-logo.svg"
-import LogoMb from "@/public/images/Brainz-logo.png"
+import LogoMb from "@/public/images/brainz-logo.svg"
 
 import {
   ArrowDownLightIcon,
@@ -82,8 +82,8 @@ const Header = () => {
           >
             <Image src={LogoMb} alt="Logo" width={74} priority={true} />
 
-            <p className="font-basement text-[10px] font-bold leading-[1.4] tracking-wider text-white">
-              PLAY TRIVIA, WIN CRYPTO
+            <p className="font-basement text-[12px] font-bold leading-[1.4] tracking-wider text-white">
+              Skilled Games
             </p>
           </Link>
           <ConnectButton />
@@ -100,8 +100,8 @@ const Header = () => {
           className="relative flex h-8 items-center gap-3 md:hidden"
         >
           <Image src={LogoMb} alt="Logo" width={74} priority={true} />
-          <p className="font-basement text-[10px] font-bold leading-[1.4] tracking-wider text-white">
-            PLAY TRIVIA, WIN CRYPTO
+          <p className="font-basement text-[12px] font-bold leading-[1.4] tracking-wider text-white">
+            Skilled Games
           </p>
         </Link>
         <div className="hidden items-center gap-4 md:flex lg:gap-7">
