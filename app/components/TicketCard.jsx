@@ -521,7 +521,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                         onClick={() => setBuyMethod("crypto")}
                         className="flex min-h-[120px] min-w-[200px] flex-col rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
                       >
-                        <span className="flex items-center justify-center">
+                        <span className="flex w-full items-center justify-center">
                           <Image
                             src="/images/usdt-logo.png"
                             width={40}
@@ -548,8 +548,11 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
 
                       <form
                         id="checkout-form"
-                        action={`${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`}
-                        method="POST"
+                        // action={`${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`}
+                        // method="POST"
+                        onSubmit={(e) => {
+                          e.preventDefault()
+                        }}
                         className="flex min-h-[120px] min-w-[200px] flex-col rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
                       >
                         <input type="hidden" name="packId" value={id} />
