@@ -36,7 +36,7 @@ const Header = () => {
   const [isCopied, setIsCopied] = useState(false)
 
   const { user: privyUser } = usePrivy()
-  const { user, setUser } = useUser()
+  const { user, refetchUser } = useUser()
   const toggleDropdown = () => {
     setIsOpenProfile(!isOpenProfile)
     if (isOpenProfile == false) {
@@ -46,15 +46,8 @@ const Header = () => {
 
   // refetch data on navigation from session to home
   useEffect(() => {
-  // TODO: replace this with refetchuser from userContext, after payment merge
-    const getProfile = async () => {
-      const userData = await apiCall("get", "/profile")
-      if (userData) {
-        setUser(userData.profile)
-      }
-    }
-    getProfile()
-  }, [setUser])
+    refetchUser()
+  }, [])
 
   const toggleMenu = () => setIsOpen(!isOpen)
 
@@ -76,6 +69,26 @@ const Header = () => {
       dropdownRef.current.style.width = `${profileRef.current.offsetWidth}px`
     }
   }, [isOpenProfile])
+
+  useEffect(() => {
+    if (!user) return
+
+    const evtSource = new EventSource(
+      `${process.env.NEXT_PUBLIC_API_URL}/buy-requests/events`
+    )
+
+    evtSource.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      if (data.userId !== user.id) return
+
+      // refresh user profile and close buy modal
+      refetchUser()
+      console.log("event", event)
+      document.dispatchEvent(new CustomEvent("closeBuyModal"))
+    }
+  }, [user])
+
+  console.log("user", user)
 
   const copyToClipboard = (string) => {
     setIsCopied(true)

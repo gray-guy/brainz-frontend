@@ -32,6 +32,7 @@ const WalletProvider = ({ children }) => {
   const [walletAddress, setWalletAddress] = useState({})
   const [_walletBalances, setWalletBalances] = useState([])
   const [platformAddress, setPlatformAddress] = useState(null)
+  const [paymentAddress, setPaymentAddress] = useState(null)
   const [isPrivyWallet, setIsPrivyWallet] = useState(false)
   const { sendTransaction: privySendTransaction } = useSendTransaction()
 
@@ -123,6 +124,8 @@ const WalletProvider = ({ children }) => {
         platformAddress,
         setPlatformAddress,
         sendTransaction,
+        paymentAddress,
+        setPaymentAddress,
       }}
     >
       {children}

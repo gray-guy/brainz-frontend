@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback, useEffect } from "react"
 import { Button } from "./Button"
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment, useState } from "react"
@@ -19,6 +19,7 @@ import Link from "next/link"
 import { toast } from "react-toastify"
 import Image from "next/image"
 import { useUser } from "../contexts/UserContext"
+import BuyWithUsdt from "./BuyWithUsdt"
 
 const USDT_ADDRESS = process.env.NEXT_PUBLIC_USDT_ADDRESS
 
@@ -39,6 +40,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
     sendTransaction,
     isPrivyWallet,
     platformAddress,
+    paymentAddress,
     setWalletBalances,
   } = useWallet()
   const { setUser } = useUser()
@@ -51,13 +53,24 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   const [buyMethod, setBuyMethod] = useState("")
   const { user } = useUser()
 
-  const closeModal = () => {
+  console.log({ tokens })
+
+  const closeModal = useCallback(() => {
     setIsOpen(false)
     setPurchased(false)
     setTimeout(() => {
       setBuyMethod("")
     }, 500)
-  }
+  }, [])
+
+  useEffect(() => {
+    // event fired from header, when user completes payment
+    document.addEventListener("closeBuyModal", closeModal)
+
+    return () => {
+      document.removeEventListener("closeBuyModal", closeModal)
+    }
+  }, [closeModal])
 
   const updateWalletBalances = async () => {
     tokens.forEach(async (token) => {
@@ -515,6 +528,15 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                       txPending={txPending}
                       closeModal={closeModal}
                     />
+                  ) : buyMethod === "usdt" ? (
+                    <BuyWithUsdt
+                      payAddress={paymentAddress}
+                      price={price}
+                      ticketAmount={ticketAmount}
+                      diamondAmount={diamondAmount}
+                      packId={id}
+                      closeModal={closeModal}
+                    />
                   ) : (
                     <div className="mb-10 mt-14 flex flex-col justify-center gap-4 font-basement sm:flex-row">
                       <button
@@ -575,6 +597,21 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                           </span>
                         </button>
                       </form>
+
+                      <button
+                        onClick={() => setBuyMethod("usdt")}
+                        className="min-w-[200px] rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
+                      >
+                        <span className="mb-4 flex items-center justify-center">
+                          <Image
+                            src="/images/usdt-logo.png"
+                            width={40}
+                            height={40}
+                            alt="usdt logo"
+                          />
+                        </span>
+                        <span className="text:lg lg:text-xl">Deposit USDT</span>
+                      </button>
                     </div>
                   )}
                   <button

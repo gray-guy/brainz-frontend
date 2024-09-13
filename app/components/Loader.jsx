@@ -21,6 +21,7 @@ const Loader = ({ children }) => {
     provider,
     platformAddress,
     setPlatformAddress,
+    setPaymentAddress
   } = useWallet()
 
   useEffect(() => {
@@ -94,6 +95,7 @@ const Loader = ({ children }) => {
       const data = await apiCall("get", "/platformWallet")
       if (data) {
         setPlatformAddress(data.platformWallet)
+        setPaymentAddress(data.paymentWallet)
       }
     }
     if (loggedIn) {
