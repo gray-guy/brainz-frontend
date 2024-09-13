@@ -26,11 +26,11 @@ const SessionCard = ({ game, activeIdx }) => {
               </h1>
             ))}
         </div> */}
-      <div className="relative min-h-[230px]">
+      <div className="relative min-h-[140px] min-[460px]:min-h-[180px] sm:min-h-[230px]">
         <Image
           src={image}
           layout="fill"
-          objectFit="cover"
+          objectFit="contain"
           alt="Next Game"
           draggable={false}
         />

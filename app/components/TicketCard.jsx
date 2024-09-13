@@ -548,17 +548,14 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
 
                       <form
                         id="checkout-form"
-                        // action={`${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`}
-                        // method="POST"
-                        onSubmit={(e) => {
-                          e.preventDefault()
-                        }}
+                        action={`${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`}
+                        method="POST"
                         className="flex min-h-[120px] min-w-[200px] flex-col rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
                       >
                         <input type="hidden" name="packId" value={id} />
                         <input type="hidden" name="userId" value={user?.id} />
 
-                        <button>
+                        <button className="flex h-full flex-col items-center justify-between">
                           <span className="flex items-center justify-center gap-2">
                             <Image
                               width={60}
@@ -573,10 +570,10 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                               alt="master card logo"
                             />
                           </span>
+                          <span className="text:lg mt-auto w-full text-center lg:text-xl">
+                            Buy with Fiat
+                          </span>
                         </button>
-                        <span className="text:lg mt-auto text-center lg:text-xl">
-                          Buy with Fiat
-                        </span>
                       </form>
                     </div>
                   )}

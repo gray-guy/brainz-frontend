@@ -132,7 +132,6 @@ export const SelectAnswer = ({
   const isRestActive = gameState === "resting"
   const isQuestionActive = gameState === "question"
 
-  console.log("showTimer ==>", showTimer)
   return (
     <div className="pb-4">
       <div className="mb-8 block bg-primary-350 md:hidden">

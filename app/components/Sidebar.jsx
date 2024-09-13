@@ -48,7 +48,7 @@ export const Sidebar = () => {
                 priority={true}
               />
               <span className="font-basement absolute bottom-1 text-[12px] leading-[1.4] tracking-wider">
-                Skilled Games
+                Skill Games
               </span>
             </Link>
           </div>
