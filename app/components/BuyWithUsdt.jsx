@@ -34,9 +34,13 @@ const BuyWithUsdt = ({
       setEncodedPrice("")
       return
     }
-    setEncodedPrice(
-      String(price) + String(buyData.paymentCode).padStart(4, "0")
-    )
+    const priceStr = String(price)
+    const paddedCode = String(buyData.paymentCode).padStart(4, "0")
+    if (priceStr.includes(".")) {
+      setEncodedPrice(priceStr + paddedCode)
+    } else {
+      setEncodedPrice(priceStr + "." + paddedCode)
+    }
   }, [price, buyData])
 
   // TODO: use sse or something to auto update buy data when it is closed
@@ -93,7 +97,7 @@ const BuyWithUsdt = ({
       ) : (
         <div
           style={{ gridTemplateColumns: "2fr 1fr" }}
-          className="mt-5 sm:grid w-full justify-between text-left font-basement"
+          className="mt-5 w-full justify-between text-left font-basement sm:grid"
         >
           <div className="text-lg md:text-xl">
             <p className="mb-5 font-bold text-secondary">
@@ -102,7 +106,7 @@ const BuyWithUsdt = ({
             <p className="text-sm md:text-lg">Amount</p>
             <div className="text-lg font-bold md:text-xl">
               {encodedPrice ? (
-                <p className="flex gap-2 mt-1">
+                <p className="mt-1 flex gap-2">
                   <span>{encodedPrice} USDT</span>
                   <button onClick={() => handleCopy(encodedPrice)}>
                     <TextCopyIcon
@@ -124,7 +128,7 @@ const BuyWithUsdt = ({
               )}
             </div>
           </div>
-          <div className="relative hidden items-center justify-self-center sm:flex row-span-2">
+          <div className="relative row-span-2 hidden items-center justify-self-center sm:flex">
             <QRCode
               size={160}
               value={payAddress}
@@ -136,8 +140,8 @@ const BuyWithUsdt = ({
             />
           </div>
           <div className="my-3">
-            <p className="text-sm md:text-lg mb-1">USDT Address</p>
-            <p className="flex items-center gap-2  md:text-lg">
+            <p className="mb-1 text-sm md:text-lg">USDT Address</p>
+            <p className="flex items-center gap-2 md:text-lg">
               <span className="inline-block rounded-[5px] bg-primary px-3 py-1">
                 {usdtAddress.slice(0, 10)}...{usdtAddress.slice(-10)}
               </span>
@@ -151,15 +155,15 @@ const BuyWithUsdt = ({
             </p>
           </div>
           <div className="col-span-2">
-            <p className="text-sm md:text-lg mb-1">Send to:</p>
+            <p className="mb-1 text-sm md:text-lg">Send to:</p>
             <p className="flex items-center gap-2 md:text-lg">
-              <span className="hidden sm:inline-block rounded-[5px] bg-primary px-3 py-1">
+              <span className="hidden rounded-[5px] bg-primary px-3 py-1 sm:inline-block">
                 {payAddress}
               </span>
-              <span className="inline-block sm:hidden rounded-[5px] bg-primary px-3 py-1">
+              <span className="inline-block rounded-[5px] bg-primary px-3 py-1 sm:hidden">
                 {payAddress.slice(0, 10)}...{payAddress.slice(-10)}
               </span>
-              <button onClick={() => handleCopy(price)}>
+              <button onClick={() => handleCopy(payAddress)}>
                 <TextCopyIcon
                   className="text-grey-200 hover:text-white"
                   height="30"
