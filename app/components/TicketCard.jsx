@@ -420,7 +420,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   const hasDiscount = !!discounts[id]
 
   return (
-    <div className="w-full rounded-[20px] border border-primary-275 bg-primary-350 px-[18px] py-5 text-center">
+    <div className="flex w-full flex-col rounded-[20px] border border-primary-275 bg-primary-350 px-[18px] py-5 text-center">
       <div className="flex items-center justify-center gap-5">
         {ticketAmount > 0 && (
           <div className="flex items-center justify-center gap-[10px]">
@@ -439,10 +439,10 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
           </div>
         )}
       </div>
-      <p className="my-2 font-basement text-sm font-normal text-grey-400">
+      <p className="mt-2 font-basement text-sm font-normal text-grey-400">
         For
       </p>
-      <h2 className="mt-2.5 font-basement text-base font-bold lg:text-lg">
+      <h2 className="mt-2 font-basement text-base font-bold lg:text-lg">
         <span
           className={`relative ${discounts[id] && "text-base font-normal text-grey-400"}`}
         >
@@ -454,12 +454,14 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
         {hasDiscount && ` ${price}`}
         &nbsp;USDT
       </h2>
-      {hasDiscount && (
-        <p className="mt-2 font-basement text-xs font-normal text-grey-400">
+      {hasDiscount ? (
+        <p className="mb-[8px] mt-1.5 font-basement text-xs font-normal text-grey-400">
           ({discounts[id].discount} Saving)
         </p>
+      ) : (
+        <div className="mb-[8px]" />
       )}
-      <div className="mt-[8px]">
+      <div className="mt-auto">
         <Button
           variant={"outlined"}
           size="text-sm lg:text-base"
