@@ -602,7 +602,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
 
                       <button
                         onClick={() => setBuyMethod("usdt")}
-                        className="min-w-[200px] rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
+                        className="flex  min-w-[200px] flex-col rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
                       >
                         <span className="mb-4 flex items-center justify-center">
                           <Image
@@ -612,7 +612,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                             alt="usdt logo"
                           />
                         </span>
-                        <span className="text:lg lg:text-xl">Deposit USDT</span>
+                        <span className="text:lg lg:text-xl mt-auto">Deposit USDT</span>
                       </button>
                     </div>
                   )}
