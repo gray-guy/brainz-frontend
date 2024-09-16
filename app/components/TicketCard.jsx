@@ -63,14 +63,14 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
     }, 500)
   }, [])
 
-  useEffect(() => {
-    // event fired from header, when user completes payment
-    document.addEventListener("closeBuyModal", closeModal)
+  // useEffect(() => {
+  //   // event fired from header, when user completes payment
+  //   document.addEventListener("closeBuyModal", closeModal)
 
-    return () => {
-      document.removeEventListener("closeBuyModal", closeModal)
-    }
-  }, [closeModal])
+  //   return () => {
+  //     document.removeEventListener("closeBuyModal", closeModal)
+  //   }
+  // }, [closeModal])
 
   const updateWalletBalances = async () => {
     tokens.forEach(async (token) => {

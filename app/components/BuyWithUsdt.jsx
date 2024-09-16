@@ -1,11 +1,9 @@
-import { usePrivy } from "@privy-io/react-auth"
-import QRCode from "qrcode.react"
-import { Button } from "./Button"
-import { toast } from "react-toastify"
-import { TextCopyIcon } from "./Svgs"
-import Image from "next/image"
 import { useCallback, useEffect, useState } from "react"
-import { apiCall, formatWalletAddress } from "@/lib/utils"
+import QRCode from "qrcode.react"
+import { toast } from "react-toastify"
+import { apiCall } from "@/lib/utils"
+import { Button } from "./Button"
+import { TextCopyIcon } from "./Svgs"
 
 const BuyWithUsdt = ({
   packId,
@@ -13,12 +11,13 @@ const BuyWithUsdt = ({
   diamondAmount = 0,
   price,
   payAddress,
-  closeModal,
 }) => {
   const [buyData, setBuyData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isBuying, setIsBuying] = useState(false)
   const [isCanceling, setIsCanceling] = useState(false)
+  const [isConfirming, setIsConfirming] = useState(false)
+  const [isPurchased, setIsPurchased] = useState(false)
   const [encodedPrice, setEncodedPrice] = useState("")
 
   const getBuyData = useCallback(async () => {
@@ -43,10 +42,21 @@ const BuyWithUsdt = ({
     }
   }, [price, buyData])
 
-  // TODO: use sse or something to auto update buy data when it is closed
   useEffect(() => {
     getBuyData().finally(() => setIsLoading(false))
   }, [getBuyData])
+
+  useEffect(() => {
+    // event fired from header, when user completes payment
+    function handleBuyEvent() {
+      setIsPurchased(true)
+    }
+    document.addEventListener("closeBuyModal", handleBuyEvent)
+
+    return () => {
+      document.removeEventListener("closeBuyModal", handleBuyEvent)
+    }
+  }, [])
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text)
@@ -74,7 +84,19 @@ const BuyWithUsdt = ({
     setIsBuying(false)
   }
 
+  const handleConfirm = () => {
+    setIsConfirming(true)
+  }
+
   const usdtAddress = process.env.NEXT_PUBLIC_USDT_ADDRESS
+
+  if (isPurchased) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center font-basement">
+        <p className="text-2xl lg:text-4xl">Purchase Successful</p>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -183,6 +205,15 @@ const BuyWithUsdt = ({
             disabled={isCanceling}
           >
             Close buy request
+          </Button>
+        )}
+        {buyData && (
+          <Button
+            variant="outlinedWhite"
+            onClick={handleConfirm}
+            disabled={isConfirming}
+          >
+            {isConfirming ? "Confirming..." : "Confirm Payment"}
           </Button>
         )}
       </div>
