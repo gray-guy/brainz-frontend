@@ -88,8 +88,6 @@ const Header = () => {
     }
   }, [user])
 
-  console.log("user", user)
-
   const copyToClipboard = (string) => {
     setIsCopied(true)
     navigator.clipboard.writeText(string)

@@ -540,7 +540,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                       closeModal={closeModal}
                     />
                   ) : (
-                    <div className="mb-10 mt-14 flex flex-col justify-center gap-4 font-basement sm:flex-row">
+                    <div className="mb-10 mt-14 flex flex-col gap-4 font-basement md:flex-row">
                       <button
                         onClick={() => setBuyMethod("crypto")}
                         className="flex min-h-[120px] min-w-[200px] flex-col rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
@@ -602,7 +602,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
 
                       <button
                         onClick={() => setBuyMethod("usdt")}
-                        className="flex  min-w-[200px] flex-col rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
+                        className="flex min-w-[200px] flex-col items-center rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
                       >
                         <span className="mb-4 flex items-center justify-center">
                           <Image
@@ -612,7 +612,9 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                             alt="usdt logo"
                           />
                         </span>
-                        <span className="text:lg lg:text-xl mt-auto">Deposit USDT</span>
+                        <span className="text:lg mt-auto lg:text-xl">
+                          Deposit USDT
+                        </span>
                       </button>
                     </div>
                   )}
