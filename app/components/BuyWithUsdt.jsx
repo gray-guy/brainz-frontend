@@ -197,7 +197,7 @@ const BuyWithUsdt = ({
         </div>
       )}
 
-      <div className="mb-3 mt-[48px] flex justify-center gap-[34px]">
+      <div className="mb-3 mt-[48px] flex flex-col-reverse justify-center gap-5 sm:gap-[34px] sm:flex-row">
         {buyData && (
           <Button
             variant="outlinedWhite"
