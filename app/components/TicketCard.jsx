@@ -603,7 +603,11 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                         </button>
                       </form> */}
 
-                      <BuyWithCredit packId={id} closeModal={closeModal} />
+                      <BuyWithCredit
+                        packId={id}
+                        price={price}
+                        closeModal={closeModal}
+                      />
                       <button
                         onClick={() => setBuyMethod("usdt")}
                         className={cardBtnClasses}
@@ -640,7 +644,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   )
 }
 
-const BuyWithCredit = ({ packId, closeModal }) => {
+const BuyWithCredit = ({ packId, price, closeModal }) => {
   const [isBuying, setIsBuying] = useState(false)
   const { refetchUser } = useUser()
 
@@ -661,12 +665,15 @@ const BuyWithCredit = ({ packId, closeModal }) => {
       {isBuying ? (
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-secondary border-s-secondary/20" />
       ) : (
-        <Image
-          src="/images/usdc-logo.png"
-          width={40}
-          height={40}
-          alt="rewards logo"
-        />
+        <div className="flex items-center gap-2">
+          <Image
+            src="/images/usdc-logo.png"
+            width={40}
+            height={40}
+            alt="rewards logo"
+          />
+          <p className="font-basement text-xl font-bold">{price}</p>
+        </div>
       )}
       <span className="text:lg mt-auto lg:text-xl">Buy with Rewards</span>
     </button>
