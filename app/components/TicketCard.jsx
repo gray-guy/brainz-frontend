@@ -30,6 +30,9 @@ const discounts = {
   2: { discount: "40%", oldPrice: 12 }, // 10 diamonds (dev)
 }
 
+const cardBtnClasses =
+  "flex min-w-[210px] h-[120px] flex-col items-center rounded-lg border border-secondary py-4 px-3 hover:outline hover:outline-1 hover:outline-secondary disabled:opacity-70"
+
 export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   const {
     walletBalances,
@@ -497,7 +500,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="shadow-xl w-full max-w-[724px] transform overflow-hidden rounded-[20px] bg-primary-275 px-6 py-6 text-center align-middle text-white transition-all md:px-12">
+                <Dialog.Panel className="shadow-xl w-full max-w-[758px] transform overflow-hidden rounded-[20px] bg-primary-275 px-6 py-6 text-center align-middle text-white transition-all md:px-12">
                   <div className="relative">
                     {buyMethod !== "" && (
                       <button
@@ -543,7 +546,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                     <div className="mb-10 mt-14 flex flex-col gap-4 font-basement md:flex-row">
                       <button
                         onClick={() => setBuyMethod("crypto")}
-                        className="flex min-h-[120px] min-w-[200px] flex-col rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
+                        className={cardBtnClasses}
                       >
                         <span className="flex w-full items-center justify-center">
                           <Image
@@ -570,11 +573,11 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                         </span>
                       </button>
 
-                      <form
+                      {/* <form
                         id="checkout-form"
                         action={`${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`}
                         method="POST"
-                        className="flex min-h-[120px] min-w-[200px] flex-col rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
+                        className={cardBtnClasses}
                       >
                         <input type="hidden" name="packId" value={id} />
                         <input type="hidden" name="userId" value={user?.id} />
@@ -598,20 +601,19 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                             Buy with Fiat
                           </span>
                         </button>
-                      </form>
+                      </form> */}
 
+                      <BuyWithCredit packId={id} closeModal={closeModal} />
                       <button
                         onClick={() => setBuyMethod("usdt")}
-                        className="flex min-w-[200px] flex-col items-center rounded-lg border border-secondary p-4 hover:outline hover:outline-1 hover:outline-secondary"
+                        className={cardBtnClasses}
                       >
-                        <span className="mb-4 flex items-center justify-center">
-                          <Image
-                            src="/images/usdt-logo.png"
-                            width={40}
-                            height={40}
-                            alt="usdt logo"
-                          />
-                        </span>
+                        <Image
+                          src="/images/usdt-logo.png"
+                          width={40}
+                          height={40}
+                          alt="usdt logo"
+                        />
                         <span className="text:lg mt-auto lg:text-xl">
                           Deposit USDT
                         </span>
@@ -635,6 +637,39 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
         </Dialog>
       </Transition>
     </div>
+  )
+}
+
+const BuyWithCredit = ({ packId, closeModal }) => {
+  const [isBuying, setIsBuying] = useState(false)
+  const { refetchUser } = useUser()
+
+  const handleBuy = async () => {
+    setIsBuying(true)
+    const data = await apiCall("post", `/shop/${packId}/buy`)
+    if (data) {
+      toast.success(data.message)
+    }
+    await refetchUser()
+    setIsBuying(false)
+
+    closeModal()
+  }
+
+  return (
+    <button disabled={isBuying} onClick={handleBuy} className={cardBtnClasses}>
+      {isBuying ? (
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-secondary border-s-secondary/20" />
+      ) : (
+        <Image
+          src="/images/usdc-logo.png"
+          width={40}
+          height={40}
+          alt="rewards logo"
+        />
+      )}
+      <span className="text:lg mt-auto lg:text-xl">Buy with Rewards</span>
+    </button>
   )
 }
 
