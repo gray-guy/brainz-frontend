@@ -44,6 +44,10 @@ const WheelModal = ({
     }
     const wheel = new Wheel(wheelContainerRef.current, props)
     wheelRef.current = wheel
+
+    return () => {
+      wheel.remove()
+    }
   }, [])
 
   return (

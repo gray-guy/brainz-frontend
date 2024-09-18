@@ -86,7 +86,7 @@ const Header = () => {
       console.log("event", event)
       document.dispatchEvent(new CustomEvent("closeBuyModal"))
     }
-  }, [user])
+  }, [user, refetchUser])
 
   const copyToClipboard = (string) => {
     setIsCopied(true)
