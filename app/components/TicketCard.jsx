@@ -24,9 +24,9 @@ import BuyWithUsdt from "./BuyWithUsdt"
 const USDT_ADDRESS = process.env.NEXT_PUBLIC_USDT_ADDRESS
 
 const discounts = {
-  35: { discount: "25%", oldPrice: 15 }, // 10 tickets
-  37: { discount: "20%", oldPrice: 8 }, // 10 diamonds
-  38: { discount: "40%", oldPrice: 12 }, // 20 diamonds
+  // 35: { discount: "25%", oldPrice: 15 }, // 10 tickets
+  // 37: { discount: "20%", oldPrice: 8 }, // 10 diamonds
+  // 38: { discount: "40%", oldPrice: 12 }, // 20 diamonds
   2: { discount: "40%", oldPrice: 12 }, // 10 diamonds (dev)
 }
 
@@ -54,9 +54,6 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   const [purchased, setPurchased] = useState(false)
   const [txHash, setTxHash] = useState("")
   const [buyMethod, setBuyMethod] = useState("")
-  const { user } = useUser()
-
-  console.log({ tokens })
 
   const closeModal = useCallback(() => {
     setIsOpen(false)
@@ -65,15 +62,6 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
       setBuyMethod("")
     }, 500)
   }, [])
-
-  // useEffect(() => {
-  //   // event fired from header, when user completes payment
-  //   document.addEventListener("closeBuyModal", closeModal)
-
-  //   return () => {
-  //     document.removeEventListener("closeBuyModal", closeModal)
-  //   }
-  // }, [closeModal])
 
   const updateWalletBalances = async () => {
     tokens.forEach(async (token) => {

@@ -17,13 +17,6 @@ const CountdownTimer = ({ restTimeRemaining, totalRestTimeRemaining }) => {
   const timerOffset =
     circumference - (restTimeRemaining / totalRestTimeRemaining) * circumference
 
-  // console.log("CountdownTimer ==>", {
-  //   gameState: gameState,
-  //   timerCount: timerCount,
-  //   restTimeRemaining: restTimeRemaining,
-  //   totalDuration: totalRestTimeRemaining,
-  // })
-
   return (
     <div className="mt-6 flex min-h-[340px] max-w-[900px] flex-col items-center justify-center rounded-[20px] border border-primary-275 bg-primary-350 py-10 font-basement text-white md:min-h-[390px]">
       <p className="mb-6 mt-0 text-center text-lg font-bold md:mb-10 lg:text-2xl">
