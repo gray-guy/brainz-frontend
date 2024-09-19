@@ -11,6 +11,7 @@ const BuyWithUsdt = ({
   diamondAmount = 0,
   price,
   payAddress,
+  closeModal,
 }) => {
   const [buyData, setBuyData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -92,8 +93,15 @@ const BuyWithUsdt = ({
 
   if (isPurchased) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center font-basement">
-        <p className="text-2xl lg:text-4xl">Purchase Successful</p>
+      <div className="flex min-h-[400px] flex-col items-center font-basement">
+        <p className="mt-auto text-2xl lg:text-4xl">Purchase Successful</p>
+        <Button
+          variant="outlinedWhite"
+          className="mt-auto"
+          onClick={closeModal}
+        >
+          Close
+        </Button>
       </div>
     )
   }
@@ -197,7 +205,7 @@ const BuyWithUsdt = ({
         </div>
       )}
 
-      <div className="mb-3 mt-[48px] flex flex-col-reverse justify-center gap-5 sm:gap-[34px] sm:flex-row">
+      <div className="mb-3 mt-[48px] flex flex-col-reverse justify-center gap-5 sm:flex-row sm:gap-[34px]">
         {buyData && (
           <Button
             variant="outlinedWhite"

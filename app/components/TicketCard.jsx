@@ -530,6 +530,14 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                       packId={id}
                       closeModal={closeModal}
                     />
+                  ) : buyMethod === "rewards" ? (
+                    <BuyWithCredit
+                      packId={id}
+                      price={price}
+                      ticketAmount={ticketAmount}
+                      diamondAmount={diamondAmount}
+                      closeModal={closeModal}
+                    />
                   ) : (
                     <div className="mb-10 mt-14 flex flex-col gap-4 font-basement md:flex-row">
                       <button
@@ -591,11 +599,25 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                         </button>
                       </form> */}
 
-                      <BuyWithCredit
-                        packId={id}
-                        price={price}
-                        closeModal={closeModal}
-                      />
+                      <button
+                        onClick={() => setBuyMethod("rewards")}
+                        className={cardBtnClasses}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Image
+                            src="/images/usdc-logo.png"
+                            width={40}
+                            height={40}
+                            alt="rewards logo"
+                          />
+                          <p className="font-basement text-xl font-bold">
+                            {price}
+                          </p>
+                        </div>
+                        <span className="text:lg mt-auto lg:text-xl">
+                          Buy with Rewards
+                        </span>
+                      </button>
                       <button
                         onClick={() => setBuyMethod("usdt")}
                         className={cardBtnClasses}
@@ -632,8 +654,15 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   )
 }
 
-const BuyWithCredit = ({ packId, price, closeModal }) => {
+const BuyWithCredit = ({
+  packId,
+  price,
+  closeModal,
+  ticketAmount,
+  diamondAmount,
+}) => {
   const [isBuying, setIsBuying] = useState(false)
+  const [isPurchased, setIsPurchased] = useState(false)
   const { refetchUser } = useUser()
 
   const handleBuy = async () => {
@@ -643,28 +672,58 @@ const BuyWithCredit = ({ packId, price, closeModal }) => {
       toast.success(data.message)
     }
     await refetchUser()
+    setIsPurchased(true)
     setIsBuying(false)
+  }
 
-    closeModal()
+  if (isPurchased) {
+    return (
+      <div className="flex min-h-[400px] flex-col items-center font-basement">
+        <p className="mt-auto text-2xl lg:text-4xl">Purchase Successful</p>
+        <Button
+          variant="outlinedWhite"
+          className="mt-auto"
+          onClick={closeModal}
+        >
+          Close
+        </Button>
+      </div>
+    )
   }
 
   return (
-    <button disabled={isBuying} onClick={handleBuy} className={cardBtnClasses}>
+    <div>
+      <div className="flex justify-center">
+        <h2 className="mt-10 max-w-[458px] font-basement text-lg md:text-2xl">
+          You are purchasing
+          {ticketAmount > 0 && (
+            <span className="font-bold"> {ticketAmount} tickets </span>
+          )}
+          {diamondAmount > 0 && (
+            <span className="font-bold"> {diamondAmount} diamonds </span>
+          )}
+        </h2>
+      </div>
+
       {isBuying ? (
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-secondary border-s-secondary/20" />
+        <div className="my-5 grid min-h-[60px] w-full place-items-center">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-secondary border-s-secondary/20" />
+        </div>
       ) : (
-        <div className="flex items-center gap-2">
-          <Image
-            src="/images/usdc-logo.png"
-            width={40}
-            height={40}
-            alt="rewards logo"
-          />
-          <p className="font-basement text-xl font-bold">{price}</p>
+        <div className="my-5 w-full justify-between text-left font-basement sm:grid">
+          <p className="text-sm md:text-lg">Amount</p>
+          <p className="mt-1 flex gap-2 text-lg font-bold md:text-xl">
+            {price} USDT
+          </p>
         </div>
       )}
-      <span className="text:lg mt-auto lg:text-xl">Buy with Rewards</span>
-    </button>
+
+      <div className="mb-3 mt-[48px] flex justify-center">
+        <Button variant="outlinedWhite" onClick={handleBuy} disabled={isBuying}>
+          {isBuying ? "Please Wait..." : "Confirm Purchase"}
+        </Button>
+      </div>
+    </div>
   )
 }
 

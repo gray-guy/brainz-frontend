@@ -53,7 +53,7 @@ export const Profile = () => {
     fetchUserRewards()
   }, [setUser])
 
-  if (!user) return null
+  if (!user || !privyUser) return null
 
   return (
     <div className="mb-0 md:mb-8">
