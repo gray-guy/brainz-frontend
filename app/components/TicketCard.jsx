@@ -670,19 +670,19 @@ const BuyWithCredit = ({
     const data = await apiCall("post", `/shop/${packId}/buy`)
     if (data) {
       toast.success(data.message)
+      setIsPurchased(true)
     }
     await refetchUser()
-    setIsPurchased(true)
     setIsBuying(false)
   }
 
   if (isPurchased) {
     return (
-      <div className="flex min-h-[400px] flex-col items-center font-basement">
+      <div className="flex min-h-[268px] flex-col items-center font-basement">
         <p className="mt-auto text-2xl lg:text-4xl">Purchase Successful</p>
         <Button
           variant="outlinedWhite"
-          className="mt-auto"
+          className="mb-3 mt-auto"
           onClick={closeModal}
         >
           Close
@@ -706,14 +706,22 @@ const BuyWithCredit = ({
       </div>
 
       {isBuying ? (
-        <div className="my-5 grid min-h-[60px] w-full place-items-center">
+        <div className="my-5 grid min-h-[72px] w-full place-items-center">
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-secondary border-s-secondary/20" />
         </div>
       ) : (
-        <div className="my-5 w-full justify-between text-left font-basement sm:grid">
+        <div className="my-5 w-full items-center justify-center text-left font-basement sm:grid">
           <p className="text-sm md:text-lg">Amount</p>
-          <p className="mt-1 flex gap-2 text-lg font-bold md:text-xl">
-            {price} USDT
+          <p className="mt-1 flex items-center gap-2">
+            <Image
+              src="/images/usdc-logo.png"
+              width={40}
+              height={40}
+              alt="rewards logo"
+            />
+            <span className="font-basement text-xl font-bold md:text-2xl">
+              {price}
+            </span>
           </p>
         </div>
       )}
