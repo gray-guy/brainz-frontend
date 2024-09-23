@@ -132,7 +132,10 @@ export const MobileSidebar = ({ onNavLinkClick }) => {
         <li>
           <button
             className="font-basement text-3xl font-bold text-white hover:text-secondary"
-            onClick={handleLogout}
+            onClick={() => {
+              handleLogout()
+              onNavLinkClick()
+            }}
           >
             Logout
           </button>

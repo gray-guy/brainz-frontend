@@ -65,7 +65,7 @@ const ConditionsModal = ({ isOpen, onAccept }) => {
                       Updated July 24, 2024
                     </p>
                     <div className="mt-6 rounded-[10px] border border-[#51626e] py-3 pl-4 pr-[6px] text-start text-grey-100">
-                      <div className="h-64 overflow-y-scroll sm:pr-[14px] scrollbar scrollbar-thumb-[#104061] scrollbar-thumb-rounded-full scrollbar-w-[6px] scrollbar-h-[16px]">
+                      <div className="h-64 overflow-y-scroll scrollbar scrollbar-thumb-[#104061] scrollbar-thumb-rounded-full scrollbar-w-[6px] scrollbar-h-[16px] sm:pr-[14px]">
                         <p className="mb-4 font-inter text-base font-normal">
                           These Terms & Conditions are entered into by and
                           between PlayBrainz, LLC, a Wyoming limited liability
