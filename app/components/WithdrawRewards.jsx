@@ -36,7 +36,7 @@ const WithdrawRewards = () => {
       return
     }
     if (amount <= 0 || amount > user.credit) {
-      toast.error("Please enter a valid amount")
+      toast.error("Please enter a valid amount (between 0 and your credit)")
       return
     }
     console.log("Submitted", JSON.stringify({ recipient, amount }))
