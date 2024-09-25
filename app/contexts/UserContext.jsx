@@ -13,6 +13,7 @@ const UserContext = createContext(null)
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null)
+  const [onboardQuiz, setOnboardQuiz] = useState([])
   const [showWelcome, setShowWelcome] = useState(false)
 
   const handleAccepToc = async () => {
@@ -21,6 +22,18 @@ const UserProvider = ({ children }) => {
       setUser((prev) => ({ ...prev, ...data.profile }))
     }
   }
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const onboardQuestion = await apiCall("get", "/questions/onboard")
+      if (onboardQuestion) {
+        setOnboardQuiz(onboardQuestion)
+      }
+    }
+    fetchQuestions()
+  }, [])
+
+  console.log("onboardQuiz===>", onboardQuiz)
 
   useEffect(() => {
     if (sessionStorage.getItem("showWelcome")) return

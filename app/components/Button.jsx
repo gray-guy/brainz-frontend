@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils"
+
 export const Button = ({
   variant,
   children,
@@ -20,7 +22,7 @@ export const Button = ({
 
   return (
     <button
-      className={`disabled:opacity-70 ${style} ${size} ${className}`}
+      className={cn("disabled:opacity-70", style, size, className)}
       {...props}
     >
       {children}

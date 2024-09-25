@@ -650,3 +650,38 @@ export const TextCopyTickIcon = ({
     </svg>
   )
 }
+
+export function QuestionIcon(props) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={props.width ?? 34}
+      height={props.height ?? 38}
+      fill="none"
+      viewBox="0 0 34 38"
+    >
+      <circle cx="17" cy="17" r="14" fill="#061F30"></circle>
+      <path
+        fill="#FFE61A"
+        d="M17 0c9.39 0 17 7.61 17 17s-7.61 17-17 17S0 26.39 0 17 7.61 0 17 0zm0 3.4a13.6 13.6 0 100 27.2 13.6 13.6 0 000-27.2zm0 20.4a1.7 1.7 0 110 3.4 1.7 1.7 0 010-3.4zm0-16.15a6.162 6.162 0 012.292 11.883 1.36 1.36 0 00-.519.342c-.075.085-.087.194-.085.306l.012.219a1.7 1.7 0 01-3.388.199L15.3 20.4v-.425c0-1.96 1.581-3.137 2.727-3.597a2.764 2.764 0 10-3.79-2.566 1.7 1.7 0 11-3.4 0A6.162 6.162 0 0117 7.65z"
+      ></path>
+    </svg>
+  )
+}
+
+export function InfoIcon(props) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={props.width ?? 18}
+      height={props.height ?? 18}
+      fill="none"
+      viewBox="0 0 18 18"
+    >
+      <path
+        fill="#FFE61A"
+        d="M2.748 15.474A9 9 0 1115.25 2.527 9 9 0 012.748 15.474zm11.457-1.27A7.204 7.204 0 104.016 4.018a7.204 7.204 0 0010.189 10.188zM8.21 4.612h1.8v5.4h-1.8v-5.4zm0 7.2h1.8v1.8h-1.8v-1.8z"
+      ></path>
+    </svg>
+  )
+}
