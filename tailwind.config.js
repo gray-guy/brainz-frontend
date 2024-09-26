@@ -153,6 +153,7 @@ module.exports = {
         },
       },
       animation: {
+        slowSpin: "spin 15s linear infinite",
         wiggle: "wiggle 2.5s ease-in-out 0s 2 reverse",
         scoreSlide: "scoreSlide 1.5s ease-out forwards",
         scoreSlideY: "scoreSlideY 1.5s ease-out forwards",

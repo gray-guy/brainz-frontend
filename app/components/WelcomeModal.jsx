@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { Dialog, Transition } from "@headlessui/react"
 import React, { Fragment, use, useEffect, useState } from "react"
-import { InfoIcon, ModalCrossIcon, QuestionIcon } from "./Svgs"
+import { InfoIcon, ModalCrossIcon, QuestionIcon, TicketIcon } from "./Svgs"
 import Slider from "react-slick"
 import { Button } from "./Button"
 import { usePrivy, useLogin } from "@privy-io/react-auth"
@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
 const WelcomeModal = ({ showModal, setShowModal }) => {
   const { ready, authenticated, user } = usePrivy()
   // TODO: map num values to words
-  const [stage, setStage] = useState(0)
+  const [stage, setStage] = useState(4)
   const { login } = useLogin()
 
   // if (user || !showModal) return null
@@ -210,12 +210,33 @@ const RewardStep = ({ handleStage }) => {
         />
       </div>
 
-      <div className="mx-auto mb-20 mt-14 flex max-w-[700px] justify-between">
+      <div className="mx-auto mb-16 mt-5 flex max-w-[700px] items-center justify-between">
         <p className="text-center font-basement text-lg font-bold md:text-3xl">
           Click on the Box to <br />{" "}
           <span className="text-secondary">Claim Your Rewards</span>
         </p>
-        <div onClick={handleClicked}>Box</div>
+        <button
+          className="group relative flex h-[187px] w-[187px] items-center justify-center"
+          onClick={handleClicked}
+        >
+          <img
+            className="absolute left-0 top-0 h-full w-full"
+            src={"/images/gift-box-bg.png"}
+            alt="gift box"
+          />
+          <img
+            className="animate-slowSpin absolute left-0 top-0 h-full w-full"
+            src={"/images/gold-ring.png"}
+            alt="gift box"
+          />
+          <img
+            className="relative transition-transform group-hover:scale-110"
+            width={87}
+            height={89}
+            src={"/images/gift-box.png"}
+            alt="gift box"
+          />
+        </button>
       </div>
     </>
   )
@@ -225,18 +246,15 @@ const ResultStep = () => {
   return (
     <>
       <CommonHeader />
-      <div className="mx-auto mb-14 mt-8 flex max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-10 text-[#000] transition-colors hover:bg-primary hover:text-white">
+      <div className="group mx-auto mb-14 mt-16 flex max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-8 text-[#000] transition-colors hover:bg-primary hover:text-white">
         <p className="text-center font-basement text-lg font-bold md:text-3xl">
           Claim your rewards
         </p>
         <div className="flex items-center gap-7">
           <div className="flex items-center gap-3">
-            <Image
-              src="/images/usdc-logo.png"
-              width={48}
-              height={48}
-              alt="Xp Icon"
-            />
+            <div className="flex size-[42px] items-center justify-center rounded-full bg-[#C3932F] font-basement font-bold text-secondary group-hover:bg-[#EFB832]/20">
+              Xp
+            </div>
             <div>
               <p className="text-xl font-bold leading-none">300</p>
               <p>Xp</p>
@@ -244,12 +262,9 @@ const ResultStep = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <Image
-              src="/images/usdc-logo.png"
-              width={48}
-              height={48}
-              alt="Xp Icon"
-            />
+            <div className="flex items-center justify-center rounded-full bg-danger-100/20 p-2">
+              <TicketIcon width="26" height="26" className="text-danger-100" />
+            </div>
             <div>
               <p className="text-xl font-bold leading-none">1</p>
               <p>Ticket</p>
