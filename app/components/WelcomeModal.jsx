@@ -12,9 +12,9 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
   const [stage, setStage] = useState(0)
   const { login } = useLogin()
 
-  if (user || !showModal) return null
+  if (user || !showModal || onboardQuiz?.length < 2) return null
 
-  const disableLogin = !ready || (ready && authenticated)
+  // const disableLogin = !ready || (ready && authenticated)
   const handleAuth = () => {
     setShowModal(false)
     login()
@@ -129,7 +129,6 @@ const CommonHeader = ({ className }) => (
 )
 
 const QuestionStep = ({ onSubmit, onboardQuiz }) => {
-  console.log("onboardQuiz===>", onboardQuiz)
   const [questionIdx, setQuestionIdx] = useState(0)
   const [selectIdx, setSelectIdx] = useState(-1)
 

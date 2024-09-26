@@ -123,6 +123,9 @@ module.exports = {
       transitionDuration: {
         1500: "1500ms",
       },
+      transitionDuration: {
+        inf: "8500ms",
+      },
       keyframes: {
         wiggle: {
           "0%, 100%": { transform: "rotate(-1deg) scale(1.0)" },
