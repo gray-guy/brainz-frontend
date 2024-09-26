@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils"
 const WelcomeModal = ({ showModal, setShowModal }) => {
   const { ready, authenticated, user } = usePrivy()
   // TODO: map num values to words
-  const [stage, setStage] = useState(4)
+  const [rewardsClicked, setRewardsClicked] = useState(false)
+  const [stage, setStage] = useState(0)
   const { login } = useLogin()
 
   // if (user || !showModal) return null
@@ -22,19 +23,20 @@ const WelcomeModal = ({ showModal, setShowModal }) => {
     login()
   }
 
-  const handleStage = (stage) => {
-    setStage(stage)
+  const onAfterEnter = () => {
+    setTimeout(() => {
+      setStage((prev) => prev + 1)
+    }, 2000)
   }
 
-  const isPrizeScreen = stage === 1 || stage === 3
+  function handleQuestionSubmit() {
+    setTimeout(() => setStage(1), 1000)
+  }
 
-  // useEffect(() => {
-  //   if (isPrizeScreen) {
-  //     setTimeout(() => {
-  //       setStage((prev) => prev + 1)
-  //     }, 2000)
-  //   }
-  // }, [isPrizeScreen])
+  function handleRewardsClick() {
+    setRewardsClicked(true)
+    setStage(3)
+  }
 
   return (
     <Transition appear show={true} as={Fragment}>
@@ -62,12 +64,22 @@ const WelcomeModal = ({ showModal, setShowModal }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="relative w-full max-w-[400px] overflow-hidden rounded-[20px] border border-secondary bg-gradient-dialog p-4 backdrop-blur-sm transition-all md:mx-0 md:max-w-[800px] lg:max-w-[1104px]">
-                {stage === 0 && <QuestionStep handleStage={handleStage} />}
-                {stage === 1 && <PrizeShow prize="ticket" />}
-                {stage === 2 && <RewardStep handleStage={handleStage} />}
-                {stage === 3 && <PrizeShow prize="xperience" />}
-                {stage === 4 && <ResultStep />}
+              <Dialog.Panel className="relative w-full max-w-[450px] overflow-hidden rounded-[20px] border border-secondary bg-gradient-dialog p-4 backdrop-blur-sm transition-all md:mx-0 md:max-w-[800px] lg:max-w-[1104px]">
+                {stage === 0 && (
+                  <QuestionStep onSubmit={handleQuestionSubmit} />
+                )}
+                <TransitionNext show={stage === 1} onAfterEnter={onAfterEnter}>
+                  <PrizeShow prize="ticket" />
+                </TransitionNext>
+                <TransitionNext show={stage === 2}>
+                  <RewardStep onRewardsClick={handleRewardsClick} />
+                </TransitionNext>
+                <TransitionNext show={stage === 3} onAfterEnter={onAfterEnter}>
+                  <PrizeShow prize="xperience" />
+                </TransitionNext>
+                <TransitionNext show={stage === 4}>
+                  <ResultStep />
+                </TransitionNext>
 
                 <button
                   className="absolute right-5 top-5 inline-block cursor-pointer bg-[#2B506A] p-2 hover:text-secondary"
@@ -83,6 +95,22 @@ const WelcomeModal = ({ showModal, setShowModal }) => {
     </Transition>
   )
 }
+
+const TransitionNext = ({ show, children, onAfterEnter, onAfterLeave }) => (
+  <Transition
+    show={show}
+    enter="duration-300"
+    enterFrom="opacity-0 translate-y-1/2"
+    enterTo="opacity-100 translate-y-0"
+    leave="duration-200"
+    leaveFrom="opacity-100 translate-y-0"
+    leaveTo="opacity-0 -translate-y-1/2"
+    afterEnter={onAfterEnter}
+    afterLeave={onAfterLeave}
+  >
+    {children}
+  </Transition>
+)
 
 const CommonHeader = ({ className }) => (
   <>
@@ -101,15 +129,13 @@ const CommonHeader = ({ className }) => (
   </>
 )
 
-const QuestionStep = ({ handleStage }) => {
+const QuestionStep = ({ onSubmit }) => {
   const [selectIdx, setSelectIdx] = useState(-1)
   const answerIdx = 2
 
   const handleSelect = (idx) => {
     setSelectIdx(idx)
-    setTimeout(() => {
-      handleStage(1)
-    }, 1000)
+    onSubmit(idx)
   }
 
   const isAnswerSelected = selectIdx !== -1
@@ -161,10 +187,10 @@ const QuestionStep = ({ handleStage }) => {
   )
 }
 
-const PrizeShow = ({ prize }) => {
+const PrizeShow = ({ className, prize }) => {
   const isTicket = prize === "ticket"
   return (
-    <div className="grid">
+    <div className={className}>
       <h2 className="mt-12 text-center font-basement text-lg font-bold md:mt-16 md:text-3xl">
         Congratulations! <br />
         You won
@@ -173,7 +199,7 @@ const PrizeShow = ({ prize }) => {
         </span>
         !
       </h2>
-      <div className="relative -left-[42%] -top-[18%] translate-x-1/2 md:-left-[38%] md:-mb-[75px] lg:-left-[25%]">
+      <div className="relative -left-[42%] -top-[90px] translate-x-1/2 md:-left-[38%] md:-mb-[75px] lg:-left-[25%]">
         <Image
           src={isTicket ? "/images/ticket-win.png" : "/images/xp-win.png"}
           width={714}
@@ -185,11 +211,7 @@ const PrizeShow = ({ prize }) => {
   )
 }
 
-const RewardStep = ({ handleStage }) => {
-  const handleClicked = () => {
-    handleStage(3)
-  }
-
+const RewardStep = ({ onRewardsClick }) => {
   return (
     <>
       <CommonHeader />
@@ -217,7 +239,7 @@ const RewardStep = ({ handleStage }) => {
         </p>
         <button
           className="group relative flex h-[187px] w-[187px] items-center justify-center"
-          onClick={handleClicked}
+          onClick={onRewardsClick}
         >
           <img
             className="absolute left-0 top-0 h-full w-full"
@@ -246,11 +268,11 @@ const ResultStep = () => {
   return (
     <>
       <CommonHeader />
-      <div className="group mx-auto mb-14 mt-16 flex max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-8 text-[#000] transition-colors hover:bg-primary hover:text-white">
+      <div className="group mx-auto mb-14 mt-16 max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-4 text-[#000] transition-colors hover:bg-primary hover:text-white md:flex md:p-8">
         <p className="text-center font-basement text-lg font-bold md:text-3xl">
           Claim your rewards
         </p>
-        <div className="flex items-center gap-7">
+        <div className="mt-3 flex items-center justify-center gap-7 md:mt-0">
           <div className="flex items-center gap-3">
             <div className="flex size-[42px] items-center justify-center rounded-full bg-[#C3932F] font-basement font-bold text-secondary group-hover:bg-[#EFB832]/20">
               Xp
