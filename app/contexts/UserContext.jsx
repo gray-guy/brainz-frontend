@@ -33,8 +33,6 @@ const UserProvider = ({ children }) => {
     fetchQuestions()
   }, [])
 
-  console.log("onboardQuiz===>", onboardQuiz)
-
   useEffect(() => {
     if (sessionStorage.getItem("showWelcome")) return
     setTimeout(() => {
@@ -60,6 +58,7 @@ const UserProvider = ({ children }) => {
       <WelcomeModal
         showModal={!user && showWelcome}
         setShowModal={setShowWelcome}
+        onboardQuiz={onboardQuiz}
       />
     </UserContext.Provider>
   )

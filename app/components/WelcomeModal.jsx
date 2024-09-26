@@ -1,21 +1,18 @@
 import Image from "next/image"
 import { Dialog, Transition } from "@headlessui/react"
-import React, { Fragment, use, useEffect, useState } from "react"
+import React, { Fragment, useEffect, useState } from "react"
 import { InfoIcon, ModalCrossIcon, QuestionIcon, TicketIcon } from "./Svgs"
-import Slider from "react-slick"
-import { Button } from "./Button"
 import { usePrivy, useLogin } from "@privy-io/react-auth"
 import { OptionSelect } from "./OptionSelect"
 import { cn } from "@/lib/utils"
 
-const WelcomeModal = ({ showModal, setShowModal }) => {
+const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
   const { ready, authenticated, user } = usePrivy()
   // TODO: map num values to words
-  const [rewardsClicked, setRewardsClicked] = useState(false)
   const [stage, setStage] = useState(0)
   const { login } = useLogin()
 
-  // if (user || !showModal) return null
+  if (user || !showModal) return null
 
   const disableLogin = !ready || (ready && authenticated)
   const handleAuth = () => {
@@ -30,11 +27,10 @@ const WelcomeModal = ({ showModal, setShowModal }) => {
   }
 
   function handleQuestionSubmit() {
-    setTimeout(() => setStage(1), 1000)
+    setTimeout(() => setStage(1), 1500)
   }
 
   function handleRewardsClick() {
-    setRewardsClicked(true)
     setStage(3)
   }
 
@@ -66,7 +62,10 @@ const WelcomeModal = ({ showModal, setShowModal }) => {
             >
               <Dialog.Panel className="relative w-full max-w-[450px] overflow-hidden rounded-[20px] border border-secondary bg-gradient-dialog p-4 backdrop-blur-sm transition-all md:mx-0 md:max-w-[800px] lg:max-w-[1104px]">
                 {stage === 0 && (
-                  <QuestionStep onSubmit={handleQuestionSubmit} />
+                  <QuestionStep
+                    onSubmit={handleQuestionSubmit}
+                    onboardQuiz={onboardQuiz}
+                  />
                 )}
                 <TransitionNext show={stage === 1} onAfterEnter={onAfterEnter}>
                   <PrizeShow prize="ticket" />
@@ -78,7 +77,7 @@ const WelcomeModal = ({ showModal, setShowModal }) => {
                   <PrizeShow prize="xperience" />
                 </TransitionNext>
                 <TransitionNext show={stage === 4}>
-                  <ResultStep />
+                  <ResultStep onLoginClick={handleAuth} />
                 </TransitionNext>
 
                 <button
@@ -129,20 +128,34 @@ const CommonHeader = ({ className }) => (
   </>
 )
 
-const QuestionStep = ({ onSubmit }) => {
+const QuestionStep = ({ onSubmit, onboardQuiz }) => {
+  console.log("onboardQuiz===>", onboardQuiz)
+  const [questionIdx, setQuestionIdx] = useState(0)
   const [selectIdx, setSelectIdx] = useState(-1)
-  const answerIdx = 2
 
-  const handleSelect = (idx) => {
-    setSelectIdx(idx)
-    onSubmit(idx)
-  }
-
+  if (!onboardQuiz?.length) return
+  const answerIdx = onboardQuiz[questionIdx].correctAnswer - 1
   const isAnswerSelected = selectIdx !== -1
+
   const getVariant = (idx) => {
     if (!isAnswerSelected || idx !== selectIdx) return "default"
     return idx === answerIdx ? "success" : "danger"
   }
+
+  const handleSelect = (idx) => {
+    setSelectIdx(idx)
+    if (answerIdx !== selectIdx && questionIdx === 0) {
+      setTimeout(() => {
+        setQuestionIdx(1)
+        setSelectIdx(-1)
+      }, 1500)
+    } else {
+      onSubmit(idx)
+    }
+  }
+
+  const letters = ["A", "B", "C", "D"]
+
   return (
     <>
       <CommonHeader />
@@ -150,21 +163,20 @@ const QuestionStep = ({ onSubmit }) => {
         <p className="mb-4 flex items-center gap-3">
           <QuestionIcon />
           <span className="font-medium lg:text-xl">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quae,
-            ipsum.
+            {onboardQuiz[questionIdx].question}
           </span>
         </p>
 
         <div className="mb-5 space-y-3">
-          {["A", "B", "C", "D"].map((letter, idx) => (
+          {onboardQuiz[questionIdx].answers.map((answerDesc, idx) => (
             <div className="cursor-pointer" onClick={() => handleSelect(idx)}>
               <OptionSelect
-                key={letter}
+                key={letters[idx]}
                 classes={{
                   root: "font-inter rounded-[10px] ",
                 }}
-                alphabet={letter}
-                description="Lorem ipsum dolor sit amet, consectur."
+                alphabet={letters[idx]}
+                description={answerDesc}
                 isActive={selectIdx === idx}
                 variant={getVariant(idx)}
                 answer={isAnswerSelected}
@@ -264,7 +276,7 @@ const RewardStep = ({ onRewardsClick }) => {
   )
 }
 
-const ResultStep = () => {
+const ResultStep = ({ onLoginClick }) => {
   return (
     <>
       <CommonHeader />
@@ -272,7 +284,10 @@ const ResultStep = () => {
         <p className="text-center font-basement text-lg font-bold md:text-3xl">
           Claim your rewards
         </p>
-        <div className="mt-3 flex items-center justify-center gap-7 md:mt-0">
+        <div
+          onClick={onLoginClick}
+          className="mt-3 flex items-center justify-center gap-7 md:mt-0"
+        >
           <div className="flex items-center gap-3">
             <div className="flex size-[42px] items-center justify-center rounded-full bg-[#C3932F] font-basement font-bold text-secondary group-hover:bg-[#EFB832]/20">
               Xp
