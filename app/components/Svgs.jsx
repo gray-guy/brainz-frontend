@@ -655,10 +655,10 @@ export function QuestionIcon(props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={props.width ?? 34}
-      height={props.height ?? 38}
+      width={props.width ?? 28}
+      height={props.height ?? 28}
       fill="none"
-      viewBox="0 0 34 38"
+      viewBox="0 0 34 34"
     >
       <circle cx="17" cy="17" r="14" fill="#061F30"></circle>
       <path

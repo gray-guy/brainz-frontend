@@ -28,13 +28,13 @@ const WelcomeModal = ({ showModal, setShowModal }) => {
 
   const isPrizeScreen = stage === 1 || stage === 3
 
-  useEffect(() => {
-    if (isPrizeScreen) {
-      setTimeout(() => {
-        setStage((prev) => prev + 1)
-      }, 2000)
-    }
-  }, [isPrizeScreen])
+  // useEffect(() => {
+  //   if (isPrizeScreen) {
+  //     setTimeout(() => {
+  //       setStage((prev) => prev + 1)
+  //     }, 2000)
+  //   }
+  // }, [isPrizeScreen])
 
   return (
     <Transition appear show={true} as={Fragment}>
@@ -48,7 +48,7 @@ const WelcomeModal = ({ showModal, setShowModal }) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Dialog.Backdrop className="bg-gradient-backdrop fixed inset-0 z-50 backdrop-blur-sm" />
+          <Dialog.Backdrop className="fixed inset-0 z-50 bg-gradient-backdrop backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 z-[51] overflow-y-auto text-white">
@@ -62,11 +62,11 @@ const WelcomeModal = ({ showModal, setShowModal }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="bg-gradient-dialog relative w-full max-w-[400px] overflow-hidden rounded-[20px] border border-secondary p-4 backdrop-blur-sm transition-all md:mx-0 md:max-w-[800px] lg:max-w-[1104px]">
+              <Dialog.Panel className="relative w-full max-w-[400px] overflow-hidden rounded-[20px] border border-secondary bg-gradient-dialog p-4 backdrop-blur-sm transition-all md:mx-0 md:max-w-[800px] lg:max-w-[1104px]">
                 {stage === 0 && <QuestionStep handleStage={handleStage} />}
-                {stage === 1 && <PrizeShow prize="1 Ticket" />}
+                {stage === 1 && <PrizeShow prize="ticket" />}
                 {stage === 2 && <RewardStep handleStage={handleStage} />}
-                {stage === 3 && <PrizeShow prize="300 XP" />}
+                {stage === 3 && <PrizeShow prize="xperience" />}
                 {stage === 4 && <ResultStep />}
 
                 <button
@@ -88,7 +88,7 @@ const CommonHeader = ({ className }) => (
   <>
     <h2
       className={cn(
-        "text-center font-basement text-lg font-bold md:text-3xl",
+        "mt-20 text-center font-basement text-lg font-bold md:text-3xl",
         className
       )}
     >
@@ -103,12 +103,20 @@ const CommonHeader = ({ className }) => (
 
 const QuestionStep = ({ handleStage }) => {
   const [selectIdx, setSelectIdx] = useState(-1)
+  const answerIdx = 2
 
   const handleSelect = (idx) => {
     setSelectIdx(idx)
-    handleStage(1)
+    setTimeout(() => {
+      handleStage(1)
+    }, 1000)
   }
 
+  const isAnswerSelected = selectIdx !== -1
+  const getVariant = (idx) => {
+    if (!isAnswerSelected || idx !== selectIdx) return "default"
+    return idx === answerIdx ? "success" : "danger"
+  }
   return (
     <>
       <CommonHeader />
@@ -131,9 +139,9 @@ const QuestionStep = ({ handleStage }) => {
                 }}
                 alphabet={letter}
                 description="Lorem ipsum dolor sit amet, consectur."
-                isActive={selectIdx !== -1}
-                variant={selectIdx === idx ? "danger" : "default"}
-                answer={selectIdx !== -1}
+                isActive={selectIdx === idx}
+                variant={getVariant(idx)}
+                answer={isAnswerSelected}
               />
             </div>
           ))}
@@ -154,12 +162,25 @@ const QuestionStep = ({ handleStage }) => {
 }
 
 const PrizeShow = ({ prize }) => {
+  const isTicket = prize === "ticket"
   return (
-    <div>
-      <h2 className="text-center font-basement text-lg font-bold md:text-3xl">
+    <div className="grid">
+      <h2 className="mt-12 text-center font-basement text-lg font-bold md:mt-16 md:text-3xl">
         Congratulations! <br />
-        You won <span className="text-secondary">{prize}</span> !
+        You won
+        <span className="text-secondary">
+          {isTicket ? " 1 Ticket " : " 300 XP "}
+        </span>
+        !
       </h2>
+      <div className="relative -left-[42%] -top-[18%] translate-x-1/2 md:-left-[38%] md:-mb-[75px] lg:-left-[25%]">
+        <Image
+          src={isTicket ? "/images/ticket-win.png" : "/images/xp-win.png"}
+          width={714}
+          height={622}
+          alt="prize"
+        />
+      </div>
     </div>
   )
 }
@@ -204,7 +225,7 @@ const ResultStep = () => {
   return (
     <>
       <CommonHeader />
-      <div className="cursor-pointer mx-auto mb-14 mt-8 flex max-w-[800px] justify-between rounded-[6px] bg-secondary p-10 text-[#000] transition-colors hover:bg-primary hover:text-white">
+      <div className="mx-auto mb-14 mt-8 flex max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-10 text-[#000] transition-colors hover:bg-primary hover:text-white">
         <p className="text-center font-basement text-lg font-bold md:text-3xl">
           Claim your rewards
         </p>
@@ -243,7 +264,7 @@ const ResultStep = () => {
 const OnboardCard = ({ image, text, className }) => (
   <div
     className={cn(
-      "bg-gradient-onboard-card shadow-onboardCard max-w-[300px] rounded-[8px] border border-secondary-100 p-[10px]",
+      "max-w-[300px] rounded-[8px] border border-secondary-100 bg-gradient-onboard-card p-[10px] shadow-onboardCard",
       className
     )}
   >

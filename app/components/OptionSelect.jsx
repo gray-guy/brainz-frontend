@@ -33,7 +33,7 @@ export const OptionSelect = ({
         "flex items-center gap-3 font-basement lg:gap-5",
         backgroundColor,
         borderColor,
-        isActive && "hover:bg-[#0A3049]",
+        // isActive && "hover:bg-[#0A3049]",
         "border-1 w-full rounded-[20px] border px-4 py-2 hover:border-[#C2CBD1] lg:px-5",
         classes.root
       )}
