@@ -238,7 +238,7 @@ export const SelectAnswer = ({
                     <LongArrowRightIcon height="24" width="24" />
                   </div>
                 </div>
-                <p className="pl-2 font-inter text-lg font-semibold md:pl-0 md:text-xl lg:text-2xl">
+                <p className="pl-2 select-none font-inter text-lg font-semibold md:pl-0 md:text-xl lg:text-2xl">
                   {question.question}
                 </p>
               </div>

@@ -37,7 +37,7 @@ export const OptionSelect = ({
         </h1>
       </div>
       <p
-        className={`font-basement text-sm font-normal md:text-lg ${isActive ? "text-[#000]" : "text-white"}`}
+        className={`font-basement text-sm font-normal select-none md:text-lg ${isActive ? "text-[#000]" : "text-white"}`}
       >
         {description}
       </p>
