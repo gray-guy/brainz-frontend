@@ -70,24 +70,6 @@ const Header = () => {
     }
   }, [isOpenProfile])
 
-  useEffect(() => {
-    if (!user) return
-
-    const evtSource = new EventSource(
-      `${process.env.NEXT_PUBLIC_API_URL}/buy-requests/events`
-    )
-
-    evtSource.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      if (data.userId !== user.id) return
-
-      // refresh user profile and close buy modal
-      refetchUser()
-      console.log("event", event)
-      document.dispatchEvent(new CustomEvent("closeBuyModal"))
-    }
-  }, [user, refetchUser])
-
   const copyToClipboard = (string) => {
     setIsCopied(true)
     navigator.clipboard.writeText(string)

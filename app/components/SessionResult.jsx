@@ -80,20 +80,17 @@ export const SessionResult = ({
     return () => clearInterval(interval)
   }, [])
 
+  const hasWheel = !!session?.wheel
   useEffect(() => {
-    const accessToken = getLocalAccessToken()
+    if (!hasWheel) return
+
     const getWheelData = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/wheels/session/${session.id}`,
-          {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }
-        )
-        const diamondQuantity = res.data.diamondsQty
-        const ticketQuantity = res.data.ticketsQty
+        const wheelData = await apiCall("get", `/wheels/session/${session.id}`)
+        const diamondQuantity = wheelData.diamondsQty
+        const ticketQuantity = wheelData.ticketsQty
 
-        const cashPrizes = res.data.cashPrizes
+        const cashPrizes = wheelData.cashPrizes
         // get average for each prize to set weight on wheel
         const totalPrizes = cashPrizes.length + 3
         const diamondWeight = diamondQuantity / totalPrizes
@@ -126,7 +123,7 @@ export const SessionResult = ({
       }
     }
     getWheelData()
-  }, [])
+  }, [hasWheel])
 
   const getWinningPrize = async () => {
     const data = apiCall("post", `/wheels/spin`, { sessionId: session.id })
@@ -143,6 +140,11 @@ export const SessionResult = ({
     }
     setSpinning(true)
     const winningPrize = await getWinningPrize()
+    if (!winningPrize) {
+      setSpinning(false)
+      return
+    }
+
     let winningMessage = ""
     let winningItem = "noPrize"
     let winningIndex = 0

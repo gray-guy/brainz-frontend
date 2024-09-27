@@ -5,15 +5,17 @@ import StripeModal from "@/app/components/StripeModal"
 import { gameData, ticketData } from "./data"
 import { useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton"
-import "react-loading-skeleton/dist/skeleton.css"
 import { apiCall } from "@/lib/utils"
-import { DiamondIcon, TicketIcon } from "@/app/components/Svgs"
+// import { DiamondIcon, TicketIcon } from "@/app/components/Svgs"
+import { useUser } from "@/app/contexts/UserContext"
+import "react-loading-skeleton/dist/skeleton.css"
 
 export const Shop = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [ticketPacks, setTicketPacks] = useState([])
   const [diamondPacks, setDiamondPacks] = useState([])
   const [bothPacks, setBothPacks] = useState([])
+  const { user, refetchUser } = useUser()
 
   useEffect(() => {
     const getShopItems = async () => {
@@ -30,6 +32,23 @@ export const Shop = () => {
 
     getShopItems()
   }, [])
+
+  useEffect(() => {
+    if (!user) return
+
+    const evtSource = new EventSource(
+      `${process.env.NEXT_PUBLIC_API_URL}/buy-requests/events`
+    )
+
+    evtSource.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      if (data.userId !== user.id) return
+
+      // refresh user profile and close buy modal
+      refetchUser()
+      document.dispatchEvent(new CustomEvent("closeBuyModal"))
+    }
+  }, [user, refetchUser])
 
   return (
     <div className="text-white">
