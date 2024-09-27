@@ -677,18 +677,17 @@ const BuyWithCredit = ({
     setIsBuying(false)
   }
 
-  if (!isPurchased) {
+  if (isPurchased) {
     return (
-      <div className="pt-3 flex min-h-[268px] flex-col items-center font-basement">
-
-        <Image 
+      <div className="flex min-h-[268px] flex-col items-center pt-3 font-basement">
+        <Image
           src="/images/success-check-b.png"
           width={160}
           height={160}
           alt="rewards logo"
         />
 
-        <p className="mt-auto mb-7 text-2xl lg:text-4xl">Purchase Successful</p>
+        <p className="mb-7 mt-auto text-2xl lg:text-4xl">Purchase Successful</p>
         <Button
           variant="outlinedWhite"
           className="mb-3 mt-auto"
@@ -719,7 +718,7 @@ const BuyWithCredit = ({
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-secondary border-s-secondary/20" />
         </div>
       ) : (
-        <div className="my-5 flex w-full items-center text-left font-basement justify-center">
+        <div className="my-5 flex w-full items-center justify-center text-left font-basement">
           <p className="text-xl font-bold md:text-2xl">Amount:</p>
           <span className="ml-3 mr-2 font-basement text-xl font-bold md:text-2xl">
             {price}
