@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { Dialog, Transition } from "@headlessui/react"
-import React, { Fragment, useEffect, useState } from "react"
+import React, { forwardRef, Fragment, useEffect, useRef, useState } from "react"
 import { InfoIcon, ModalCrossIcon, QuestionIcon, TicketIcon } from "./Svgs"
 import { usePrivy, useLogin } from "@privy-io/react-auth"
 import { OptionSelect } from "./OptionSelect"
@@ -23,16 +23,13 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
   const onAfterEnter = () => {
     setTimeout(() => {
       setStage((prev) => prev + 1)
-    }, 2000)
+    }, 3000)
   }
 
-  function handleQuestionSubmit() {
+  const handleQuestionSubmit = () => {
     setTimeout(() => setStage(1), 1500)
   }
-
-  function handleRewardsClick() {
-    setStage(3)
-  }
+  const handleRewardsClick = () => setStage(3)
 
   return (
     <Transition appear show={true} as={Fragment}>
@@ -50,7 +47,7 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
         </Transition.Child>
 
         <div className="fixed inset-0 z-[51] overflow-y-auto text-white">
-          <div className="flex min-h-full items-center justify-center p-4">
+          <div className="flex min-h-full items-center justify-center p-2 md:p-4">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -65,6 +62,7 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
                   <QuestionStep
                     onSubmit={handleQuestionSubmit}
                     onboardQuiz={onboardQuiz}
+                    handleAuth={handleAuth}
                   />
                 )}
                 <TransitionNext show={stage === 1} onAfterEnter={onAfterEnter}>
@@ -98,10 +96,10 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
 const TransitionNext = ({ show, children, onAfterEnter, onAfterLeave }) => (
   <Transition
     show={show}
-    enter="duration-300"
+    enter="duration-500 ease-in-out"
     enterFrom="opacity-0 translate-y-1/2"
     enterTo="opacity-100 translate-y-0"
-    leave="duration-200"
+    leave="duration-300"
     leaveFrom="opacity-100 translate-y-0"
     leaveTo="opacity-0 -translate-y-1/2"
     afterEnter={onAfterEnter}
@@ -115,75 +113,59 @@ const CommonHeader = ({ className }) => (
   <>
     <h2
       className={cn(
-        "mt-20 text-center font-basement text-lg font-bold md:text-3xl",
+        "mt-12 text-center font-basement text-lg font-bold md:mt-20 md:text-3xl",
         className
       )}
     >
       Flex Your <span className="text-secondary">Skills</span>,{" "}
       <span className="text-secondary">Stack</span> Prizes!
     </h2>
-    <p className="mb-10 text-center text-sm md:text-base">
+    <p className="mb-7 text-center text-sm md:mb-10 md:text-base">
       Join our Live Trivia Games and Quests to play skill games and win prizes
     </p>
   </>
 )
 
-const QuestionStep = ({ onSubmit, onboardQuiz }) => {
-  const [questionIdx, setQuestionIdx] = useState(0)
+const QuestionStep = ({ onSubmit, onboardQuiz, handleAuth }) => {
   const [selectIdx, setSelectIdx] = useState(-1)
+  const [questionIdx, setQuestionIdx] = useState(0)
+  const question1Ref = useRef()
+  const question2Ref = useRef()
 
-  if (!onboardQuiz?.length) return
-  const answerIdx = onboardQuiz[questionIdx].correctAnswer - 1
-  const isAnswerSelected = selectIdx !== -1
-
-  const getVariant = (idx) => {
-    if (!isAnswerSelected || idx !== selectIdx) return "default"
-    return idx === answerIdx ? "success" : "danger"
-  }
-
-  const handleSelect = (idx) => {
+  const handleSelect = (idx, isCorrect) => {
     setSelectIdx(idx)
-    if (answerIdx !== selectIdx && questionIdx === 0) {
+    if (!isCorrect && questionIdx === 0) {
       setTimeout(() => {
         setQuestionIdx(1)
         setSelectIdx(-1)
+
+        question1Ref.current.style.transform = "translateX(calc(-100% - 16px))"
+        question2Ref.current.style.transform = "translateX(calc(-100% - 16px))"
       }, 1500)
     } else {
       onSubmit(idx)
     }
   }
 
-  const letters = ["A", "B", "C", "D"]
-
   return (
     <>
       <CommonHeader />
       <div className="lg:px-14">
-        <p className="mb-4 flex items-center gap-3">
-          <QuestionIcon />
-          <span className="font-medium lg:text-xl">
-            {onboardQuiz[questionIdx].question}
-          </span>
-        </p>
-
-        <div className="mb-5 space-y-3">
-          {onboardQuiz[questionIdx].answers.map((answerDesc, idx) => (
-            <div className="cursor-pointer" onClick={() => handleSelect(idx)}>
-              <OptionSelect
-                key={letters[idx]}
-                classes={{
-                  root: "font-inter rounded-[10px] ",
-                }}
-                alphabet={letters[idx]}
-                description={answerDesc}
-                isActive={selectIdx === idx}
-                variant={getVariant(idx)}
-                answer={isAnswerSelected}
-              />
-            </div>
-          ))}
+        <div className="grid auto-cols-[100%] grid-flow-col gap-4 overflow-hidden transition-transform">
+          <Question
+            ref={question1Ref}
+            quizData={onboardQuiz[0]}
+            selectIdx={selectIdx}
+            handleSelect={handleSelect}
+          />
+          <Question
+            ref={question2Ref}
+            quizData={onboardQuiz[1]}
+            selectIdx={selectIdx}
+            handleSelect={handleSelect}
+          />
         </div>
-        <p className="flex gap-3 rounded-[6px] bg-secondary/15 px-3 py-5 text-sm">
+        <p className="mt-3 flex gap-3 rounded-[6px] bg-secondary/15 px-3 py-5 text-sm md:mt-4">
           <InfoIcon className="text-secondary" />
           <span>
             Your prize is waiting! Take the trivia challenge to claim it!
@@ -191,12 +173,56 @@ const QuestionStep = ({ onSubmit, onboardQuiz }) => {
         </p>
       </div>
 
-      <div className="mb-10 mt-14 text-center text-sm">
-        Skip to <span className="text-secondary">Login / Sign Up</span>
+      <div className="mb-5 mt-7 flex justify-center md:mb-10 md:mt-14">
+        <button className="text-center text-sm" onClick={handleAuth}>
+          Skip to <span className="text-secondary">Login / Sign Up</span>
+        </button>
       </div>
     </>
   )
 }
+
+const Question = forwardRef(({ quizData, selectIdx, handleSelect }, ref) => {
+  const letters = ["A", "B", "C", "D"]
+
+  const isAnswerSelected = selectIdx !== -1
+  const answerIdx = quizData.correctAnswer - 1
+
+  const getVariant = (idx) => {
+    if (!isAnswerSelected || idx !== selectIdx) return "default"
+    return idx === answerIdx ? "success" : "danger"
+  }
+
+  return (
+    <div ref={ref} className="transition-transform duration-300 ease-in-out">
+      <p className="flex items-center gap-3">
+        <QuestionIcon />
+        <span className="font-medium lg:text-xl">{quizData.question}</span>
+      </p>
+      <div className="mt-3 space-y-1 md:mt-4 md:space-y-3">
+        {quizData.answers.map((answerDesc, idx) => (
+          <div
+            key={answerDesc}
+            className="cursor-pointer"
+            onClick={() => handleSelect(idx, idx === answerIdx)}
+          >
+            <OptionSelect
+              key={letters[idx]}
+              classes={{
+                root: "font-inter rounded-[10px] ",
+              }}
+              alphabet={letters[idx]}
+              description={answerDesc}
+              isActive={selectIdx === idx}
+              variant={getVariant(idx)}
+              answer={isAnswerSelected}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+})
 
 const PrizeShow = ({ className, prize }) => {
   const isTicket = prize === "ticket"
@@ -210,7 +236,7 @@ const PrizeShow = ({ className, prize }) => {
         </span>
         !
       </h2>
-      <div className="relative -left-[42%] -top-[90px] translate-x-1/2 md:-left-[38%] md:-mb-[75px] lg:-left-[25%]">
+      <div className="relative -left-[42%] -top-6 translate-x-1/2 md:-left-[38%] md:-top-[90px] md:-mb-[75px] lg:-left-[25%]">
         <Image
           src={isTicket ? "/images/ticket-win.png" : "/images/xp-win.png"}
           width={714}
@@ -227,7 +253,7 @@ const RewardStep = ({ onRewardsClick }) => {
     <>
       <CommonHeader />
 
-      <div className="mt-14 flex items-center justify-center gap-4">
+      <div className="mt-14 grid touch-pan-x grid-flow-col gap-2 max-md:auto-cols-[280px] max-md:overflow-x-auto md:items-center md:justify-center md:gap-4">
         <OnboardCard
           image="/images/onboard-reward-1.png"
           text="Win USDT Prizes through Live Games & Quests"
@@ -235,7 +261,7 @@ const RewardStep = ({ onRewardsClick }) => {
         <OnboardCard
           image="/images/onboard-reward-2.png"
           text="Participate in challenges and games to gather tickets."
-          className="mb-32"
+          className="md:mb-32"
         />
         <OnboardCard
           image="/images/onboard-reward-3.png"
@@ -243,27 +269,30 @@ const RewardStep = ({ onRewardsClick }) => {
         />
       </div>
 
-      <div className="mx-auto mb-16 mt-5 flex max-w-[700px] items-center justify-between">
-        <p className="text-center font-basement text-lg font-bold md:text-3xl">
+      <div className="mx-auto mb-10 mt-8 flex max-w-[700px] flex-col items-center justify-between md:mb-16 md:mt-5 md:flex-row">
+        <p className="mb-4 text-center font-basement text-lg font-bold md:mb-0 md:text-3xl">
           Click on the Box to <br />{" "}
           <span className="text-secondary">Claim Your Rewards</span>
         </p>
         <button
-          className="group relative flex h-[187px] w-[187px] items-center justify-center"
+          className="group relative flex size-[120px] items-center justify-center md:size-[187px]"
           onClick={onRewardsClick}
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="absolute left-0 top-0 h-full w-full"
             src={"/images/gift-box-bg.png"}
             alt="gift box"
           />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            className="animate-slowSpin absolute left-0 top-0 h-full w-full"
+            className="absolute left-0 top-0 h-full w-full animate-slowSpin"
             src={"/images/gold-ring.png"}
             alt="gift box"
           />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            className="relative transition-transform group-hover:scale-110"
+            className="relative scale-[0.6] transition-transform duration-300 ease-in-out group-hover:scale-[0.7] md:scale-100 md:group-hover:scale-110"
             width={87}
             height={89}
             src={"/images/gift-box.png"}
@@ -279,7 +308,7 @@ const ResultStep = ({ onLoginClick }) => {
   return (
     <>
       <CommonHeader />
-      <div className="group mx-auto mb-14 mt-16 max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-4 text-[#000] transition-colors hover:bg-primary hover:text-white md:flex md:p-8">
+      <div className="group mx-auto mb-8 mt-10 max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-4 text-[#000] transition-colors duration-300 ease-in-out hover:bg-primary hover:text-white md:mb-14 md:mt-16 md:flex md:p-8">
         <p className="text-center font-basement text-lg font-bold md:text-3xl">
           Claim your rewards
         </p>
@@ -326,7 +355,7 @@ const OnboardCard = ({ image, text, className }) => (
       height={189}
       alt="image with usdc logo "
     />
-    <p className="px-[30px] py-[21px] text-center">{text}</p>
+    <p className="px-[30px] py-3 text-center md:py-[21px]">{text}</p>
   </div>
 )
 

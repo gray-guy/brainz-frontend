@@ -123,9 +123,6 @@ module.exports = {
       transitionDuration: {
         1500: "1500ms",
       },
-      transitionDuration: {
-        inf: "8500ms",
-      },
       keyframes: {
         wiggle: {
           "0%, 100%": { transform: "rotate(-1deg) scale(1.0)" },
@@ -169,7 +166,7 @@ module.exports = {
         "gradient-dialog":
           "linear-gradient(112.35deg, #092F5B 28.55%, rgba(9, 47, 91, 0.45) 90.38%)",
         "gradient-onboard-card":
-          "linear-gradient(117.95deg, rgba(17, 75, 163, 0.2) 3.83%, rgba(17, 75, 163, 0.09) 57.89%)",
+          "linear-gradient(117.95deg, rgba(17, 75, 163, 1) 3.83%, rgba(17, 75, 163, 1) 57.89%)",
         "gradient-border":
           "linear-gradient(109.63deg, rgba(255, 255, 255, 0.45) -11.64%, rgba(16, 47, 156, 0.45) 61.36%)",
         "gradient-white":

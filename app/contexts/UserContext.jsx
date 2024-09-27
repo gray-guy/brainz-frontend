@@ -23,6 +23,13 @@ const UserProvider = ({ children }) => {
     }
   }
 
+  const refetchUser = useCallback(async () => {
+    const userData = await apiCall("get", "/profile")
+    if (userData) {
+      setUser(userData.profile)
+    }
+  }, [])
+
   useEffect(() => {
     const fetchQuestions = async () => {
       const onboardQuestion = await apiCall("get", "/questions/onboard")
@@ -34,19 +41,19 @@ const UserProvider = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    if (sessionStorage.getItem("showWelcome")) return
+    // if (sessionStorage.getItem("shownWelcome")) return
     setTimeout(() => {
       setShowWelcome(true)
-      sessionStorage.setItem("showWelcome", true)
+      sessionStorage.setItem("shownWelcome", true)
     }, 2500)
   }, [])
 
-  const refetchUser = useCallback(async () => {
-    const userData = await apiCall("get", "/profile")
-    if (userData) {
-      setUser(userData.profile)
+  useEffect(() => {
+    if (user) {
+      setShowWelcome(false)
+      sessionStorage.setItem("shownWelcome", true)
     }
-  }, [])
+  }, [user])
 
   return (
     <UserContext.Provider value={{ user, setUser, refetchUser }}>
