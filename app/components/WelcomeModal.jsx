@@ -43,7 +43,7 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Dialog.Backdrop className="fixed inset-0 z-50 bg-gradient-backdrop backdrop-blur-sm" />
+          <Dialog.Backdrop className="bg-gradient-backdrop fixed inset-0 z-50 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 z-[51] overflow-y-auto text-white">
@@ -57,7 +57,7 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="relative w-full max-w-[450px] overflow-hidden rounded-[20px] border border-secondary bg-gradient-dialog p-4 backdrop-blur-sm transition-all md:mx-0 md:max-w-[800px] lg:max-w-[1104px]">
+              <Dialog.Panel className="bg-gradient-dialog relative w-full max-w-[450px] overflow-hidden rounded-[20px] border border-secondary p-4 backdrop-blur-sm transition-all md:mx-0 md:max-w-[800px] lg:max-w-[1104px]">
                 {stage === 0 && (
                   <QuestionStep
                     onSubmit={handleQuestionSubmit}
@@ -286,7 +286,7 @@ const RewardStep = ({ onRewardsClick }) => {
           />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            className="absolute left-0 top-0 h-full w-full animate-slowSpin"
+            className="animate-slowSpin absolute left-0 top-0 h-full w-full"
             src={"/images/gold-ring.png"}
             alt="gift box"
           />
@@ -308,7 +308,7 @@ const ResultStep = ({ onLoginClick }) => {
   return (
     <>
       <CommonHeader />
-      <div className="group mx-auto mb-8 mt-10 max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-4 text-[#000] transition-colors duration-300 ease-in-out hover:bg-primary hover:text-white md:mb-14 md:mt-16 md:flex md:p-8">
+      <div className="group mx-auto mb-8 mt-10 max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-4 text-[#000] transition-all duration-500 ease-in-out hover:scale-105 hover:bg-primary hover:text-white md:mb-14 md:mt-16 md:flex md:p-8">
         <p className="text-center font-basement text-lg font-bold md:text-3xl">
           Claim your rewards
         </p>
@@ -317,7 +317,7 @@ const ResultStep = ({ onLoginClick }) => {
           className="mt-3 flex items-center justify-center gap-7 md:mt-0"
         >
           <div className="flex items-center gap-3">
-            <div className="flex size-[42px] items-center justify-center rounded-full bg-[#C3932F] font-basement font-bold text-secondary group-hover:bg-[#EFB832]/20">
+            <div className="text-black flex size-[42px] items-center justify-center rounded-full bg-gray-100/30 font-basement font-bold group-hover:bg-[#EFB832]/20 group-hover:text-secondary">
               Xp
             </div>
             <div>
@@ -327,8 +327,12 @@ const ResultStep = ({ onLoginClick }) => {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center rounded-full bg-danger-100/20 p-2">
-              <TicketIcon width="26" height="26" className="text-danger-100" />
+            <div className="flex items-center justify-center rounded-full bg-gray-100/30 p-2 group-hover:bg-danger-100/20">
+              <TicketIcon
+                width="26"
+                height="26"
+                className="text-black group-hover:text-danger-100"
+              />
             </div>
             <div>
               <p className="text-xl font-bold leading-none">1</p>
@@ -344,7 +348,7 @@ const ResultStep = ({ onLoginClick }) => {
 const OnboardCard = ({ image, text, className }) => (
   <div
     className={cn(
-      "max-w-[300px] rounded-[8px] border border-secondary-100 bg-gradient-onboard-card p-[10px] shadow-onboardCard",
+      "bg-gradient-onboard-card shadow-onboardCard max-w-[300px] rounded-[8px] border border-secondary-100 p-[10px]",
       className
     )}
   >
