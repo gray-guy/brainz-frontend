@@ -205,15 +205,6 @@ const BuyWithUsdt = ({
         {buyData && (
           <Button
             variant="outlinedWhite"
-            onClick={handleCancel}
-            disabled={isCanceling}
-          >
-            Close buy request
-          </Button>
-        )}
-        {buyData && (
-          <Button
-            variant="outlinedWhite"
             onClick={handleConfirm}
             disabled={isConfirming}
           >
