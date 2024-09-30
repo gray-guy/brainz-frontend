@@ -1,7 +1,13 @@
 import Image from "next/image"
 import { Dialog, Transition } from "@headlessui/react"
 import React, { forwardRef, Fragment, useEffect, useRef, useState } from "react"
-import { InfoIcon, ModalCrossIcon, QuestionIcon, TicketIcon } from "./Svgs"
+import {
+  InfoIcon,
+  ModalCrossIcon,
+  QuestionIcon,
+  TicketIcon,
+  XpIcon,
+} from "./Svgs"
 import { usePrivy, useLogin } from "@privy-io/react-auth"
 import { OptionSelect } from "./OptionSelect"
 import { cn } from "@/lib/utils"
@@ -9,7 +15,7 @@ import { cn } from "@/lib/utils"
 const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
   const { ready, authenticated, user } = usePrivy()
   // TODO: map num values to words
-  const [stage, setStage] = useState(0)
+  const [stage, setStage] = useState(4)
   const { login } = useLogin()
 
   if (user || !showModal || onboardQuiz?.length < 2) return null
@@ -22,7 +28,7 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
 
   const onAfterEnter = () => {
     setTimeout(() => {
-      setStage((prev) => prev + 1)
+      // setStage((prev) => prev + 1)
     }, 3000)
   }
 
@@ -43,7 +49,7 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Dialog.Backdrop className="bg-gradient-backdrop fixed inset-0 z-50 backdrop-blur-sm" />
+          <Dialog.Backdrop className="fixed inset-0 z-50 bg-gradient-backdrop backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 z-[51] overflow-y-auto text-white">
@@ -57,7 +63,7 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="bg-gradient-dialog relative w-full max-w-[450px] overflow-hidden rounded-[20px] border border-secondary p-4 backdrop-blur-sm transition-all md:mx-0 md:max-w-[800px] lg:max-w-[1104px]">
+              <Dialog.Panel className="relative w-full max-w-[450px] overflow-hidden rounded-[20px] border border-secondary bg-gradient-dialog p-4 transition-all md:mx-0 md:max-w-[800px] lg:max-w-[1104px]">
                 {stage === 0 && (
                   <QuestionStep
                     onSubmit={handleQuestionSubmit}
@@ -227,24 +233,81 @@ const Question = forwardRef(({ quizData, selectIdx, handleSelect }, ref) => {
 const PrizeShow = ({ className, prize }) => {
   const isTicket = prize === "ticket"
   return (
-    <div className={className}>
-      <h2 className="mt-12 text-center font-basement text-lg font-bold md:mt-16 md:text-3xl">
-        Congratulations! <br />
-        You won
-        <span className="text-secondary">
-          {isTicket ? " 1 Ticket " : " 300 XP "}
-        </span>
-        !
-      </h2>
-      <div className="relative -left-[42%] -top-6 translate-x-1/2 md:-left-[38%] md:-top-[90px] md:-mb-[75px] lg:-left-[25%]">
+    <div className={cn(className, "min-h-[560px]")}>
+      <div className="relative z-10 mt-12 font-basement font-bold md:mt-16">
+        <h3 className="mb-1 text-center font-basement text-2xl">
+          Congratulations!
+        </h3>
+        <h2 className="text-center text-xl font-bold md:text-4xl">
+          You won
+          <span className="text-secondary">
+            {isTicket ? " 1 Ticket " : " 300 XP "}
+          </span>
+          !
+        </h2>
+      </div>
+      <div className="relative mx-auto mb-4 mt-7 flex h-[348px] w-[448px] items-center justify-center">
+        <GlowSvg className="absolute left-1/2 top-1/2 w-[200%] translate-x-[-50%] translate-y-[-50%]" />
         <Image
+          className="relative z-10"
+          src={"/images/ticket-prize.png"}
+          width={320}
+          height={235}
+          alt="prize"
+        />
+        {/* <div className="absolute left-1/2 top-1/2 aspect-auto-[640/579] w-[640px] translate-x-[-50%] translate-y-[-50%]">
+          <Image src={"/images/ticket-prize-with-glow.png"} fill alt="prize" />
+        </div> */}
+      </div>
+
+      {/* <div className="relative -left-[42%] -top-6 translate-x-1/2 md:-left-[38%] md:-top-[90px] md:-mb-[75px] lg:-left-[25%]"> */}
+      {/* <Image
           src={isTicket ? "/images/ticket-win.png" : "/images/xp-win.png"}
           width={714}
           height={622}
           alt="prize"
-        />
-      </div>
+        /> */}
+      {/* </div> */}
     </div>
+  )
+}
+
+const GlowSvg = ({ className }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1056"
+      height="956"
+      fill="none"
+      className={className}
+      viewBox="0 0 1056 956"
+    >
+      <g filter="url(#filter0_f_5820_11693)">
+        <path fill="#1D82BC" d="M304 304H752V652H304z"></path>
+      </g>
+      <defs>
+        <filter
+          id="filter0_f_5820_11693"
+          width="1056"
+          height="956"
+          x="0"
+          y="0"
+          colorInterpolationFilters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
+          <feBlend
+            in="SourceGraphic"
+            in2="BackgroundImageFix"
+            result="shape"
+          ></feBlend>
+          <feGaussianBlur
+            result="effect1_foregroundBlur_5820_11693"
+            stdDeviation="152"
+          ></feGaussianBlur>
+        </filter>
+      </defs>
+    </svg>
   )
 }
 
@@ -286,7 +349,7 @@ const RewardStep = ({ onRewardsClick }) => {
           />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            className="animate-slowSpin absolute left-0 top-0 h-full w-full"
+            className="absolute left-0 top-0 h-full w-full animate-slowSpin"
             src={"/images/gold-ring.png"}
             alt="gift box"
           />
@@ -308,7 +371,7 @@ const ResultStep = ({ onLoginClick }) => {
   return (
     <>
       <CommonHeader />
-      <div className="group mx-auto mb-8 mt-10 max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-4 text-[#000] transition-all duration-500 ease-in-out hover:scale-105 hover:bg-primary hover:text-white md:mb-14 md:mt-16 md:flex md:p-8">
+      <div className="group mx-auto mb-8 mt-10 max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-4 text-[#000] transition-all duration-500 ease-in-out lg:hover:scale-105 hover:bg-primary hover:text-white md:mb-14 md:mt-16 md:flex md:p-8">
         <p className="text-center font-basement text-lg font-bold md:text-3xl">
           Claim your rewards
         </p>
@@ -317,8 +380,8 @@ const ResultStep = ({ onLoginClick }) => {
           className="mt-3 flex items-center justify-center gap-7 md:mt-0"
         >
           <div className="flex items-center gap-3">
-            <div className="text-black flex size-[42px] items-center justify-center rounded-full bg-gray-100/30 font-basement font-bold group-hover:bg-[#EFB832]/20 group-hover:text-secondary">
-              Xp
+            <div className="text-black  flex size-[42px] items-center justify-center rounded-full bg-[#8B7E11]/60 font-basement font-bold text-[#3F3908] group-hover:bg-[#EFB832]/20 group-hover:text-secondary">
+              <XpIcon className="group-hover:[&_.xp-text]:fill-[#9A8C1B]" />
             </div>
             <div>
               <p className="text-xl font-bold leading-none">300</p>
@@ -327,11 +390,11 @@ const ResultStep = ({ onLoginClick }) => {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center rounded-full bg-gray-100/30 p-2 group-hover:bg-danger-100/20">
+            <div className="flex items-center justify-center rounded-full bg-danger-100/20 p-2">
               <TicketIcon
                 width="26"
                 height="26"
-                className="text-black group-hover:text-danger-100"
+                className="text-black text-danger-100"
               />
             </div>
             <div>
@@ -348,7 +411,7 @@ const ResultStep = ({ onLoginClick }) => {
 const OnboardCard = ({ image, text, className }) => (
   <div
     className={cn(
-      "bg-gradient-onboard-card shadow-onboardCard max-w-[300px] rounded-[8px] border border-secondary-100 p-[10px]",
+      "max-w-[300px] rounded-[8px] border border-secondary-100 bg-gradient-onboard-card p-[10px] shadow-onboardCard",
       className
     )}
   >
