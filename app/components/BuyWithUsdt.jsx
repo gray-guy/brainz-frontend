@@ -34,13 +34,9 @@ const BuyWithUsdt = ({
       setEncodedPrice("")
       return
     }
-    const priceStr = String(price)
+    const priceStr = price.toFixed(2) // only for USDT
     const paddedCode = String(buyData.paymentCode).padStart(4, "0")
-    if (priceStr.includes(".")) {
-      setEncodedPrice(priceStr + paddedCode)
-    } else {
-      setEncodedPrice(priceStr + "." + paddedCode)
-    }
+    setEncodedPrice(priceStr + paddedCode)
   }, [price, buyData])
 
   useEffect(() => {
