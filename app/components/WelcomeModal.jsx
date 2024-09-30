@@ -13,6 +13,7 @@ import { motion } from "framer-motion"
 import { OptionSelect } from "./OptionSelect"
 import { cn } from "@/lib/utils"
 import { PointConfetti } from "./PointConfetti"
+import { PrizeShow } from "./PrizeShow"
 
 const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
   const { ready, authenticated, user } = usePrivy()
@@ -80,15 +81,22 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
                   />
                 )}
                 {stage === 1 && (
-                  <PrizeShow prize="ticket" onComplete={onComplete} />
+                  <PrizeShow
+                    amount={1}
+                    prize="ticket"
+                    onComplete={onComplete}
+                  />
                 )}
                 {stage === 2 && (
-                  <motion.div animate={{ y: ["50%", 0], opacity: [0, 100] }} transition={{duration: 0.4}}>
+                  <motion.div
+                    animate={{ y: ["50%", 0], opacity: [0, 100] }}
+                    transition={{ duration: 0.4 }}
+                  >
                     <RewardStep onRewardsClick={handleRewardsClick} />
                   </motion.div>
                 )}
                 {stage === 3 && (
-                  <PrizeShow prize="xp" onComplete={onComplete} />
+                  <PrizeShow amount={300} prize="xp" onComplete={onComplete} />
                 )}
                 {stage === 4 && (
                   <motion.div animate={{ y: ["50%", 0], opacity: [0, 100] }}>
@@ -227,108 +235,6 @@ const Question = forwardRef(({ quizData, selectIdx, handleSelect }, ref) => {
   )
 })
 Question.displayName = "Question"
-
-const PrizeShow = ({ className, prize, onComplete }) => {
-  const isTicket = prize === "ticket"
-  return (
-    <div className={cn(className, "min-h-[560px]")}>
-      <motion.div
-        animate={{ y: [90, 0] }}
-        transition={{ delay: 0.1 }}
-        className="relative z-20 mt-12 font-basement font-bold md:mt-16"
-      >
-        <h3 className="mb-1 text-center font-basement text-2xl">
-          Congratulations!
-        </h3>
-        <h2 className="text-center text-xl font-bold md:text-4xl">
-          You won
-          <span className="text-secondary">
-            {isTicket ? " 1 Ticket " : " 300 XP "}
-          </span>
-          !
-        </h2>
-      </motion.div>
-      <PointConfetti
-        tweenDuration={1500}
-        initialVelocityX={5}
-        onConfettiComplete={onComplete}
-        gravity={0.1}
-        recycle={false}
-      />
-      <motion.div
-        animate={{
-          opacity: [0.4, 0.8, 1, 1],
-          scale: [0.8, 1.25, 1],
-        }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="relative z-10 mx-auto mb-4 mt-7 flex h-[348px] w-[448px] items-center justify-center"
-      >
-        {isTicket ? (
-          <>
-            <GlowSvg className="absolute left-1/2 top-1/2 w-[200%] translate-x-[-50%] translate-y-[-50%]" />
-            <Image
-              className="relative z-20"
-              src={"/images/ticket-prize.png"}
-              width={320}
-              height={235}
-              alt="prize"
-            />
-          </>
-        ) : (
-          <>
-            <GlowSvg className="absolute left-1/2 top-1/2 w-[200%] translate-x-[-50%] translate-y-[-50%]" />
-            <Image
-              className="relative z-20"
-              src={"/images/xpnce-prize.png"}
-              width={384}
-              height={277}
-              alt="prize"
-            />
-          </>
-        )}
-      </motion.div>
-    </div>
-  )
-}
-
-const GlowSvg = ({ className }) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1056"
-      height="956"
-      fill="none"
-      className={className}
-      viewBox="0 0 1056 956"
-    >
-      <g filter="url(#filter0_f_5820_11693)">
-        <path fill="#1D82BC" d="M304 304H752V652H304z"></path>
-      </g>
-      <defs>
-        <filter
-          id="filter0_f_5820_11693"
-          width="1056"
-          height="956"
-          x="0"
-          y="0"
-          colorInterpolationFilters="sRGB"
-          filterUnits="userSpaceOnUse"
-        >
-          <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
-          <feGaussianBlur
-            result="effect1_foregroundBlur_5820_11693"
-            stdDeviation="152"
-          ></feGaussianBlur>
-        </filter>
-      </defs>
-    </svg>
-  )
-}
 
 const RewardStep = ({ onRewardsClick }) => {
   return (
