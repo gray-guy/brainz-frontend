@@ -62,8 +62,10 @@ export const Dashboard = ({
     router.push(`/session/${id}`)
   }
 
+  const {setShowWelcome} = useUser()
   return (
     <div className="bg-primary text-white">
+      <button onClick={() => setShowWelcome(true)}>open</button>
       {nextGame && session ? (
         <div className="hidden w-full rounded-[10px] bg-primary-350 pb-5 lg:block">
           <div className="flex flex-wrap items-center justify-between gap-14 px-8 pt-4">

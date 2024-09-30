@@ -56,7 +56,7 @@ const UserProvider = ({ children }) => {
   }, [user])
 
   return (
-    <UserContext.Provider value={{ user, setUser, refetchUser }}>
+    <UserContext.Provider value={{ user, setUser, refetchUser, setShowWelcome }}>
       {children}
       <TermsConditionsModal
         isOpen={!!user && !user.hasAcceptedToc}

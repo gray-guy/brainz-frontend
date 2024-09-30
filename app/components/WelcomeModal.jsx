@@ -9,14 +9,24 @@ import {
   XpIcon,
 } from "./Svgs"
 import { usePrivy, useLogin } from "@privy-io/react-auth"
+import { motion } from "framer-motion"
 import { OptionSelect } from "./OptionSelect"
 import { cn } from "@/lib/utils"
 
 const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
   const { ready, authenticated, user } = usePrivy()
   // TODO: map num values to words
-  const [stage, setStage] = useState(4)
+  const [stage, setStage] = useState(0)
   const { login } = useLogin()
+
+  console.log(stage)
+  useEffect(() => {
+    if (stage === 1 || stage === 3) {
+      setTimeout(() => {
+        setStage((prev) => prev + 1)
+      }, 3000)
+    }
+  }, [stage])
 
   if (user || !showModal || onboardQuiz?.length < 2) return null
 
@@ -24,12 +34,6 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
   const handleAuth = () => {
     setShowModal(false)
     login()
-  }
-
-  const onAfterEnter = () => {
-    setTimeout(() => {
-      // setStage((prev) => prev + 1)
-    }, 3000)
   }
 
   const handleQuestionSubmit = () => {
@@ -71,15 +75,15 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
                     handleAuth={handleAuth}
                   />
                 )}
-                <TransitionNext show={stage === 1} onAfterEnter={onAfterEnter}>
-                  <PrizeShow prize="ticket" />
-                </TransitionNext>
+                {/* <TransitionNext show={stage === 1} onAfterEnter={onAfterEnter}> */}
+                {stage === 1 && <PrizeShow prize="ticket" />}
+                {/* </TransitionNext> */}
                 <TransitionNext show={stage === 2}>
                   <RewardStep onRewardsClick={handleRewardsClick} />
                 </TransitionNext>
-                <TransitionNext show={stage === 3} onAfterEnter={onAfterEnter}>
-                  <PrizeShow prize="xperience" />
-                </TransitionNext>
+                {/* <TransitionNext show={stage === 3} onAfterEnter={onAfterEnter}>
+                </TransitionNext> */}
+                {stage === 3 && <PrizeShow prize="xp" />}
                 <TransitionNext show={stage === 4}>
                   <ResultStep onLoginClick={handleAuth} />
                 </TransitionNext>
@@ -102,10 +106,10 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
 const TransitionNext = ({ show, children, onAfterEnter, onAfterLeave }) => (
   <Transition
     show={show}
-    enter="duration-500 ease-in-out"
+    enter="duration-300 ease-in-out"
     enterFrom="opacity-0 translate-y-1/2"
     enterTo="opacity-100 translate-y-0"
-    leave="duration-300"
+    leave="duration-200"
     leaveFrom="opacity-100 translate-y-0"
     leaveTo="opacity-0 -translate-y-1/2"
     afterEnter={onAfterEnter}
@@ -234,7 +238,11 @@ const PrizeShow = ({ className, prize }) => {
   const isTicket = prize === "ticket"
   return (
     <div className={cn(className, "min-h-[560px]")}>
-      <div className="relative z-10 mt-12 font-basement font-bold md:mt-16">
+      <motion.div
+        animate={{ y: [90, 0] }}
+        transition={{ delay: 0.1 }}
+        className="relative z-10 mt-12 font-basement font-bold md:mt-16"
+      >
         <h3 className="mb-1 text-center font-basement text-2xl">
           Congratulations!
         </h3>
@@ -245,29 +253,39 @@ const PrizeShow = ({ className, prize }) => {
           </span>
           !
         </h2>
-      </div>
-      <div className="relative mx-auto mb-4 mt-7 flex h-[348px] w-[448px] items-center justify-center">
-        <GlowSvg className="absolute left-1/2 top-1/2 w-[200%] translate-x-[-50%] translate-y-[-50%]" />
-        <Image
-          className="relative z-10"
-          src={"/images/ticket-prize.png"}
-          width={320}
-          height={235}
-          alt="prize"
-        />
-        {/* <div className="absolute left-1/2 top-1/2 aspect-auto-[640/579] w-[640px] translate-x-[-50%] translate-y-[-50%]">
-          <Image src={"/images/ticket-prize-with-glow.png"} fill alt="prize" />
-        </div> */}
-      </div>
-
-      {/* <div className="relative -left-[42%] -top-6 translate-x-1/2 md:-left-[38%] md:-top-[90px] md:-mb-[75px] lg:-left-[25%]"> */}
-      {/* <Image
-          src={isTicket ? "/images/ticket-win.png" : "/images/xp-win.png"}
-          width={714}
-          height={622}
-          alt="prize"
-        /> */}
-      {/* </div> */}
+      </motion.div>
+      <motion.div
+        animate={{
+          opacity: [0.4, 0.8, 1, 1],
+          scale: [0.8, 1.25, 1],
+        }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="relative mx-auto mb-4 mt-7 flex h-[348px] w-[448px] items-center justify-center"
+      >
+        {isTicket ? (
+          <>
+            <GlowSvg className="absolute left-1/2 top-1/2 w-[200%] translate-x-[-50%] translate-y-[-50%]" />
+            <Image
+              className="relative z-10"
+              src={"/images/ticket-prize.png"}
+              width={320}
+              height={235}
+              alt="prize"
+            />
+          </>
+        ) : (
+          <>
+            <GlowSvg className="absolute left-1/2 top-1/2 w-[200%] translate-x-[-50%] translate-y-[-50%]" />
+            <Image
+              className="relative z-10"
+              src={"/images/xpnce-prize.png"}
+              width={384}
+              height={277}
+              alt="prize"
+            />
+          </>
+        )}
+      </motion.div>
     </div>
   )
 }
@@ -371,7 +389,7 @@ const ResultStep = ({ onLoginClick }) => {
   return (
     <>
       <CommonHeader />
-      <div className="group mx-auto mb-8 mt-10 max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-4 text-[#000] transition-all duration-500 ease-in-out lg:hover:scale-105 hover:bg-primary hover:text-white md:mb-14 md:mt-16 md:flex md:p-8">
+      <div className="group mx-auto mb-8 mt-10 max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-4 text-[#000] transition-all duration-500 ease-in-out hover:bg-primary hover:text-white md:mb-14 md:mt-16 md:flex md:p-8 lg:hover:scale-105">
         <p className="text-center font-basement text-lg font-bold md:text-3xl">
           Claim your rewards
         </p>
@@ -380,7 +398,7 @@ const ResultStep = ({ onLoginClick }) => {
           className="mt-3 flex items-center justify-center gap-7 md:mt-0"
         >
           <div className="flex items-center gap-3">
-            <div className="text-black  flex size-[42px] items-center justify-center rounded-full bg-[#8B7E11]/60 font-basement font-bold text-[#3F3908] group-hover:bg-[#EFB832]/20 group-hover:text-secondary">
+            <div className="text-black flex size-[42px] items-center justify-center rounded-full bg-[#8B7E11]/60 font-basement font-bold text-[#3F3908] group-hover:bg-[#EFB832]/20 group-hover:text-secondary">
               <XpIcon className="group-hover:[&_.xp-text]:fill-[#9A8C1B]" />
             </div>
             <div>
