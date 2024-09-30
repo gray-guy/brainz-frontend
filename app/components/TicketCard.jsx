@@ -492,7 +492,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                   <div className="relative">
                     {buyMethod !== "" && (
                       <button
-                        className="absolute left-5 top-1/2 -translate-y-1/2 font-basement hover:text-secondary"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 font-basement hover:text-secondary"
                         onClick={() => setBuyMethod("")}
                       >
                         Back
@@ -501,6 +501,17 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                     <h1 className="font-basement text-[26px] font-bold md:text-4xl">
                       Buy
                     </h1>
+
+                    <button
+                      onClick={closeModal}
+                      className="absolute right-0 top-1/2 -translate-y-1/2"
+                    >
+                      <ModalCrossIcon
+                        className={
+                          "cursor-pointer text-white hover:text-secondary"
+                        }
+                      />
+                    </button>
                   </div>
 
                   {buyMethod === "crypto" ? (
@@ -634,16 +645,6 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                       </button>
                     </div>
                   )}
-                  <button
-                    onClick={closeModal}
-                    className="absolute right-[50px] top-[38px]"
-                  >
-                    <ModalCrossIcon
-                      className={
-                        "cursor-pointer text-white hover:text-secondary"
-                      }
-                    />
-                  </button>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
@@ -678,8 +679,15 @@ const BuyWithCredit = ({
 
   if (isPurchased) {
     return (
-      <div className="flex min-h-[268px] flex-col items-center font-basement">
-        <p className="mt-auto text-2xl lg:text-4xl">Purchase Successful</p>
+      <div className="flex min-h-[268px] flex-col items-center pt-3 font-basement">
+        <Image
+          src="/images/success-check-b.png"
+          width={160}
+          height={160}
+          alt="rewards logo"
+        />
+
+        <p className="mb-7 mt-auto text-2xl lg:text-4xl">Purchase Successful</p>
         <Button
           variant="outlinedWhite"
           className="mb-3 mt-auto"
@@ -710,19 +718,17 @@ const BuyWithCredit = ({
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-secondary border-s-secondary/20" />
         </div>
       ) : (
-        <div className="my-5 w-full items-center justify-center text-left font-basement sm:grid">
-          <p className="text-sm md:text-lg">Amount</p>
-          <p className="mt-1 flex items-center gap-2">
-            <Image
-              src="/images/usdc-logo.png"
-              width={40}
-              height={40}
-              alt="rewards logo"
-            />
-            <span className="font-basement text-xl font-bold md:text-2xl">
-              {price}
-            </span>
-          </p>
+        <div className="my-5 flex w-full items-center justify-center text-left font-basement">
+          <p className="text-xl font-bold md:text-2xl">Amount:</p>
+          <span className="ml-3 mr-2 font-basement text-xl font-bold md:text-2xl">
+            {price}
+          </span>
+          <Image
+            src="/images/usdc-logo.png"
+            width={40}
+            height={40}
+            alt="rewards logo"
+          />
         </div>
       )}
 

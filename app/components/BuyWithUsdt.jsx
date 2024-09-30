@@ -34,13 +34,9 @@ const BuyWithUsdt = ({
       setEncodedPrice("")
       return
     }
-    const priceStr = String(price)
+    const priceStr = price.toFixed(2) // only for USDT
     const paddedCode = String(buyData.paymentCode).padStart(4, "0")
-    if (priceStr.includes(".")) {
-      setEncodedPrice(priceStr + paddedCode)
-    } else {
-      setEncodedPrice(priceStr + "." + paddedCode)
-    }
+    setEncodedPrice(priceStr + paddedCode)
   }, [price, buyData])
 
   useEffect(() => {
@@ -206,15 +202,6 @@ const BuyWithUsdt = ({
       )}
 
       <div className="mb-3 mt-[48px] flex flex-col-reverse justify-center gap-5 sm:flex-row sm:gap-[34px]">
-        {buyData && (
-          <Button
-            variant="outlinedWhite"
-            onClick={handleCancel}
-            disabled={isCanceling}
-          >
-            Close buy request
-          </Button>
-        )}
         {buyData && (
           <Button
             variant="outlinedWhite"

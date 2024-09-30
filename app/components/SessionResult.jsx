@@ -140,6 +140,11 @@ export const SessionResult = ({
     }
     setSpinning(true)
     const winningPrize = await getWinningPrize()
+    if (!winningPrize) {
+      setSpinning(false)
+      return
+    }
+
     let winningMessage = ""
     let winningItem = "noPrize"
     let winningIndex = 0
