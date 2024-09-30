@@ -31,7 +31,7 @@ const discounts = {
 }
 
 const cardBtnClasses =
-  "flex min-w-[210px] h-[120px] flex-col items-center rounded-lg border border-secondary py-4 px-3 hover:outline hover:outline-1 hover:outline-secondary disabled:opacity-70"
+  "flex min-w-[210px] h-[125px] flex-col items-center rounded-lg border border-secondary py-4 px-3 hover:outline hover:outline-1 hover:outline-secondary disabled:opacity-70"
 
 export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
   const {
@@ -498,8 +498,13 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                         Back
                       </button>
                     )}
-                    <h1 className="font-basement text-[26px] font-bold md:text-4xl">
-                      Buy
+                    <h1 className="font-basement text-[24px] font-bold md:text-3xl">
+                      Buy{" "}
+                      <span className="hidden sm:inline-block">
+                        {ticketAmount > 0 && `${ticketAmount} Ticket(s)`}{" "}
+                        {ticketAmount > 0 && diamondAmount > 0 && "and"}
+                        {diamondAmount > 0 && `${diamondAmount} Diamond(s)`}
+                      </span>
                     </h1>
 
                     <button
@@ -551,34 +556,36 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                     />
                   ) : (
                     <div className="mb-10 mt-14 flex flex-col gap-4 font-basement md:flex-row">
-                      <button
-                        onClick={() => setBuyMethod("crypto")}
-                        className={cardBtnClasses}
-                      >
-                        <span className="flex w-full items-center justify-center">
-                          <Image
-                            src="/images/usdt-logo.png"
-                            width={40}
-                            height={40}
-                            alt="usdt logo"
-                          />
-                          <Image
-                            src="/images/eth-logo.webp"
-                            alt="wallet"
-                            width={40}
-                            height={40}
-                          />
-                          <Image
-                            src="/images/bnb-logo.png"
-                            width={40}
-                            height={40}
-                            alt="bnb logo"
-                          />
-                        </span>
-                        <span className="text:lg mt-auto w-full text-center lg:text-xl">
-                          Buy with Crypto
-                        </span>
-                      </button>
+                      {!isPrivyWallet && (
+                        <button
+                          onClick={() => setBuyMethod("crypto")}
+                          className={cardBtnClasses}
+                        >
+                          <span className="flex w-full items-center justify-center">
+                            <Image
+                              src="/images/usdt-logo.png"
+                              width={40}
+                              height={40}
+                              alt="usdt logo"
+                            />
+                            <Image
+                              src="/images/eth-logo.webp"
+                              alt="wallet"
+                              width={40}
+                              height={40}
+                            />
+                            <Image
+                              src="/images/bnb-logo.png"
+                              width={40}
+                              height={40}
+                              alt="bnb logo"
+                            />
+                          </span>
+                          <p className="text:lg mt-1 w-full text-center lg:text-xl">
+                            Use Connected Wallet
+                          </p>
+                        </button>
+                      )}
 
                       {/* <form
                         id="checkout-form"
@@ -621,13 +628,10 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                             height={40}
                             alt="rewards logo"
                           />
-                          <p className="font-basement text-xl font-bold">
-                            {price}
-                          </p>
                         </div>
-                        <span className="text:lg mt-auto lg:text-xl">
-                          Buy with Rewards
-                        </span>
+                        <p className="text:lg mt-auto lg:text-xl">
+                          Use Platform Balance
+                        </p>
                       </button>
                       <button
                         onClick={() => setBuyMethod("usdt")}
@@ -640,7 +644,7 @@ export const TicketCard = ({ ticketAmount, diamondAmount, price, id }) => {
                           alt="usdt logo"
                         />
                         <span className="text:lg mt-auto lg:text-xl">
-                          Deposit USDT
+                          Buy with Crypto
                         </span>
                       </button>
                     </div>

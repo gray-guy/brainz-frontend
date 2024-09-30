@@ -3,7 +3,7 @@ import QRCode from "qrcode.react"
 import { toast } from "react-toastify"
 import { apiCall } from "@/lib/utils"
 import { Button } from "./Button"
-import { TextCopyIcon } from "./Svgs"
+import { TextCopyIcon, WarningIcon } from "./Svgs"
 
 const BuyWithUsdt = ({
   packId,
@@ -103,9 +103,9 @@ const BuyWithUsdt = ({
   }
 
   return (
-    <div>
+    <div className="font-basement">
       <div className="flex justify-center">
-        <h2 className="mt-10 max-w-[458px] font-basement text-lg md:text-2xl">
+        <h2 className="mt-10 max-w-[458px] text-lg md:text-2xl">
           You are purchasing
           {ticketAmount > 0 && (
             <span className="font-bold"> {ticketAmount} tickets </span>
@@ -123,7 +123,7 @@ const BuyWithUsdt = ({
       ) : (
         <div
           style={{ gridTemplateColumns: "2fr 1fr" }}
-          className="mt-5 w-full justify-between text-left font-basement sm:grid"
+          className="mt-5 w-full justify-between text-left sm:grid"
         >
           <div className="text-lg md:text-xl">
             <p className="mb-5 font-bold text-secondary">
@@ -165,21 +165,6 @@ const BuyWithUsdt = ({
               renderAs={"svg"}
             />
           </div>
-          <div className="my-3">
-            <p className="mb-1 text-sm md:text-lg">USDT Address</p>
-            <p className="flex items-center gap-2 md:text-lg">
-              <span className="inline-block rounded-[5px] bg-primary px-3 py-1">
-                {usdtAddress.slice(0, 10)}...{usdtAddress.slice(-10)}
-              </span>
-              <button onClick={() => handleCopy(usdtAddress)}>
-                <TextCopyIcon
-                  className="text-grey-200 hover:text-white"
-                  height="30"
-                  width="30"
-                />
-              </button>
-            </p>
-          </div>
           <div className="col-span-2">
             <p className="mb-1 text-sm md:text-lg">Send to:</p>
             <p className="flex items-center gap-2 md:text-lg">
@@ -200,6 +185,13 @@ const BuyWithUsdt = ({
           </div>
         </div>
       )}
+      <p className="mt-6 flex items-center gap-5">
+        <WarningIcon width="50" height="50" className="hidden sm:block" />
+        <span className="max-w-[370px] text-left sm:text-justify text-secondary">
+          Make sure to send the <b>exact amount</b> as shown above and to send
+          over the <b>BSC network</b>. Otherwise you will lose your funds.
+        </span>
+      </p>
 
       <div className="mb-3 mt-[48px] flex flex-col-reverse justify-center gap-5 sm:flex-row sm:gap-[34px]">
         {buyData && (
