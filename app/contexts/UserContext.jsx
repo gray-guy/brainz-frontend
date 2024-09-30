@@ -41,7 +41,7 @@ const UserProvider = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    // if (sessionStorage.getItem("shownWelcome")) return
+    if (sessionStorage.getItem("shownWelcome")) return
     setTimeout(() => {
       setShowWelcome(true)
       sessionStorage.setItem("shownWelcome", true)

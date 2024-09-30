@@ -12,6 +12,7 @@ import { usePrivy, useLogin } from "@privy-io/react-auth"
 import { motion } from "framer-motion"
 import { OptionSelect } from "./OptionSelect"
 import { cn } from "@/lib/utils"
+import { PointConfetti } from "./PointConfetti"
 
 const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
   const { ready, authenticated, user } = usePrivy()
@@ -19,12 +20,11 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
   const [stage, setStage] = useState(0)
   const { login } = useLogin()
 
-  console.log(stage)
   useEffect(() => {
     if (stage === 1 || stage === 3) {
       setTimeout(() => {
         setStage((prev) => prev + 1)
-      }, 3000)
+      }, 1000)
     }
   }, [stage])
 
@@ -75,25 +75,26 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
                     handleAuth={handleAuth}
                   />
                 )}
-                {/* <TransitionNext show={stage === 1} onAfterEnter={onAfterEnter}> */}
                 {stage === 1 && <PrizeShow prize="ticket" />}
-                {/* </TransitionNext> */}
-                <TransitionNext show={stage === 2}>
-                  <RewardStep onRewardsClick={handleRewardsClick} />
-                </TransitionNext>
-                {/* <TransitionNext show={stage === 3} onAfterEnter={onAfterEnter}>
-                </TransitionNext> */}
+                {stage === 2 && (
+                  <motion.div animate={{ y: ["50%", 0], opacity: [0, 100] }}>
+                    <RewardStep onRewardsClick={handleRewardsClick} />
+                  </motion.div>
+                )}
                 {stage === 3 && <PrizeShow prize="xp" />}
-                <TransitionNext show={stage === 4}>
-                  <ResultStep onLoginClick={handleAuth} />
-                </TransitionNext>
-
-                <button
-                  className="absolute right-5 top-5 inline-block cursor-pointer bg-[#2B506A] p-2 hover:text-secondary"
-                  onClick={() => setShowModal(false)}
-                >
-                  <ModalCrossIcon width="16" height="16" />
-                </button>
+                {stage === 4 && (
+                  <motion.div animate={{ y: ["50%", 0], opacity: [0, 100] }}>
+                    <ResultStep onLoginClick={handleAuth} />
+                  </motion.div>
+                )}
+                {(stage === 0 || stage === 4) && (
+                  <button
+                    className="absolute right-5 top-5 inline-block cursor-pointer bg-[#2B506A] p-2 hover:text-secondary"
+                    onClick={() => setShowModal(false)}
+                  >
+                    <ModalCrossIcon width="16" height="16" />
+                  </button>
+                )}
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -102,22 +103,6 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
     </Transition>
   )
 }
-
-const TransitionNext = ({ show, children, onAfterEnter, onAfterLeave }) => (
-  <Transition
-    show={show}
-    enter="duration-300 ease-in-out"
-    enterFrom="opacity-0 translate-y-1/2"
-    enterTo="opacity-100 translate-y-0"
-    leave="duration-200"
-    leaveFrom="opacity-100 translate-y-0"
-    leaveTo="opacity-0 -translate-y-1/2"
-    afterEnter={onAfterEnter}
-    afterLeave={onAfterLeave}
-  >
-    {children}
-  </Transition>
-)
 
 const CommonHeader = ({ className }) => (
   <>
@@ -233,6 +218,7 @@ const Question = forwardRef(({ quizData, selectIdx, handleSelect }, ref) => {
     </div>
   )
 })
+Question.displayName = "Question"
 
 const PrizeShow = ({ className, prize }) => {
   const isTicket = prize === "ticket"
@@ -241,7 +227,7 @@ const PrizeShow = ({ className, prize }) => {
       <motion.div
         animate={{ y: [90, 0] }}
         transition={{ delay: 0.1 }}
-        className="relative z-10 mt-12 font-basement font-bold md:mt-16"
+        className="relative z-[11] mt-12 font-basement font-bold md:mt-16"
       >
         <h3 className="mb-1 text-center font-basement text-2xl">
           Congratulations!
@@ -254,6 +240,12 @@ const PrizeShow = ({ className, prize }) => {
           !
         </h2>
       </motion.div>
+      <PointConfetti
+        tweenDuration={1500}
+        initialVelocityX={5}
+        gravity={0.1}
+        recycle={false}
+      />
       <motion.div
         animate={{
           opacity: [0.4, 0.8, 1, 1],
@@ -266,7 +258,7 @@ const PrizeShow = ({ className, prize }) => {
           <>
             <GlowSvg className="absolute left-1/2 top-1/2 w-[200%] translate-x-[-50%] translate-y-[-50%]" />
             <Image
-              className="relative z-10"
+              className="relative z-20"
               src={"/images/ticket-prize.png"}
               width={320}
               height={235}
@@ -277,7 +269,7 @@ const PrizeShow = ({ className, prize }) => {
           <>
             <GlowSvg className="absolute left-1/2 top-1/2 w-[200%] translate-x-[-50%] translate-y-[-50%]" />
             <Image
-              className="relative z-10"
+              className="relative z-20"
               src={"/images/xpnce-prize.png"}
               width={384}
               height={277}
