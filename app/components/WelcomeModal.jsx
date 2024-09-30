@@ -20,13 +20,7 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
   const [stage, setStage] = useState(0)
   const { login } = useLogin()
 
-  useEffect(() => {
-    if (stage === 1 || stage === 3) {
-      setTimeout(() => {
-        setStage((prev) => prev + 1)
-      }, 1000)
-    }
-  }, [stage])
+  const isPrizeStage = stage === 1 || stage === 3
 
   if (user || !showModal || onboardQuiz?.length < 2) return null
 
@@ -37,9 +31,12 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
   }
 
   const handleQuestionSubmit = () => {
-    setTimeout(() => setStage(1), 1500)
+    setTimeout(() => setStage(1), 2500)
   }
   const handleRewardsClick = () => setStage(3)
+  const onComplete = () => {
+    setStage((prev) => prev + 1)
+  }
 
   return (
     <Transition appear show={true} as={Fragment}>
@@ -67,7 +64,14 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="relative w-full max-w-[450px] overflow-hidden rounded-[20px] border border-secondary bg-gradient-dialog p-4 transition-all md:mx-0 md:max-w-[800px] lg:max-w-[1104px]">
+              <Dialog.Panel
+                className={cn(
+                  "relative w-full max-w-[450px] overflow-hidden rounded-[20px] border border-secondary p-4 transition-all md:mx-0 md:max-w-[800px] lg:max-w-[1104px]",
+                  isPrizeStage
+                    ? "bg-[#0F233C]"
+                    : "bg-gradient-dialog backdrop-blur-sm"
+                )}
+              >
                 {stage === 0 && (
                   <QuestionStep
                     onSubmit={handleQuestionSubmit}
@@ -75,13 +79,17 @@ const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
                     handleAuth={handleAuth}
                   />
                 )}
-                {stage === 1 && <PrizeShow prize="ticket" />}
+                {stage === 1 && (
+                  <PrizeShow prize="ticket" onComplete={onComplete} />
+                )}
                 {stage === 2 && (
-                  <motion.div animate={{ y: ["50%", 0], opacity: [0, 100] }}>
+                  <motion.div animate={{ y: ["50%", 0], opacity: [0, 100] }} transition={{duration: 0.4}}>
                     <RewardStep onRewardsClick={handleRewardsClick} />
                   </motion.div>
                 )}
-                {stage === 3 && <PrizeShow prize="xp" />}
+                {stage === 3 && (
+                  <PrizeShow prize="xp" onComplete={onComplete} />
+                )}
                 {stage === 4 && (
                   <motion.div animate={{ y: ["50%", 0], opacity: [0, 100] }}>
                     <ResultStep onLoginClick={handleAuth} />
@@ -220,14 +228,14 @@ const Question = forwardRef(({ quizData, selectIdx, handleSelect }, ref) => {
 })
 Question.displayName = "Question"
 
-const PrizeShow = ({ className, prize }) => {
+const PrizeShow = ({ className, prize, onComplete }) => {
   const isTicket = prize === "ticket"
   return (
     <div className={cn(className, "min-h-[560px]")}>
       <motion.div
         animate={{ y: [90, 0] }}
         transition={{ delay: 0.1 }}
-        className="relative z-[11] mt-12 font-basement font-bold md:mt-16"
+        className="relative z-20 mt-12 font-basement font-bold md:mt-16"
       >
         <h3 className="mb-1 text-center font-basement text-2xl">
           Congratulations!
@@ -243,6 +251,7 @@ const PrizeShow = ({ className, prize }) => {
       <PointConfetti
         tweenDuration={1500}
         initialVelocityX={5}
+        onConfettiComplete={onComplete}
         gravity={0.1}
         recycle={false}
       />
@@ -252,7 +261,7 @@ const PrizeShow = ({ className, prize }) => {
           scale: [0.8, 1.25, 1],
         }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="relative mx-auto mb-4 mt-7 flex h-[348px] w-[448px] items-center justify-center"
+        className="relative z-10 mx-auto mb-4 mt-7 flex h-[348px] w-[448px] items-center justify-center"
       >
         {isTicket ? (
           <>
@@ -381,14 +390,12 @@ const ResultStep = ({ onLoginClick }) => {
   return (
     <>
       <CommonHeader />
-      <div className="group mx-auto mb-8 mt-10 max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-4 text-[#000] transition-all duration-500 ease-in-out hover:bg-primary hover:text-white md:mb-14 md:mt-16 md:flex md:p-8 lg:hover:scale-105">
+      <div className="group relative mx-auto mb-8 mt-10 max-w-[800px] cursor-pointer justify-between rounded-[6px] bg-secondary p-4 text-[#000] transition-all duration-500 ease-in-out hover:bg-primary hover:text-white md:mb-14 md:mt-16 md:flex md:p-8 lg:hover:scale-105">
+        <button className="absolute inset-0" onClick={onLoginClick} />
         <p className="text-center font-basement text-lg font-bold md:text-3xl">
           Claim your rewards
         </p>
-        <div
-          onClick={onLoginClick}
-          className="mt-3 flex items-center justify-center gap-7 md:mt-0"
-        >
+        <div className="mt-3 flex items-center justify-center gap-7 md:mt-0">
           <div className="flex items-center gap-3">
             <div className="text-black flex size-[42px] items-center justify-center rounded-full bg-[#8B7E11]/60 font-basement font-bold text-[#3F3908] group-hover:bg-[#EFB832]/20 group-hover:text-secondary">
               <XpIcon className="group-hover:[&_.xp-text]:fill-[#9A8C1B]" />
