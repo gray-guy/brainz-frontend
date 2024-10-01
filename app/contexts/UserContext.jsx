@@ -41,7 +41,7 @@ const UserProvider = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    if (sessionStorage.getItem("shownWelcome")) return
+    // if (sessionStorage.getItem("shownWelcome")) return
     setTimeout(() => {
       setShowWelcome(true)
       sessionStorage.setItem("shownWelcome", true)
@@ -49,14 +49,13 @@ const UserProvider = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    if (user) {
-      setShowWelcome(false)
-      sessionStorage.setItem("shownWelcome", true)
-    }
+    if (user) setShowWelcome(false)
   }, [user])
 
   return (
-    <UserContext.Provider value={{ user, setUser, refetchUser, setShowWelcome }}>
+    <UserContext.Provider
+      value={{ user, setUser, refetchUser, setShowWelcome }}
+    >
       {children}
       <TermsConditionsModal
         isOpen={!!user && !user.hasAcceptedToc}

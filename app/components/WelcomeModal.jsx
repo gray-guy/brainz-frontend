@@ -12,7 +12,6 @@ import { usePrivy, useLogin } from "@privy-io/react-auth"
 import { motion } from "framer-motion"
 import { OptionSelect } from "./OptionSelect"
 import { cn } from "@/lib/utils"
-import { PointConfetti } from "./PointConfetti"
 import { PrizeShow } from "./PrizeShow"
 
 const WelcomeModal = ({ showModal, onboardQuiz, setShowModal }) => {
