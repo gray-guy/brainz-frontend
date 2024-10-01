@@ -54,12 +54,14 @@ export const LeaderTable = () => {
 let rankSuffix = { 1: "st", 2: "nd", 3: "rd" }
 const LeaderTableRow = ({ rank, username, level, reward, xpPoints }) => {
   const isTop3 = rank <= 3
+  const highlight = true
 
   return (
     <div
       className={cn(
         "grid-cols-leaderboard grid items-center gap-4 border-[#303241] py-4 font-medium text-white [&:not(:last-child)]:border-b",
-        isTop3 && "bg-primary-350"
+        isTop3 && "bg-primary-350",
+        highlight && "bg-[#9E9126] text-[#000]"
       )}
     >
       <div className="justify-self-center text-secondary">
