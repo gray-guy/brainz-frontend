@@ -123,6 +123,9 @@ module.exports = {
       transitionDuration: {
         1500: "1500ms",
       },
+      gridTemplateColumns: {
+        leaderboard: "50px 50px 1fr 130px 130px",
+      },
       keyframes: {
         wiggle: {
           "0%, 100%": { transform: "rotate(-1deg) scale(1.0)" },
