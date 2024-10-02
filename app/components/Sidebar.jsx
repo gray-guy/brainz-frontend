@@ -7,6 +7,8 @@ import { useEffect, useMemo, useState } from "react"
 import { socialLinks } from "@/lib/config"
 import { usePrivy } from "@privy-io/react-auth"
 import { PromotionTasks } from "./PromotionTasks"
+import { cn } from "@/lib/utils"
+import { HomeIcon, HtpIcon, ProfileIcon, ShopIcon } from "./Svgs"
 
 export const Sidebar = () => {
   const [activeLink, setActiveLink] = useState("")
@@ -17,10 +19,15 @@ export const Sidebar = () => {
 
   const navLinks = useMemo(
     () => [
-      { title: "Home", url: "/" },
-      { title: "Shop", url: "/shop", isProtected: true },
-      { title: "Profile", url: "/profile", isProtected: true },
-      { title: "How to Play", url: "/htp/rules" },
+      { title: "Home", url: "/", icon: <HomeIcon /> },
+      { title: "Shop", url: "/shop", isProtected: true, icon: <ShopIcon /> },
+      {
+        title: "Profile",
+        url: "/profile",
+        isProtected: true,
+        icon: <ProfileIcon />,
+      },
+      { title: "How to Play", url: "/htp/rules", icon: <HtpIcon /> },
     ],
     []
   )
@@ -33,67 +40,66 @@ export const Sidebar = () => {
   const disabledClass = "opacity-50 cursor-not-allowed pointer-events-none"
 
   return (
-    <div className="sticky top-0 h-full w-[243px] px-5 max-md:hidden">
-      <div className="flex h-screen flex-col justify-between">
-        <div className="mt-4 px-3">
-          <div className="flex justify-center">
-            <Link href={"/"} className="relative text-white">
-              <Image
-                src={Logo}
-                alt="Logo"
-                width={115}
-                height={62}
-                objectFit="contain"
-                draggable={false}
-                priority={true}
-              />
-              <span className="font-basement absolute bottom-1 text-[12px] leading-[1.4] tracking-wider">
-                Skill Games
-              </span>
-            </Link>
-          </div>
-          <div className="mt-6">
-            <ul className="flex flex-col gap-6">
-              {navLinks.map(
-                ({ title, url, className, isProtected = false }, index) => (
-                  <li
-                    key={index}
-                    className={`text-xl font-semibold hover:text-secondary ${
-                      title === activeLink ? "text-secondary" : "text-white"
-                    } ${className ?? ""} ${
-                      isProtected && !authenticated ? disabledClass : ""
-                    }`}
-                  >
-                    <Link href={url} className="font-basement font-bold">
-                      {title}
-                    </Link>
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
+    <div className="sticky top-0 h-screen w-[245px] pr-9 max-md:hidden">
+      <div className=" ">
+        {/* top link */}
+        <div className="mt-6 flex justify-center">
+          <Link href={"/"} className="relative text-white">
+            <Image
+              src={Logo}
+              alt="Logo"
+              width={91}
+              height={53}
+              objectFit="contain"
+              draggable={false}
+              priority={true}
+            />
+            <span className="absolute bottom-1 font-basement text-[12px] leading-[1.4] tracking-wider">
+              Skill Games
+            </span>
+          </Link>
         </div>
-        <PromotionTasks />
-        <div className="mt-[13%] pb-[5%] text-center">
-          <div className="flex justify-center gap-4 border-white">
-            {socialLinks.map((link, index) => (
-              <Link
-                key={index}
-                href={link.url}
-                target="_blank"
-                className="group flex h-[38px] w-[36px] items-center justify-center rounded-[4px] bg-primary-350 py-[8px] transition-colors duration-200 hover:bg-secondary"
-              >
-                <link.icon
-                  width={21}
-                  height={23}
-                  className={"cursor-pointer text-white group-hover:text-dark"}
+
+        <div className="mt-10 px-3">
+          <ul className="flex flex-col gap-5 text-white">
+            {navLinks.map((link, index) => (
+              <li key={index}>
+                <SideLink
+                  {...link}
+                  isDisabled={link.isProtected && !authenticated}
+                  isActive={activeLink === link.title}
                 />
-              </Link>
+              </li>
             ))}
-          </div>
-          <p className="mt-4 text-grey-100">Brainz © 2024</p>
+          </ul>
         </div>
       </div>
+      <PromotionTasks />
+      <div className="mt-auto">
+        <button className="inline-flex h-12 min-w-[140px] items-center justify-center rounded-sm font-medium">
+          Log Out
+        </button>
+        <button className="inline-flex h-12 min-w-[140px] items-center justify-center rounded-sm font-medium">
+          Join Us
+        </button>
+      </div>
     </div>
+  )
+}
+
+const SideLink = ({ icon, title, isDisabled, isActive, url }) => {
+  return (
+    <Link
+      className={cn(
+        "flex items-center gap-3 rounded-md p-[6px] text-lg font-medium transition-colors hover:text-secondary",
+        isDisabled && "pointer-events-none cursor-not-allowed opacity-50",
+        isActive &&
+          "bg-secondary font-semibold text-primary-350 hover:text-primary"
+      )}
+      href={url}
+    >
+      {icon}
+      <span>{title}</span>
+    </Link>
   )
 }
