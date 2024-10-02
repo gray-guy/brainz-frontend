@@ -1,26 +1,30 @@
 export const RankCard = () => {
   return (
     <div className="rounded-md border border-primary-275 bg-primary-350 p-10 text-white">
-      <div className="flex font-basement">
+      <div className="flex font-basement md:text-xl">
         <div>
           <p>You Ranked</p>
           <p className="mt-2 font-bold">
-            <span className="text-xl text-secondary">25th</span> / <br />
+            <span className="text-xl text-secondary md:text-2xl">25th</span> /{" "}
+            <br />
             230 Players
           </p>
         </div>
-        <div className="mx-6 h-[95px] w-[2px] bg-primary-275" />
+        <div className="mx-12 h-[95px] w-[2px] bg-primary-275" />
         <div>
           <p>You Scored</p>
           <p className="mt-2 font-bold">
-            <span className="text-xl text-secondary">3,000</span> <br />
+            <span className="text-xl text-secondary md:text-2xl">3,000</span>{" "}
+            <br />
             Points
           </p>
         </div>
       </div>
       <div className="my-7 h-[2px] w-full bg-primary-275" />
       <div>
-        <h3 className="mb-4 font-basement font-bold">Rewards Earned</h3>
+        <h3 className="mb-4 font-basement font-bold md:text-xl">
+          Rewards Earned
+        </h3>
         <div className="flex justify-between">
           <Reward
             imgSrc="/images/usdc-logo.png"

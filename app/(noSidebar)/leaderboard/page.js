@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { LeaderTable } from "./leader-table"
 import { RankCard } from "./rank-card"
+import { NextSessionCard } from "./next-session"
 
 export default function Page() {
   return (
@@ -8,11 +9,8 @@ export default function Page() {
       <div className="mx-auto mb-16 mt-20 max-w-[1100px]">
         <div className="mb-14 grid grid-cols-2 gap-7">
           <RankCard />
-          <RankCard />
+          <NextSessionCard />
         </div>
-        <h1 className="mb-10 text-center font-basement text-3xl font-bold text-secondary">
-          SESSION RANKINGS
-        </h1>
         <LeaderTable />
       </div>
       <Footer />
@@ -22,7 +20,7 @@ export default function Page() {
 
 const Footer = () => {
   return (
-    <div className="bg-[#03131E] p-10 pb-20 text-white flex flex-col md:flex-row justify-between md:items-center gap-4">
+    <div className="flex flex-col justify-between gap-4 bg-[#03131E] p-10 pb-20 text-white md:flex-row md:items-center">
       <div>
         <Image
           src="/images/logo-footer.svg"
@@ -30,7 +28,7 @@ const Footer = () => {
           width={136}
           height={73}
         />
-        <div className="mt-3 space-y-3 max-w-[500px]">
+        <div className="mt-3 max-w-[500px] space-y-3">
           <p>
             Discover Brainz, the exciting platform that blends your love for
             trivia with the thrill of winning cryptocurrency. Simply join,
@@ -48,8 +46,7 @@ const Footer = () => {
         </div>
       </div>
 
-
-      <div className=" flex gap-6 xl:gap-10">
+      <div className="flex gap-6 xl:gap-10">
         <div>
           <h3 className="mb-4 font-basement text-xl font-bold capitalize">
             Platform

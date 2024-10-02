@@ -124,7 +124,7 @@ module.exports = {
         1500: "1500ms",
       },
       gridTemplateColumns: {
-        leaderboard: "50px 50px 1fr 130px 130px",
+        leaderboard: "60px 70px 1fr 130px 130px",
       },
       keyframes: {
         wiggle: {

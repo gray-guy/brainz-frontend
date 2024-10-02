@@ -43,9 +43,20 @@ const data = [
 
 export const LeaderTable = () => {
   return (
-    <div className="px-3">
-      {data.map((item) => (
-        <LeaderTableRow key={item.rank} {...item} />
+    <div>
+      <h1 className="mb-10 text-center font-basement text-3xl font-bold text-secondary">
+        SESSION RANKINGS
+      </h1>
+      {data.map((item, index) => (
+        <div
+          key={item.rank}
+          className={cn(
+            "px-3 [&:not(:last-child)>div]:border-b",
+            item.rank <= 3 && "bg-primary-350"
+          )}
+        >
+          <LeaderTableRow {...item} />
+        </div>
       ))}
     </div>
   )
@@ -53,19 +64,17 @@ export const LeaderTable = () => {
 
 let rankSuffix = { 1: "st", 2: "nd", 3: "rd" }
 const LeaderTableRow = ({ rank, username, level, reward, xpPoints }) => {
-  const isTop3 = rank <= 3
-  const highlight = true
+  const highlight = false
 
   return (
     <div
       className={cn(
-        "grid-cols-leaderboard grid items-center gap-4 border-[#303241] py-4 font-medium text-white [&:not(:last-child)]:border-b",
-        isTop3 && "bg-primary-350",
+        "grid grid-cols-leaderboard items-center gap-4 border-[#303241] py-4 font-medium text-white",
         highlight && "bg-[#9E9126] text-[#000]"
       )}
     >
-      <div className="justify-self-center text-secondary">
-        {isTop3 && <WinnerIcon width="28" height="25" />}
+      <div className="justify-self-end text-secondary">
+        {rank <= 3 && <WinnerIcon width="28" height="25" />}
       </div>
       <p className="text-center font-basement text-lg font-medium">
         {rank + (rankSuffix[rank] ?? "nd")}
