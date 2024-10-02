@@ -1,52 +1,72 @@
 import Image from "next/image"
-import Link from "next/link"
-import React from "react"
-import { DiscordIcon, InstagramIcon, LinkedInIcon, XIcon } from "./Svgs"
-import logo from "@/public/images/brainz-logo.svg"
-import { socialLinks } from "@/lib/config"
 
-const Footer = () => {
+export const Footer = () => {
   return (
-    <div className="flex flex-wrap justify-between px-6 py-[42px] custom:px-[58px]">
+    <div className="flex flex-col justify-between gap-7 bg-[#03131E] p-6 text-white lg:flex-row lg:items-center lg:p-10 lg:pb-20">
       <div>
-        <Link href={"/"}>
-          <Image
-            src={logo}
-            alt="Logo"
-            width={80}
-            height={50}
-            draggable={false}
-            priority={true}
-          />
-        </Link>
-        <p className="mt-2 max-w-[462px] text-grey-425">BRAINZ@2024</p>
-      </div>
-      <div className="mt-[60px] custom:mt-[0]">
-        <div className="flex items-center justify-start gap-5 border-white custom:justify-end">
-          {socialLinks.map((link, index) => (
-            <Link key={index} href={link.url} target="_blank">
-              <link.icon
-                width={21}
-                height={23}
-                className={"cursor-pointer text-white hover:text-secondary"}
-              />
-            </Link>
-          ))}
+        <Image
+          src="/images/logo-footer.svg"
+          alt="Logo"
+          width={136}
+          height={73}
+        />
+        <div className="mt-3 max-w-[500px] space-y-3">
+          <p>
+            Discover Brainz, the exciting platform that blends your love for
+            trivia with the thrill of winning cryptocurrency. Simply join,
+            choose from a variety of quizzes, and put your knowledge to the
+            test. Each correct answer brings you closer to earning real crypto
+            rewards.
+          </p>
+          <p>
+            Track your progress on real-time leaderboards and compete with
+            players worldwide. With secure transactions and seamless withdrawal
+            options, Brainz makes it easy to convert your quiz success into
+            valuable digital currency. Start answering questions, winning
+            crypto, and enjoying the best of both worlds today!
+          </p>
         </div>
-        <div className="flex gap-4 pt-10 text-sm text-grey-425">
-          <Link href={"#"} className="hover:text-secondary">
-            Privacy Policy
-          </Link>
-          <Link href={"#"} className="hover:text-secondary">
-            Terms
-          </Link>
-          <Link href={"#"} className="hover:text-secondary">
-            Legal
-          </Link>
+      </div>
+
+      <div className="flex gap-6 xl:gap-10">
+        <div>
+          <h3 className="mb-4 font-basement text-xl font-bold capitalize">
+            Platform
+          </h3>
+          <div className="flex flex-col gap-2">
+            <span>Support</span>
+            <span>FAQ</span>
+            <span>Partnership Program</span>
+            <span>Blog</span>
+            <span>Help Center</span>
+          </div>
+        </div>
+        <div>
+          <h3 className="mb-4 font-basement text-xl font-bold capitalize">
+            About us
+          </h3>
+          <div className="flex flex-col gap-2">
+            <span>AML Policy</span>
+            <span>Sports Policy</span>
+            <span>Responsible Gaming</span>
+            <span>Privacy Policy</span>
+            <span>Terms & Conditions</span>
+          </div>
+        </div>
+        <div>
+          <h3 className="mb-4 font-basement text-xl font-bold capitalize">
+            Community
+          </h3>
+          <div className="flex flex-col gap-2">
+            <span>Facebook</span>
+
+            <span>Twitter</span>
+
+            <span>Instgram</span>
+            <span>Discord</span>
+          </div>
         </div>
       </div>
     </div>
   )
 }
-
-export default Footer
