@@ -117,6 +117,7 @@ module.exports = {
       progressBar:
         "rgba(233, 171, 13, 0.2) 0px 0 6px, rgba(233, 171, 13, 0.2) 0 0 6px",
       glow: " 0px 4px 50px 3px rgba(255, 255, 255, 0.25);",
+      onboardCard: "0px 3.29px 36.15px 0px rgba(0, 0, 0, 0.3)",
     },
     extend: {
       transitionDuration: {
@@ -152,6 +153,7 @@ module.exports = {
         },
       },
       animation: {
+        slowSpin: "spin 15s linear infinite",
         wiggle: "wiggle 2.5s ease-in-out 0s 2 reverse",
         scoreSlide: "scoreSlide 1.5s ease-out forwards",
         scoreSlideY: "scoreSlideY 1.5s ease-out forwards",
@@ -159,6 +161,16 @@ module.exports = {
       backgroundImage: {
         "gradient-card":
           "linear-gradient(117.95deg, rgba(255, 255, 255, 0.2) 3.83%, rgba(198, 198, 198, 0.09) 57.89%)",
+        "gradient-backdrop":
+          "linear-gradient(117.95deg, rgba(255, 255, 255, 0.2) 3.83%, rgba(198, 198, 198, 0.09) 57.89%)",
+        "gradient-dialog":
+          "linear-gradient(112.35deg, #092F5B 28.55%, rgba(9, 47, 91, 0.45) 90.38%)",
+        "gradient-onboard-card":
+          "linear-gradient(117.95deg, rgba(17, 75, 163, 1) 3.83%, rgba(17, 75, 163, 1) 57.89%)",
+        "gradient-border":
+          "linear-gradient(109.63deg, rgba(255, 255, 255, 0.45) -11.64%, rgba(16, 47, 156, 0.45) 61.36%)",
+        "gradient-white":
+          "linear-gradient(306deg, rgba(153, 153, 153, 0) -11.5%, rgba(156, 156, 156, 0.25) 60.13%)",
       },
       spacing: {
         128: "32rem",

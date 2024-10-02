@@ -13,6 +13,7 @@ const UserContext = createContext(null)
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null)
+  const [onboardQuiz, setOnboardQuiz] = useState([])
   const [showWelcome, setShowWelcome] = useState(false)
 
   const handleAccepToc = async () => {
@@ -22,14 +23,6 @@ const UserProvider = ({ children }) => {
     }
   }
 
-  useEffect(() => {
-    if (sessionStorage.getItem("showWelcome")) return
-    setTimeout(() => {
-      setShowWelcome(true)
-      sessionStorage.setItem("showWelcome", true)
-    }, 2500)
-  }, [])
-
   const refetchUser = useCallback(async () => {
     const userData = await apiCall("get", "/profile")
     if (userData) {
@@ -37,8 +30,32 @@ const UserProvider = ({ children }) => {
     }
   }, [])
 
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const onboardQuestion = await apiCall("get", "/questions/onboard")
+      if (onboardQuestion) {
+        setOnboardQuiz(onboardQuestion)
+      }
+    }
+    fetchQuestions()
+  }, [])
+
+  useEffect(() => {
+    if (sessionStorage.getItem("shownWelcome")) return
+    setTimeout(() => {
+      setShowWelcome(true)
+      sessionStorage.setItem("shownWelcome", true)
+    }, 2500)
+  }, [])
+
+  useEffect(() => {
+    if (user) setShowWelcome(false)
+  }, [user])
+
   return (
-    <UserContext.Provider value={{ user, setUser, refetchUser }}>
+    <UserContext.Provider
+      value={{ user, setUser, refetchUser, setShowWelcome }}
+    >
       {children}
       <TermsConditionsModal
         isOpen={!!user && !user.hasAcceptedToc}
@@ -47,6 +64,7 @@ const UserProvider = ({ children }) => {
       <WelcomeModal
         showModal={!user && showWelcome}
         setShowModal={setShowWelcome}
+        onboardQuiz={onboardQuiz}
       />
     </UserContext.Provider>
   )

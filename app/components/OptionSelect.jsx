@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils"
 import React from "react"
 
 export const OptionSelect = ({
@@ -6,6 +7,7 @@ export const OptionSelect = ({
   variant = "default",
   answer = false,
   isActive = false,
+  classes = {},
   ...rest
 }) => {
   let backgroundColor, borderColor
@@ -27,17 +29,22 @@ export const OptionSelect = ({
   return (
     <div
       {...rest}
-      className={`flex items-center gap-3 lg:gap-5 ${backgroundColor} ${borderColor} ${
-        isActive ? "" : "hover:bg-[#0A3049]"
-      } border-1 w-full rounded-[20px] border px-4 py-2 hover:border-[#C2CBD1] lg:px-5`}
+      className={cn(
+        "flex items-center gap-3 font-basement lg:gap-5",
+        backgroundColor,
+        borderColor,
+        // isActive && "hover:bg-[#0A3049]",
+        "border-1 w-full rounded-[20px] border px-4 py-2 hover:border-[#C2CBD1] lg:px-5",
+        classes.root
+      )}
     >
       <div className="flex items-center justify-center rounded-[8px] border border-primary-375 bg-primary px-3 py-1.5 lg:px-5 lg:py-2.5">
-        <h1 className="font-basement text-sm font-normal text-white lg:text-lg">
+        <h1 className="text-sm font-normal text-white lg:text-lg">
           {alphabet}
         </h1>
       </div>
       <p
-        className={`font-basement text-sm font-normal select-none md:text-lg ${isActive ? "text-[#000]" : "text-white"}`}
+        className={`select-none text-sm font-normal md:text-lg ${isActive ? "text-[#000]" : "text-white"}`}
       >
         {description}
       </p>
