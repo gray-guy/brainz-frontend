@@ -21,28 +21,27 @@ export const Dashboard = ({
   const router = useRouter()
   const { user } = useUser()
 
-  // re-fetch on session enj
   useEffect(() => {
     if (!session) return
     const currentTime = new Date()
     const startInterval = new Date(session.startTime) - currentTime + 500
     const endInterval = new Date(session.endTime) - currentTime + 500
 
-    // update on session start, causes re-render
-    // const startTimeId = setTimeout(() => {
-    //   setNextGame((prev) => ({ ...prev }))
-    // }, startInterval)
+    // update page on session start
+    const startTimeId = setTimeout(() => {
+      router.refresh()
+    }, startInterval)
 
     // update on session end to next session or next game
-    // const endTimeId = setTimeout(() => {
-    //   getGames()
-    // }, endInterval)
+    const endTimeId = setTimeout(() => {
+      router.refresh()
+    }, endInterval)
 
     return () => {
-      // clearTimeout(startTimeId)
-      // clearTimeout(endTimeId)
+      clearTimeout(startTimeId)
+      clearTimeout(endTimeId)
     }
-  }, [session])
+  }, [session, router])
 
   const handleJoinSession = async (id) => {
     if (!user) {
